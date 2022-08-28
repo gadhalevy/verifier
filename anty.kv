@@ -1,0 +1,59 @@
+Welcome:
+<Welcome>:
+    txt:txt
+    orientation:'vertical'
+    halignment:'left'
+    Label:
+        size_hint_y:0.2
+        markup:True
+        font_size:'30dp'
+        text:
+            '[b][u][color=00ff00]Welcome to Verifier[/color][/u][/b]'
+    Label:
+        markup:True
+        id:txt
+        font_size:'20dp'
+    Button:
+        size_hint_y:0.1
+        text:'Continue'
+        on_press: root.new_screen()
+
+<AntyCopy>:
+    group:group
+    lab:lab
+    started:started
+    orientation: 'vertical'
+    BoxLayout:
+        size_hint_y:0.07
+        padding:'5dp'
+        BoxLayout:
+            size_hint_x:0.25
+            Label:
+                id:group
+        Label:
+            size_hint_x:0.5
+            halign: 'right'
+            id:lab
+        BoxLayout:
+            size_hint_x:0.25
+            Label:
+                id:started
+    BoxLayout:
+        orientation: 'vertical'
+        orientation: "vertical"
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            FileChooserListView:
+                id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Exit"
+                on_release: root.exit()
+
+            Button:
+                text: "Process"
+                on_release: root.load(filechooser.path, filechooser.selection)

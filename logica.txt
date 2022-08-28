@@ -1,0 +1,7 @@
+# if records only in moodle and not in FB: msg "files not created with verifier"
+# if station of records of two first labs<=10: msg "suspicion files not created on robots computers"
+if zip_group not match FB group: msg "suspicion groups not match" not tested yet
+if pic_group not match zip_group and FB group: msg "suspicion groups not match"
+if start>created msg: "suspicion created b4 start time"
+if os of labs Auto_car or IOT=='Windows' msg: "wrong os should be Linux"
+if pic_group!=group show pic_group.
