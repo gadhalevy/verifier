@@ -14,11 +14,13 @@ from firebase_admin import db
 
 class  Welcome (BoxLayout):
     txt=ObjectProperty()
+    hashoov=ObjectProperty()
     def __init__(self, **kwargs):
         super(Welcome, self).__init__(**kwargs)
         Clock.schedule_once(self.start,0.1)
 
     def start(self,dt):
+        self.hashoov.text='\u2022[b][u][color=ff0000] In movie first you should film your group number on portrait orientation. [/color][/u][/b]'
         self.txt.text='\u2022 Start your application in windows in directory d:\documents\student. \
         \n\u2022 Start your application in Linux in directory Home/cimlab/PycharmProjects. \
         \n\u2022 Insert only movies in mp4 or avi or mov format. \
@@ -97,6 +99,7 @@ class AntyCopy(BoxLayout):
         ref = db.reference('/{}/{}/'.format(lab,group))
         ref.push({
             '{}'.format(f[:f.index('.')]):{
+                'file':f,
                 'siomet':'{}'.format(f[f.index('.')+1:]),
                 'os':'{}'.format(created_os),
                 'start': '{}'.format(start),

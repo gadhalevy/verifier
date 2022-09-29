@@ -18,15 +18,22 @@ class Form(GridLayout):
         super(Form, self).__init__(**kwargs)
         try:
             self.dic = pickle.load(open("save.p", "rb"))
-            # print(self.dic)
-            # print(self.dic)
         except:
             self.dic={}
-            year=input('Please enter year of semester A\n')
-            semester=input('Please enter semester A or B (capitals).\n')
-            station=input('Please enter station number\n')
-            self.dic
-            self.dic['station']=station
+        keys=('year','semester','station')
+        prompts=('Please enter year of semester A (22,23 Etc)\n', \
+                 'Please enter semester A or B (capitals).\n', \
+                 'Please enter station number\n')
+        for i,key in enumerate(keys):
+            if self.dic.get(key,-1)==-1:
+                tmp=input(prompts[i])
+                self.dic[key]=tmp
+            # year=input('Please enter year of semester A (22,23 Etc)\n')
+            # semester=input('Please enter semester A or B (capitals).\n')
+            # station=input('Please enter station number\n')
+            # self.dic['year']=year
+            # self.dic['semester']=semester
+            # self.dic['station']=station
 
 
     def shmor(self):
@@ -41,6 +48,8 @@ class Form(GridLayout):
             dic['start']=datetime.datetime.now().strftime("%d/%m/%y %H:%M")
             dic['group']=group
             dic['station']=self.dic['station']
+            dic['year']=self.dic['year']
+            dic['semester']=self.dic['semester']
             dic['lab']=self.maabada.text
             pickle.dump(dic, open("save.p", "wb"))
 
