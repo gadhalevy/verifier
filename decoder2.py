@@ -20,13 +20,14 @@ def init():
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
         pass
-    tmp = platform.platform()
-    if 'Windows' in tmp:
-        cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
-        ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-    elif 'Linux' in tmp:
-        cred = credentials.Certificate("/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/mykey.json")
-        ocr.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+    cred = credentials.Certificate('https://github.com/gadhalevy/verifier/blob/master/mykey.json')
+#     tmp = platform.platform()
+#     if 'Windows' in tmp:
+#         cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
+#         ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#     elif 'Linux' in tmp:
+#         cred = credentials.Certificate("/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/mykey.json")
+#         ocr.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                          'storageBucket' :'lab9-c9743.appspot.com'})
 @st.cache(allow_output_mutation=True)
