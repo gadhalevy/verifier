@@ -5,4 +5,4 @@ pandas~=1.3.1
 moviepy~=1.0.3
 streamlit~=0.86.0
 firebase_admin~=5.4.0
-opencv_contrib_python~=4.5.3.56
+opencv-python~=4.5.3.56
