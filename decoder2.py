@@ -104,7 +104,7 @@ def main():
                                    ('Choose', 'Robotica', 'Vision', 'Robolego', 'Android', 'Yetsur', 'IOT',
                                     'Auto car 1','Auto car 2'))
     if maabada != 'Choose':
-        df = from_db(year,semester,maabada,cred)
+        df = from_db(year,semester,maabada)
         if st.sidebar.checkbox('Show data from FireBase?'):
             st.write('Data from Firebase')
             st.dataframe(df)
