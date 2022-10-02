@@ -15,19 +15,19 @@ from moviepy.editor import *
 import cv2
 from zipfile import ZipFile
 @st.cache(allow_output_mutation=True)
-def init(cred):
+def init():
     try:
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
         pass
-#     cred = credentials.Certificate('https://github.com/gadhalevy/verifier/blob/master/mykey.json')
-#     tmp = platform.platform()
-#     if 'Windows' in tmp:
-#         cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
-#         ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-#     elif 'Linux' in tmp:
-#         cred = credentials.Certificate("/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/mykey.json")
-#         ocr.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+    cred = credentials.Certificate('https://github.com/gadhalevy/verifier/blob/master/mykey.json')
+    tmp = platform.platform()
+    if 'Windows' in tmp:
+        cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
+        ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    elif 'Linux' in tmp:
+        cred = credentials.Certificate("/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/mykey.json")
+        ocr.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                          'storageBucket' :'lab9-c9743.appspot.com'})
 @st.cache(allow_output_mutation=True)
@@ -45,8 +45,8 @@ def make_student_list(path):
     return groups
 
 @st.cache(allow_output_mutation=True)
-def from_db(year,semester,maabada,cred):
-    init(cred)
+def from_db(year,semester,maabada):
+    init()
     year=str(year)
     ref=db.reference('{}/{}/{}'.format(year,semester,maabada))
     df=pd.json_normalize(ref.get())
@@ -98,9 +98,6 @@ def main():
         if st.sidebar.checkbox("Show students groups"):
             st.write('Students groups')
             st.dataframe(groups)
-    myjson=st.sidebar.file_uploader("Find the json credentials of firebase")
-    cred = credentials.Certificate(myjson)
-    ocr.pytesseract.tesseract_cmd = st.sidebar.file_uploader("Find the so file for tesseract OCR")
     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח'])
     semester=st.sidebar.selectbox("Please choose semester",('A','B'))
     maabada = st.sidebar.selectbox('Please select maabada',
