@@ -114,7 +114,7 @@ def main():
         for i,r in df.iterrows():
             group=r['group']
             file=r['file']
-            download_blob('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file),'/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/FromFb/{}_{}'.format(group,file))
+            download_blob('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file),'{}_{}'.format(group,file))
         #     files.append('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file))
         # st.write(files)
     if st.sidebar.checkbox('Analyze?'):
