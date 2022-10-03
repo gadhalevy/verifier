@@ -124,7 +124,7 @@ def main():
             txt='### Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
             st.markdown(txt)
         for f in os.listdir('FromFb'):
-            make_pic(os.path.join('FromFb',f),os.path.join('FromFb',f[:-3]+'jpg'))
+            make_pic(os.path.join('FromFb',f),os.path.join('/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/FromFb',f[:-3]+'jpg'))
         imgs = []
         caption = []
         for f in os.listdir('FromFb'):
