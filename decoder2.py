@@ -21,7 +21,7 @@ def init():
     except ValueError:
         pass
 #     cred = credentials.Certificate('https://raw.githubusercontent.com/gadhalevy/verifier/mykey.json')
-    cred = credentials.Certificate('https://github.com/gadhalevy/verifier/blob/master/mykey.json')
+    cred = credentials.Certificate('https://raw.githubusercontent.com/gadhalevy/verifier/blob/master/mykey.json')    
 #     tmp = platform.platform()
 #     if 'Windows' in tmp:
 #         cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
