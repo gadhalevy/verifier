@@ -91,8 +91,8 @@ def download_blob(source_blob_name, destination_file_name):
     blob.download_to_filename(destination_file_name)
 
 def main():
-#     for f in os.listdir(os.curdir):
-#         st.write(f)
+    for f in os.listdir(os.curdir):
+        st.write(f)
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
