@@ -84,14 +84,7 @@ def from_movie(img):
 def download_blob(year,semester,maabada,group,file):
     """Downloads a blob from the bucket."""
     source_blob_name='Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file)
-    destination_file_name=os.path.join(year,semester,maabada)
-    lst=destination_file_name.split('/')
-    for l in lst:
-        try:
-            os.mkdir(l)
-            os.chdir(l)
-        except:
-            pass
+    destination_file_name=os.path.join(year,semester,maabada)    
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
@@ -101,8 +94,8 @@ def download_blob(year,semester,maabada,group,file):
     return os.getcwd()
 
 def main():
-    for f in os.listdir(os.curdir):
-        st.write(f)
+#     for f in os.listdir(os.curdir):
+#         st.write(f)
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
