@@ -94,8 +94,11 @@ def download_blob(year,semester,maabada,group,file):
     return destination_file_name+'/{}_{}'.format(group,file)
 
 def main():
-    for f in os.listdir(os.curdir):
-        st.write(f)
+    for root, dirs, files in os.walk(".", topdown=False):
+       for name in files:
+          st.write(os.path.join(root, name))
+       for name in dirs:
+          st.write(os.path.join(root, name))
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
