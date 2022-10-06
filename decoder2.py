@@ -81,18 +81,26 @@ def from_movie(img):
     xconfig = '--psm 10 --oem 3 -c tessedit_char_whitelist=0123456789'
     return ocr.image_to_string(thresh1, config=xconfig).strip()
 
-def download_blob(source_blob_name, destination_file_name):
+def download_blob(source_blob_name):
     """Downloads a blob from the bucket."""
+    lst=os.path.split(source_blob_name)
+    for l in lst:
+        try:
+            os.mkdir(l)
+            os.chdir(l)
+        except:
+            pass
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
     metadata = {"firebaseStorageDownloadTokens": new_token}
     blob.metadata = metadata
+    destination_file_name=os.path.join(lst[0][1:],lst[1])
     blob.download_to_filename(destination_file_name)
 
 def main():
-    for f in os.listdir(os.curdir):
-        st.write(f)
+#     for f in os.listdir(os.curdir):
+#         st.write(f)
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
@@ -116,7 +124,7 @@ def main():
         for i,r in df.iterrows():
             group=r['group']
             file=r['file']
-            download_blob('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file),'/home/cimlab/PycharmProjects/stream/{}_{}'.format(group,file))
+            download_blob('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file))
         #     files.append('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file))
         # st.write(files)
     if st.sidebar.checkbox('Analyze?'):
