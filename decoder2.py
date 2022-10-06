@@ -150,7 +150,7 @@ def main():
                 # st.write('k=',kvutsa,'name=',f[:2])
                 if kvutsa!=f[:2]:
                     st.write('group {} differ from picture analyse {}'.format(f[:2],kvutsa))
-                    img=cv2.imread(os.path.join('FromFb',f))
+                    img=cv2.imread(os.path.join(movies_dir,f))
                     imgs.append(img)
                     caption.append(f)
         if len(imgs)>0:
