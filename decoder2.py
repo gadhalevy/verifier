@@ -142,21 +142,21 @@ def main():
 #               st.write(os.path.join(root, name))
                    
 #             make_pic(os.path.join('FromFb',f),os.path.join('/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/FromFb',f[:-3]+'jpg'))
-#         imgs = []
-#         caption = []
-#         for f in os.listdir('FromFb'):
-#             if f.endswith('jpg'):
-#                 kvutsa=from_movie(os.path.join('FromFb',f))
-#                 # st.write('k=',kvutsa,'name=',f[:2])
-#                 if kvutsa!=f[:2]:
-#                     st.write('group {} differ from picture analyse {}'.format(f[:2],kvutsa))
-#                     img=cv2.imread(os.path.join('FromFb',f))
-#                     imgs.append(img)
-#                     caption.append(f)
-#         if len(imgs)>0:
-#             txt=f'### Mismatch pictures and groups'
-#             st.markdown(txt)
-#             st.image(imgs,caption=caption,width=60)
+        imgs = []
+        caption = []
+        for f in os.listdir(movies_dir):
+            if f.endswith('jpg'):
+                kvutsa=from_movie(os.path.join(movies_dir,f))
+                # st.write('k=',kvutsa,'name=',f[:2])
+                if kvutsa!=f[:2]:
+                    st.write('group {} differ from picture analyse {}'.format(f[:2],kvutsa))
+                    img=cv2.imread(os.path.join('FromFb',f))
+                    imgs.append(img)
+                    caption.append(f)
+        if len(imgs)>0:
+            txt=f'### Mismatch pictures and groups'
+            st.markdown(txt)
+            st.image(imgs,caption=caption,width=60)
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
             tmp['station'] = tmp.station.astype('int')
