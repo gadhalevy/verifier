@@ -84,7 +84,8 @@ def from_movie(img):
 def download_blob(year,semester,maabada,group,file):
     """Downloads a blob from the bucket."""
     source_blob_name='Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file)
-    lst=os.path.split(source_blob_name)
+    destination_file_name=os.path.join(year,semester,maabada)
+    lst=destination_file_name.split('/')
     for l in lst:
         try:
             os.mkdir(l)
@@ -95,9 +96,9 @@ def download_blob(year,semester,maabada,group,file):
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
     metadata = {"firebaseStorageDownloadTokens": new_token}
-    blob.metadata = metadata
-    destination_file_name=os.path.join(year,semester,maabada,group,file)
-    blob.download_to_filename(destination_file_name)
+    blob.metadata = metadata    
+    blob.download_to_filename(destination_file_name+'/{}_{}'.format(group,file))
+    return os.getcwd()
 
 def main():
 #     for f in os.listdir(os.curdir):
@@ -125,7 +126,8 @@ def main():
         for i,r in df.iterrows():
             group=r['group']
             file=r['file']
-            download_blob(year, semester, maabada, group, file)
+            dir=download_blob(year, semester, maabada, group, file)
+            st.write(dir)
 #             download_blob('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file))
         #     files.append('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file))
         # st.write(files)
