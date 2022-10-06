@@ -68,12 +68,13 @@ def from_db(year,semester,maabada):
 
 @st.cache(allow_output_mutation=True)
 def make_pic(year,semester,maabada,f):
-    path='{}/{}/{}'.format(year,semester,maabada)
-    pathRead=os.path.join(path,f)
-    clip = VideoFileClip(pathRead)
-    pathWrite=pathRead[:-3]+'jpg'
-    img = clip.save_frame(pathWrite,t=1)
-    return img
+    if (f.lower().endswith('avi')) or (f.lower().endswith('mp4')) or (f.lower().endswith('mov')):
+        path='{}/{}/{}'.format(year,semester,maabada)
+        pathRead=os.path.join(path,f)
+        clip = VideoFileClip(pathRead)
+        pathWrite=pathRead[:-3]+'jpg'
+        img = clip.save_frame(pathWrite,t=1)
+        return img
 
 
 @st.cache(allow_output_mutation=True)
