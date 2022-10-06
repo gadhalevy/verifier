@@ -67,8 +67,11 @@ def from_db(year,semester,maabada):
     return df
 
 @st.cache(allow_output_mutation=True)
-def make_pic(pathRead,pathWrite):
+def make_pic(year,semester,maabada,f):
+    path='{}/{}/{}'.format(year,semester,maabada)
+    pathRead=os.path.join(path,f)
     clip = VideoFileClip(pathRead)
+    pathWrite=pathRead[:-3]+'jpg'
     img = clip.save_frame(pathWrite,t=1)
     return img
 
@@ -94,11 +97,6 @@ def download_blob(year,semester,maabada,group,file):
     return destination_file_name+'/{}_{}'.format(group,file)
 
 def main():
-    for root, dirs, files in os.walk(".", topdown=False):
-       for name in files:
-          st.write(os.path.join(root, name))
-       for name in dirs:
-          st.write(os.path.join(root, name))
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
@@ -133,23 +131,30 @@ def main():
         if len(tmp)>0:
             txt='### Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
             st.markdown(txt)
-        for f in os.listdir('FromFb'):
-            make_pic(os.path.join('FromFb',f),os.path.join('/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/FromFb',f[:-3]+'jpg'))
-        imgs = []
-        caption = []
-        for f in os.listdir('FromFb'):
-            if f.endswith('jpg'):
-                kvutsa=from_movie(os.path.join('FromFb',f))
-                # st.write('k=',kvutsa,'name=',f[:2])
-                if kvutsa!=f[:2]:
-                    st.write('group {} differ from picture analyse {}'.format(f[:2],kvutsa))
-                    img=cv2.imread(os.path.join('FromFb',f))
-                    imgs.append(img)
-                    caption.append(f)
-        if len(imgs)>0:
-            txt=f'### Mismatch pictures and groups'
-            st.markdown(txt)
-            st.image(imgs,caption=caption,width=60)
+        for f in os.listdir('{}/{}/{}'.format(year,semester,maabada):
+            make_pic(year,semester,maabada,f)
+        for root, dirs, files in os.walk(".", topdown=False):
+           for name in files:
+              st.write(os.path.join(root, name))
+           for name in dirs:
+              st.write(os.path.join(root, name))
+                   
+#             make_pic(os.path.join('FromFb',f),os.path.join('/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/FromFb',f[:-3]+'jpg'))
+#         imgs = []
+#         caption = []
+#         for f in os.listdir('FromFb'):
+#             if f.endswith('jpg'):
+#                 kvutsa=from_movie(os.path.join('FromFb',f))
+#                 # st.write('k=',kvutsa,'name=',f[:2])
+#                 if kvutsa!=f[:2]:
+#                     st.write('group {} differ from picture analyse {}'.format(f[:2],kvutsa))
+#                     img=cv2.imread(os.path.join('FromFb',f))
+#                     imgs.append(img)
+#                     caption.append(f)
+#         if len(imgs)>0:
+#             txt=f'### Mismatch pictures and groups'
+#             st.markdown(txt)
+#             st.image(imgs,caption=caption,width=60)
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
             tmp['station'] = tmp.station.astype('int')
