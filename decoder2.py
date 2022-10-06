@@ -131,7 +131,7 @@ def main():
         if len(tmp)>0:
             txt='### Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
             st.markdown(txt)
-        for f in os.listdir('{}/{}/{}'.format(year,semester,maabada):
+        for f in os.listdir('{}/{}/{}'.format(year,semester,maabada)):
             make_pic(year,semester,maabada,f)
         for root, dirs, files in os.walk(".", topdown=False):
            for name in files:
