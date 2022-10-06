@@ -132,13 +132,14 @@ def main():
         if len(tmp)>0:
             txt='### Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
             st.markdown(txt)
-        for f in os.listdir('{}/{}/{}'.format(year,semester,maabada)):
+        movies_dir='{}/{}/{}'.format(year,semester,maabada)
+        for f in os.listdir(movies_dir):
             make_pic(year,semester,maabada,f)
-        for root, dirs, files in os.walk(".", topdown=False):
-           for name in files:
-              st.write(os.path.join(root, name))
-           for name in dirs:
-              st.write(os.path.join(root, name))
+#         for root, dirs, files in os.walk(".", topdown=False):
+#            for name in files:
+#               st.write(os.path.join(root, name))
+#            for name in dirs:
+#               st.write(os.path.join(root, name))
                    
 #             make_pic(os.path.join('FromFb',f),os.path.join('/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/FromFb',f[:-3]+'jpg'))
 #         imgs = []
