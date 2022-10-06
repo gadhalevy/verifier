@@ -91,11 +91,11 @@ def download_blob(year,semester,maabada,group,file):
     metadata = {"firebaseStorageDownloadTokens": new_token}
     blob.metadata = metadata    
     blob.download_to_filename(destination_file_name+'/{}_{}'.format(group,file))
-    return os.getcwd()
+    return destination_file_name+'/{}_{}'.format(group,file)
 
 def main():
-#     for f in os.listdir(os.curdir):
-#         st.write(f)
+    for f in os.listdir(os.curdir):
+        st.write(f)
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
