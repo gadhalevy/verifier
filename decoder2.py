@@ -146,8 +146,12 @@ def main():
             st.markdown(txt)
             st.image(imgs,caption=caption,width=60)
             if st.sidebar.checkbox('Show mismach movies?'):
+                mismatch=[]
                 for f in os.listdir(movies_dir):
-                    pass
+                     if (f.lower().endswith('avi')) or (f.lower().endswith('mp4')) or (f.lower().endswith('mov')):
+                            if f[:-3]+'jpg' in caption:
+                                mismatch.append(f)
+                st.write(mismatch)
                 
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
