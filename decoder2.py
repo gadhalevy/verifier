@@ -21,14 +21,6 @@ def init():
     except ValueError:
         pass
     cred = credentials.Certificate('apikey.json')
-#     cred = credentials.Certificate('https://raw.githubusercontent.com/gadhalevy/verifier/blob/master/mykey.json')    
-#     tmp = platform.platform()
-#     if 'Windows' in tmp:
-#         cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
-#         ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-#     elif 'Linux' in tmp:
-#         cred = credentials.Certificate("/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/mykey.json")
-#         ocr.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                          'storageBucket' :'lab9-c9743.appspot.com'})
 @st.cache(allow_output_mutation=True)
@@ -117,15 +109,11 @@ def main():
             st.write('Data from Firebase')
             st.dataframe(df)
     if st.sidebar.checkbox('Download movies from Firebase?'):
-        # files=[]
         for i,r in df.iterrows():
             group=r['group']
             file=r['file']
             dir=download_blob(year, semester, maabada, group, file)
             st.write(dir)
-#             download_blob('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file))
-        #     files.append('Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file))
-        # st.write(files)
     if st.sidebar.checkbox('Analyze?'):
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
