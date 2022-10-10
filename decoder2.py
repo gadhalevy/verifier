@@ -149,15 +149,15 @@ def main():
                 mismatch=[]
                 for f in os.listdir(movies_dir):
                      if (f.lower().endswith('avi')) or (f.lower().endswith('mp4')) or (f.lower().endswith('mov')):
-                            st.write(f)
+#                             st.write(f)
                             if f[:-3]+'jpg' in caption:
                                 mismatch.append(f)
                 
-#                 for f in mismatch:
-#                     st.write(os.path.join(movies_dir,f))
-#                     video_file = open(os.path.join(movies_dir,f), 'rb')
-#                     video_bytes = video_file.read()
-#                     st.video(video_bytes)
+                for f in mismatch:
+                    st.write(os.path.join(movies_dir,f))
+                    video_file = open(os.path.join(movies_dir,f), 'rb')
+                    video_bytes = video_file.read()
+                    st.video(video_bytes)
                 
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
