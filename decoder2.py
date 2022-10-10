@@ -152,6 +152,7 @@ def main():
                             if f[:-3]+'jpg' in caption:
                                 mismatch.append(f)
                 for f in mismatch:
+                    st.write(os.path.join(movies_dir,f))
                     video_file = open(os.path.join(movies_dir,f), 'rb')
                     video_bytes = video_file.read()
                     st.video(video_bytes)
