@@ -113,7 +113,7 @@ def main():
             group=r['group']
             file=r['file']
             dir=download_blob(year, semester, maabada, group, file)
-            st.write(dir)
+#             st.write(dir)
     if st.sidebar.checkbox('Analyze?'):
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
@@ -145,6 +145,10 @@ def main():
             txt=f'### Mismatch pictures and groups'
             st.markdown(txt)
             st.image(imgs,caption=caption,width=60)
+            if st.sidebar.checkbox('Show mismach movies?'):
+                for f in os.listdir(movies_dir):
+                    pass
+                
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
             tmp['station'] = tmp.station.astype('int')
