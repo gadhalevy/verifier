@@ -1,0 +1,59 @@
+Form:
+<BackgroundColor@Widget>
+    background_color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+<BackgroundLabel@Label+BackgroundColor>
+    background_color: 0, 0, 0, 0
+<Form>:
+    title:'Kartis Avoda'
+    out:out
+    group:group
+    maabada:maabada
+    cols:2
+    rows:5
+    BackgroundLabel:
+        markup:True
+        text:'[b][u]Kartis[/u][/b]'
+        font_size:'25dp'
+        background_color: 1, 0, 0, 1
+    BackgroundLabel:
+        markup:True
+        text:'[b][u]Avoda[/u][/b]'
+        font_size:'25dp'
+        background_color: 0, 0, 1, 1
+    Label:
+        text:'Choose maabada:'
+    Spinner:
+        id:maabada
+        values: 'Robotica','Vision','Robolego','Android','Yetsur','IOT','Auto car 1'
+        text:'Robotica'
+    Label:
+        text:'Enter group number:'
+    TextInput:
+        id:group
+    Button:
+        text:'Sign up'
+        on_press:root.shmor()
+    Button:
+        id:out
+        disabled: True
+        text:'Exit'
+        on_press:root.exit()
+    BoxLayout:
+        size_hint_y:8
+        BackgroundLabel:
+            text:'You have\nTo fill\n"Kartis Avoda" \nBefore start\nAnd every time\nAfter you \nOperate the\nVerifier and\nSubmit to Moodle.'
+            font_size:'20dp'
+            background_color: 0, 0, 1, 1
+    BoxLayout:
+        size_hint_y:8
+        BackgroundLabel:
+            text:'You have\nTo fill\n"Kartis Avoda"\nIn same\nComputer you\nWork and\nOperate the\nVerifier and\nSubmit to Moodle.'
+            font_size:'20dp'
+            background_color: 1, 0, 0, 1
+    
