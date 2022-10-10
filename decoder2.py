@@ -20,7 +20,7 @@ def init():
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
         pass
-    cred = credentials.Certificate(secrets.FBKEY)
+    cred = credentials.Certificate('apikey.json')
 #     cred = credentials.Certificate('https://raw.githubusercontent.com/gadhalevy/verifier/blob/master/mykey.json')    
 #     tmp = platform.platform()
 #     if 'Windows' in tmp:
