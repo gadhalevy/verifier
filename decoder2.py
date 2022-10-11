@@ -163,7 +163,7 @@ def main():
                                 mismatch.append(f)
                 video=make_movie(movies_dir,mismatch)
                 tfile = tempfile.NamedTemporaryFile(delete=False)
-                tfile.write(next(video).read())
+                tfile.write(cv2.read(next(video)))
                 vf = cv.VideoCapture(tfile.name)
                                     
 #                     st.write(os.path.join(movies_dir,f))
