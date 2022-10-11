@@ -89,7 +89,7 @@ def download_blob(year,semester,maabada,group,file):
     blob.download_to_filename(destination_file_name+'/{}_{}'.format(group,file))
     return destination_file_name+'/{}_{}'.format(group,file)
 
-@st.cache(allow_output_mutation=True)
+# @st.cache(allow_output_mutation=True)
 def make_movie(path,mismatch):
     for f in mismatch:
         video_file = open(os.path.join(path,f), 'rb')
