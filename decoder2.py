@@ -169,7 +169,7 @@ def main():
 #                     st.write(os.path.join(movies_dir,f))
 #                     video_file = open(os.path.join(movies_dir,f), 'rb')
 #                     video_bytes = video_file.read()
-                st.video(next(video))
+                st.video(os.path.join(movies_dir,'01_01.mp4'))
                 
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
