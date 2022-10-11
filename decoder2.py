@@ -96,7 +96,7 @@ def make_movie(path,mismatch):
         video_file = open(os.path.join(path,f), 'rb')
 #         video_bytes = video_file.read()
 #         yield video_bytes
-        yield os.path.join(path,f)
+        yield video_file
 
 def main():
     st.header("Verifier decoder")
@@ -163,7 +163,7 @@ def main():
                                 mismatch.append(f)
                 video=make_movie(movies_dir,mismatch)
                 tfile = tempfile.NamedTemporaryFile(delete=False)
-                tfile.write(cv2.read(next(video)))
+                tfile.write(next(video))
                 vf = cv.VideoCapture(tfile.name)
                                     
 #                     st.write(os.path.join(movies_dir,f))
