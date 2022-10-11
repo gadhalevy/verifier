@@ -13,6 +13,7 @@ import os,numpy as np
 import datetime
 from moviepy.editor import *
 import cv2
+import tempfile
 from zipfile import ZipFile
 @st.cache(allow_output_mutation=True)
 def init():
@@ -161,16 +162,9 @@ def main():
                             if f[:-3]+'jpg' in caption:
                                 mismatch.append(f)
                 video=make_movie(movies_dir,mismatch)
-                cap= cv2.VideoCapture(next(video))
-                stframe = st.empty()
-                i=1
-                while(cap.isOpened()):
-                    ret, frame = cap.read()
-                    if ret == False:
-                        break
-#                     if i%1000 == 0:
-#                         cv2.imwrite('new_image'+str(i)+'.jpg',frame)
-#                     i+=1
+                tfile = tempfile.NamedTemporaryFile(delete=False)
+                tfile.write(next(video).read())
+                vf = cv.VideoCapture(tfile.name)
                                     
 #                     st.write(os.path.join(movies_dir,f))
 #                     video_file = open(os.path.join(movies_dir,f), 'rb')
