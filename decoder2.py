@@ -91,7 +91,7 @@ def download_blob(year,semester,maabada,group,file):
 
 @st.cache(allow_output_mutation=True)
 def make_movie(path,f):
-    video_file = open(os.path.join(movies_dir,f), 'rb')
+    video_file = open(os.path.join(path,f), 'rb')
     video_bytes = video_file.read()
     yield video_bytes
 
