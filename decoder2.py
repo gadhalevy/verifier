@@ -90,10 +90,11 @@ def download_blob(year,semester,maabada,group,file):
     return destination_file_name+'/{}_{}'.format(group,file)
 
 @st.cache(allow_output_mutation=True)
-def make_movie(path,f):
-    video_file = open(os.path.join(path,f), 'rb')
-    video_bytes = video_file.read()
-    yield video_bytes
+def make_movie(path,mismatch):
+    for f in mismatch:
+        video_file = open(os.path.join(path,f), 'rb')
+        video_bytes = video_file.read()
+        yield video_bytes
 
 def main():
     st.header("Verifier decoder")
@@ -158,12 +159,12 @@ def main():
 #                             st.write(f)
                             if f[:-3]+'jpg' in caption:
                                 mismatch.append(f)
-                video=make_movie(movies_dir,f)
-                for f in mismatch:                    
+                video=make_movie(movies_dir,mismatch)
+                                    
 #                     st.write(os.path.join(movies_dir,f))
 #                     video_file = open(os.path.join(movies_dir,f), 'rb')
 #                     video_bytes = video_file.read()
-                    st.video(next(video))
+                st.video(next(video))
                 
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
