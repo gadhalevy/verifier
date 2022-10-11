@@ -92,9 +92,10 @@ def download_blob(year,semester,maabada,group,file):
 # @st.cache(allow_output_mutation=True)
 def make_movie(path,mismatch):
     for f in mismatch:
-        video_file = open(os.path.join(path,f), 'rb')
-        video_bytes = video_file.read()
-        yield video_bytes
+#         video_file = open(os.path.join(path,f), 'rb')
+#         video_bytes = video_file.read()
+#         yield video_bytes
+        yield os.path.join(path,f)
 
 def main():
     st.header("Verifier decoder")
