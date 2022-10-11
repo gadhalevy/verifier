@@ -161,15 +161,15 @@ def main():
                             if f[:-3]+'jpg' in caption:
                                 mismatch.append(f)
                 video=make_movie(movies_dir,mismatch)
-                tfile = tempfile.NamedTemporaryFile(delete=False)
-                tfile.write(next(video))
-                vf = cv2.VideoCapture(tfile.name)
-                st.video(vf)
+#                 tfile = tempfile.NamedTemporaryFile(delete=False)
+#                 tfile.write(next(video))
+#                 vf = cv2.VideoCapture(tfile.name)
+#                 st.video(vf)
                                     
 #                     st.write(os.path.join(movies_dir,f))
 #                     video_file = open(os.path.join(movies_dir,f), 'rb')
 #                     video_bytes = video_file.read()
-#                 st.video(next(video))
+                st.video(next(video))
                 
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
