@@ -161,8 +161,8 @@ def main():
                             if f[:-3]+'jpg' in caption:
                                 mismatch.append(f)
                 if len(mismatch)>0:
-                    for v in make_movie(movies_dir,mismatch):
-                        st.video(video,format=f[f.index('.'):])
+                    for video in make_movie(movies_dir,mismatch):
+                        st.video(video)
 #                     video=make_movie(movies_dir,mismatch[0])
 #                     for f in mismatch[1:]:                                          
 #                         video=next(video)
