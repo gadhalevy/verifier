@@ -166,7 +166,7 @@ def main():
                     for video in make_movie(movies_dir,mismatch):
                         st.video(video)
         if st.sidebar.checkbox('Show all movies?'):
-            for video in make_movie(movies_dir,movies_dir):
+            for video in make_movie(movies_dir):
                 st.video(video)
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
