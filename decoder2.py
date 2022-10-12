@@ -38,7 +38,7 @@ def make_student_list(path):
     groups = final[['Group members', 'num']]
     return groups
 
-@st.cache(allow_output_mutation=True)
+# @st.cache(allow_output_mutation=True)
 def from_db(year,semester,maabada):
     init()
     year=str(year)
