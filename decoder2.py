@@ -169,7 +169,7 @@ def main():
         if st.sidebar.checkbox('Show all movies?'):
             for video in make_movie(movies_dir):
                 st.video(video)
-        options=st.multiselect('Select movies to show',os.listdir(movies_dir))
+        options=st.sidebar.multiselect('Select movies to show',os.listdir(movies_dir))
         if len(options)>0:
             for video in make_movie(movies_dir,options):
                 st.video(video)
