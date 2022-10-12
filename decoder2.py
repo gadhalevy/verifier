@@ -170,7 +170,9 @@ def main():
             for video in make_movie(movies_dir):
                 st.video(video)
         options=st.multiselect('Select movies to show',os.listdir(movies_dir))
-        st.write(options)
+        if len(options)>0:
+            for video in make_movie(movies_dir,options):
+                st.video(video)
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
             tmp['station'] = tmp.station.astype('int')
