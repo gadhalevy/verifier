@@ -91,10 +91,11 @@ def download_blob(year,semester,maabada,group,file):
     return destination_file_name+'/{}_{}'.format(group,file)
 
 # @st.cache(allow_output_mutation=True)
-def make_movie(path,f):    
-    video_file = open(os.path.join(path,f), 'rb')
-    video_bytes = video_file.read()
-    yield video_bytes
+def make_movie(path,mismatch):
+    for f in mismatch:
+        video_file = open(os.path.join(path,f), 'rb')
+        video_bytes = video_file.read()
+        yield video_bytes
 
 def main():
     st.header("Verifier decoder")
@@ -160,10 +161,12 @@ def main():
                             if f[:-3]+'jpg' in caption:
                                 mismatch.append(f)
                 if len(mismatch)>0:
-                    video=make_movie(movies_dir,mismatch[0])
-                    for f in mismatch[1:]:                                          
-                        video=next(video)
+                    for v in make_movie(movies_dir,mismatch):
                         st.video(video,format=f[f.index('.'):])
+#                     video=make_movie(movies_dir,mismatch[0])
+#                     for f in mismatch[1:]:                                          
+#                         video=next(video)
+#                         st.video(video,format=f[f.index('.'):])
 #                 tfile = tempfile.NamedTemporaryFile(delete=False)
 #                 tfile.write(next(video))
 #                 vf = cv2.VideoCapture(tfile.name)
