@@ -163,7 +163,7 @@ def main():
                     video=make_movie(movies_dir,mismatch[0])
                     for f in mismatch[1:]:                                          
                         video=next(video)
-                        st.video(video,format=f[f.index('.'):]
+                        st.video(video,format=f[f.index('.'):])
 #                 tfile = tempfile.NamedTemporaryFile(delete=False)
 #                 tfile.write(next(video))
 #                 vf = cv2.VideoCapture(tfile.name)
