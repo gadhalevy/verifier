@@ -163,20 +163,9 @@ def main():
                 if len(mismatch)>0:
                     for video in make_movie(movies_dir,mismatch):
                         st.video(video)
-#                     video=make_movie(movies_dir,mismatch[0])
-#                     for f in mismatch[1:]:                                          
-#                         video=next(video)
-#                         st.video(video,format=f[f.index('.'):])
-#                 tfile = tempfile.NamedTemporaryFile(delete=False)
-#                 tfile.write(next(video))
-#                 vf = cv2.VideoCapture(tfile.name)
-#                 st.video(vf)
-                                    
-#                     st.write(os.path.join(movies_dir,f))
-#                     video_file = open(os.path.join(movies_dir,f), 'rb')
-#                     video_bytes = video_file.read()
-                
-                
+        if st.sidebar.checkbox('Show all movies?'):
+            for video in make_movie(movies_dir,movies_dir):
+                st.video(video)
         if maabada in ('Robotica','Vision'):
             tmp = df[['station', 'group']]
             tmp['station'] = tmp.station.astype('int')
