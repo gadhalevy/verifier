@@ -50,7 +50,7 @@ def from_db(year,semester,maabada):
     cols=[col[3] for col in df.columns.str.split('.')][:7]
     # print(group,pics,cols)
     tmp=df.to_numpy()
-    print(tmp)
+#     print(tmp)
     tmp=tmp.reshape(-1,7)
     df=pd.DataFrame(tmp)
     df.columns=cols
@@ -134,13 +134,6 @@ def main():
         movies_dir='{}/{}/{}'.format(year,semester,maabada)
         for f in os.listdir(movies_dir):
             make_pic(year,semester,maabada,f)
-#         for root, dirs, files in os.walk(".", topdown=False):
-#            for name in files:
-#               st.write(os.path.join(root, name))
-#            for name in dirs:
-#               st.write(os.path.join(root, name))
-                   
-#             make_pic(os.path.join('FromFb',f),os.path.join('/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/FromFb',f[:-3]+'jpg'))
         imgs = []
         caption = []
         for f in os.listdir(movies_dir):
@@ -185,11 +178,5 @@ def main():
             tmp_set = set(tmp['group'][tmp.os=='Windows'])
             if len(tmp_set) > 0:
                 st.write('groups {} submitted files on wrong OS in {}.'.format(','.join(tmp_set),maabada))
-
-
-
-
-
-
 
 main()
