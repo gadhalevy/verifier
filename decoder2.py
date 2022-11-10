@@ -127,7 +127,7 @@ def main():
     if st.sidebar.checkbox('Analyze?'):
         numEx=[2,2,3,0,0,0,0,0,0]
         tarMaabada=numEx[labs.index(maabada)-1]
-        st.write(df.groupby('group').count())
+        st.write(df['group'].value_counts())
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
