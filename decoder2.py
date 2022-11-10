@@ -131,7 +131,7 @@ def main():
         tmp=tmp[tmp<tarMaabada]
         tmp=list(sum(tmp.index,()))
 #         st.write(tmp.index)
-        st.write('Groups {} did not complete all missions'.format(tmp.index))
+        st.write('Groups {} did not complete all missions'.format(' '.join(str(tmp))))
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
