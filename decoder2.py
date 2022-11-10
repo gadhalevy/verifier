@@ -129,13 +129,13 @@ def main():
         tarMaabada=numEx[labs.index(maabada)-1]
         tmp=df['group'].value_counts()
         tmp=tmp[tmp<tarMaabada]
-        lst=[str(i) for i in tmp.index]
+#         lst=[str(i) for i in tmp.index]
         
-        st.write(lst)
-#         tmp=list(sum(tmp.index,()))
-#         st.write(tmp)
-#         tmp=list(map(str,tmp))
-#         st.write(tmp)
+#         st.write(lst)
+        tmp=list(sum(tmp.index,()))
+        st.write(tmp)
+        lst=list(map(str,tmp))
+        st.write(tmp)
         st.write('Groups {} did not complete all missions'.format(' '.join(lst)))
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
