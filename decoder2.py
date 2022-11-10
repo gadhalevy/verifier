@@ -128,8 +128,8 @@ def main():
         numEx=[2,2,3,0,0,0,0,0,0]
         tarMaabada=numEx[labs.index(maabada)-1]
         tmp=df['group'].value_counts()
-        tmp=tmp[tmp<tarMaabada].index
-        lst=[str(i[0]) for i in tmp]
+        tmp=tmp[tmp<tarMaabada]
+        lst=[str(i[0]) for i in tmp.index]
         
         st.write(lst)
 #         tmp=list(sum(tmp.index,()))
