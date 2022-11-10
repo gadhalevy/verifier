@@ -125,8 +125,9 @@ def main():
             dir=download_blob(year, semester, maabada, group, file)
 #             st.write(dir)
     if st.sidebar.checkbox('Analyze?'):
-        numEx=[2,27,13,0,0,0,0,0,0]
-        st.write(numEx[labs.index(maabada)-1])
+        numEx=[2,2,3,0,0,0,0,0,0]
+        tarMaabada=numEx[labs.index(maabada)-1]
+        st.write(df.groupby('group').count())
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
