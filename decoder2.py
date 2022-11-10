@@ -129,7 +129,7 @@ def main():
         tarMaabada=numEx[labs.index(maabada)-1]
         tmp=df['group'].value_counts()
         tmp=tmp[tmp<tarMaabada]
-        
+        st.write(tmp)
         tmp=list(sum(tmp.index,()))
         st.write(tmp)
 #         tmp=list(map(str,tmp))
