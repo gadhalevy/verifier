@@ -127,7 +127,7 @@ def main():
 #             st.write(dir)
     if st.sidebar.checkbox('Analyze?'):
         numEx=[0,27,13,0,0,0,0,0,0]
-        st.write(numEx.index(labs.find(maabada))+1)
+        st.write(numEx[labs.index(maabada)+1])
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
