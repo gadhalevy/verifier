@@ -133,7 +133,7 @@ def main():
 #         st.write(tmp)
 #         lst=list(map(str,tmp))
 #         st.write(tmp)
-        lst=[str(i[1]) for i in tmp.index]
+        lst=[str(i) for i in tmp.index]
         st.write('Groups {} did not complete all missions'.format(' '.join(lst)))
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
