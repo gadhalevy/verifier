@@ -135,12 +135,12 @@ def main():
 #         st.write(tmp)
         lst=[str(i) for i in tmp.index]
         if len(lst)>0:
-            txt='## Groups {} did not complete all missions'.format(' '.join(lst))
+            txt='### Groups {} did not complete all missions'.format(' '.join(lst))
             st.markdown(txt)
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
-            txt='## Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
+            txt='### Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
             st.markdown(txt)
         movies_dir='{}/{}/{}'.format(year,semester,maabada)
         for f in os.listdir(movies_dir):
