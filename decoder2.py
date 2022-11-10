@@ -110,10 +110,10 @@ def main():
             st.write('Students groups')
             st.dataframe(groups)
     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
+    labs=('Choose', 'Robotica', 'Vision', 'Robolego', 'Android', 'Yetsur', 'IOT',
+                                    'Auto car 1','Auto car 2')
     semester=st.sidebar.selectbox("Please choose semester",('A','B'))
-    maabada = st.sidebar.selectbox('Please select maabada',
-                                   ('Choose', 'Robotica', 'Vision', 'Robolego', 'Android', 'Yetsur', 'IOT',
-                                    'Auto car 1','Auto car 2'))
+    maabada = st.sidebar.selectbox('Please select maabada',labs)
     if maabada != 'Choose':
         df = from_db(year,semester,maabada)
         if st.sidebar.checkbox('Show data from FireBase?'):
@@ -126,6 +126,8 @@ def main():
             dir=download_blob(year, semester, maabada, group, file)
 #             st.write(dir)
     if st.sidebar.checkbox('Analyze?'):
+        numEx=[0,27,13,0,0,0,0,0,0]
+        st.write(numEx.index(labs.find(maabada))+1)
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
