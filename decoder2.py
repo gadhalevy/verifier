@@ -131,7 +131,7 @@ def main():
         tmp=tmp[tmp<tarMaabada].index
         lst=[str(i[0]) for i in tmp]
         
-#         st.write(tmp)
+        st.write(lst)
 #         tmp=list(sum(tmp.index,()))
 #         st.write(tmp)
 #         tmp=list(map(str,tmp))
