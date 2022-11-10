@@ -131,6 +131,7 @@ def main():
         tmp=tmp[tmp<tarMaabada]
         tmp=list(sum(tmp.index,()))
         tmp=list(map(str,tmp))
+        st.write(tmp)
         st.write('Groups {} did not complete all missions'.format(' '.join(tmp)))
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
