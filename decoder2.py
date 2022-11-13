@@ -129,6 +129,7 @@ def main():
         set_group=set(groups['num'])
         dif=set_group-set_fb_groups
         txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
+        st.markdown(txt)
         numEx=[2,2,3,0,0,0,0,0,0]
         tarMaabada=numEx[labs.index(maabada)-1]
         tmp=df['group'].value_counts()
