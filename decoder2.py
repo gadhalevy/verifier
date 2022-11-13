@@ -27,7 +27,7 @@ def init():
 @st.cache(allow_output_mutation=True)
 def make_student_list(path):
     df = pd.read_csv(path, header=0)
-    skiprows = df.index[df['Groups'] == u'מעבדה - 01'].values[0]
+    skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
     tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
     df = df.iloc[skiprows:tmp]
     df = df[[df.columns[1], df.columns[2]]]
