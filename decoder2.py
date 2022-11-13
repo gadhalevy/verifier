@@ -183,7 +183,7 @@ def main():
             tmp['station'] = tmp.station.astype('int')
             tmp=set(tmp['group'][tmp['station'] > 10].to_numpy())
             if len(tmp)>0:
-                st.write('Groups {} submitted from wrong station in {}.'
+                st.markdown('#### Groups {} submitted from wrong station in {}.'
                          .format(','.join(tmp),maabada))
         elif maabada in ('IOT','Auto car 1','Auto car 2'):
             tmp = df[['group', 'os']]
