@@ -126,7 +126,6 @@ def main():
 #             st.write(dir)
     if st.sidebar.checkbox('Analyze?'):
         set_fb_groups=set(df['group'])
-        st.write(set_fb_groups)
         set_groups=set(s.strip() for s in groups['num'])
         dif=set_groups-set_fb_groups
         txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
