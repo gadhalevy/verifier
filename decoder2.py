@@ -127,7 +127,7 @@ def main():
     if st.sidebar.checkbox('Analyze?'):
         set_fb_groups=set(df['group'])
         st.write(set_fb_groups)
-        set_groups=set(groups['num'])
+        set_groups={strip(s) for s in set(groups[num])}
         st.write(set_groups)
         dif=set_groups-set_fb_groups
         st.write(dif)
