@@ -128,9 +128,7 @@ def main():
         set_fb_groups=set(df['group'])
         st.write(set_fb_groups)
         set_groups=set(s.strip() for s in groups['num'])
-        st.write(set_groups)
         dif=set_groups-set_fb_groups
-        st.write(dif)
         txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
         st.markdown(txt)
         numEx=[2,2,3,0,0,0,0,0,0]
