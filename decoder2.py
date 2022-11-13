@@ -105,10 +105,10 @@ def main():
     st.subheader('Tries to find incorrect submissions')
     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
     if path:
-        groups = make_student_list(path)
+        groups = make_student_list(path).dropna()
         if st.sidebar.checkbox("Show students groups"):
             st.write('Students groups')
-            st.dataframe(groups.dropna())
+            st.dataframe(groups)
     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
     labs=('Choose', 'Robotica', 'Vision', 'Robolego', 'Android', 'Yetsur', 'IOT','Auto car 1','Auto car 2')
     semester=st.sidebar.selectbox("Please choose semester",('A','B'))
