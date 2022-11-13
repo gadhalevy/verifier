@@ -141,7 +141,7 @@ def main():
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
-            txt='### Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
+            txt='#### Groups {} used movies that were created before signed kartis avoda!!'.format(','.join(tmp))
             st.markdown(txt)
         movies_dir='{}/{}/{}'.format(year,semester,maabada)
         for f in os.listdir(movies_dir):
