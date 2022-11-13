@@ -108,7 +108,7 @@ def main():
         groups = make_student_list(path)
         if st.sidebar.checkbox("Show students groups"):
             st.write('Students groups')
-            st.dataframe(groups)
+            st.dataframe(groups.dropna())
     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
     labs=('Choose', 'Robotica', 'Vision', 'Robolego', 'Android', 'Yetsur', 'IOT','Auto car 1','Auto car 2')
     semester=st.sidebar.selectbox("Please choose semester",('A','B'))
@@ -125,14 +125,14 @@ def main():
             dir=download_blob(year, semester, maabada, group, file)
 #             st.write(dir)
     if st.sidebar.checkbox('Analyze?'):
+        set_fb_groups=set(df['group'])
+        set_group=set(groups['num'])
+        dif=set_group-set_fb_groups
+        txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
         numEx=[2,2,3,0,0,0,0,0,0]
         tarMaabada=numEx[labs.index(maabada)-1]
         tmp=df['group'].value_counts()
         tmp=tmp[tmp<tarMaabada]
-#         tmp=list(sum(tmp.index,()))
-#         st.write(tmp)
-#         lst=list(map(str,tmp))
-#         st.write(tmp)
         lst=[str(i) for i in tmp.index]
         if len(lst)>0:
             txt='### Groups {} did not complete all missions'.format(' '.join(lst))
