@@ -123,7 +123,7 @@ def main():
             group=r['group']
             file=r['file']
             dir=download_blob(year, semester, maabada, group, file)
-#             st.write(dir)
+    st.write('To see groups analyze you have to load Overview.csv file')
     if st.sidebar.checkbox('Analyze?'):
         if path:
             set_fb_groups=set(df['group'])
