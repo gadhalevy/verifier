@@ -125,19 +125,21 @@ def main():
             dir=download_blob(year, semester, maabada, group, file)
 #             st.write(dir)
     if st.sidebar.checkbox('Analyze?'):
-        set_fb_groups=set(df['group'])
-        set_groups=set(s.strip() for s in groups['num'])
-        dif=set_groups-set_fb_groups
-        txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
-        st.markdown(txt)
-        numEx=[2,2,3,0,0,0,0,0,0]
-        tarMaabada=numEx[labs.index(maabada)-1]
-        tmp=df['group'].value_counts()
-        tmp=tmp[tmp<tarMaabada]
-        lst=[str(i) for i in tmp.index]
-        if len(lst)>0:
-            txt='### Groups {} did not complete all missions'.format(' '.join(lst))
-            st.markdown(txt)
+        if path:
+            set_fb_groups=set(df['group'])
+            set_groups=set(s.strip() for s in groups['num'])
+            dif=set_groups-set_fb_groups
+            txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
+            if len(dif)>0:
+                st.markdown(txt)
+            numEx=[2,2,3,0,0,0,0,0,0]
+            tarMaabada=numEx[labs.index(maabada)-1]
+            tmp=df['group'].value_counts()
+            tmp=tmp[tmp<tarMaabada]
+            lst=[str(i) for i in tmp.index]
+            if len(lst)>0:
+                txt='### Groups {} did not complete all missions'.format(' '.join(lst))
+                st.markdown(txt)
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
