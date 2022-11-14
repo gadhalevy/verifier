@@ -123,7 +123,7 @@ def main():
             group=r['group']
             file=r['file']
             dir=download_blob(year, semester, maabada, group, file)
-    txt='#### To see groups analyze you have to load Overview.csv file :disappointed:'
+    txt='#### To see groups that did not make {maabada} at all you have to load Overview.csv file :disappointed:'
     st.markdown(txt)
     if st.sidebar.checkbox('Analyze?'):
         if path:
@@ -133,14 +133,14 @@ def main():
             txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
             if len(dif)>0:
                 st.markdown(txt)
-            numEx=[2,2,3,0,0,0,0,0,0]
-            tarMaabada=numEx[labs.index(maabada)-1]
-            tmp=df['group'].value_counts()
-            tmp=tmp[tmp<tarMaabada]
-            lst=[str(i) for i in tmp.index]
-            if len(lst)>0:
-                txt='### Groups {} did not complete all missions'.format(' '.join(lst))
-                st.markdown(txt)
+        numEx=[2,2,3,0,0,0,0,0,0]
+        tarMaabada=numEx[labs.index(maabada)-1]
+        tmp=df['group'].value_counts()
+        tmp=tmp[tmp<tarMaabada]
+        lst=[str(i) for i in tmp.index]
+        if len(lst)>0:
+            txt='### Groups {} did not complete all missions'.format(' '.join(lst))
+            st.markdown(txt)
         tmp=df[['group','start','created']]
         tmp=set(tmp['group'][tmp['start']>tmp['created']].to_numpy())
         if len(tmp)>0:
