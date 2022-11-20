@@ -109,7 +109,8 @@ def main():
         if st.sidebar.checkbox("Show students groups"):
             st.write('Students groups')
             st.dataframe(groups)
-    year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
+#     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
+    year=st.sidebar.selectbox('Please choose year',['Tashpag','Tashpad','Tashpah'])
     labs=('Choose', 'Robotica', 'Vision', 'Robolego', 'Android', 'Yetsur', 'IOT','Auto car 1','Auto car 2')
     semester=st.sidebar.selectbox("Please choose semester",('A','B'))
     maabada = st.sidebar.selectbox('Please select maabada',labs)
