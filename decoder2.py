@@ -103,7 +103,8 @@ def make_movie(path,mismatch=[]):
 def main():
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
-    path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
+#     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
+    path='Overview.csv'
     if path:
         groups = make_student_list(path).dropna()
         if st.sidebar.checkbox("Show students groups"):
