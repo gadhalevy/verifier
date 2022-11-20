@@ -125,8 +125,8 @@ def main():
             group=r['group']
             file=r['file']
             dir=download_blob(year, semester, maabada, group, file)
-    txt=f'#### To see groups that did not make {maabada} at all you have to load Overview.csv file :disappointed:'
-    st.markdown(txt)
+#     txt=f'#### To see groups that did not make {maabada} at all you have to load Overview.csv file :disappointed:'
+#     st.markdown(txt)
     if st.sidebar.checkbox('Analyze?'):
         if path:
             set_fb_groups=set(df['group'])
