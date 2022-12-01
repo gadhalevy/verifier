@@ -135,7 +135,7 @@ def main():
             txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
             if len(dif)>0:
                 st.markdown(txt)
-        numEx=[2,2,3,0,0,0,0,0,0]
+        numEx=[2,2,3,3,2,0,0,0,0]
         tarMaabada=numEx[labs.index(maabada)-1]
         tmp=df['group'].value_counts()
         tmp=tmp[tmp<tarMaabada]
