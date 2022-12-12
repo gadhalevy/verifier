@@ -112,7 +112,7 @@ def main():
             st.dataframe(groups)
 #     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
     year=st.sidebar.selectbox('Please choose year',['Tashpag','Tashpad','Tashpah'])
-    labs=('Choose', 'Robotica', 'Vision', 'Robolego', 'Android', 'Yetsur', 'IOT','Auto car 1','Auto car 2')
+    labs=('Choose', 'Robotica', 'Vision', 'Robolego', 'Yetsur', 'Android', 'IOT','Auto car 1','Auto car 2')
     semester=st.sidebar.selectbox("Please choose semester",('A','B'))
     maabada = st.sidebar.selectbox('Please select maabada',labs)
     if maabada != 'Choose':
@@ -135,7 +135,7 @@ def main():
             txt='### Groups {} did not make maabada {} yet'.format(' '.join(dif),maabada)
             if len(dif)>0:
                 st.markdown(txt)
-        numEx=[2,2,3,3,2,0,0,0,0]
+        numEx=[2,2,3,3,2,4,1,0,0]
         tarMaabada=numEx[labs.index(maabada)-1]
         tmp=df['group'].value_counts()
         tmp=tmp[tmp<tarMaabada]
