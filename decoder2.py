@@ -95,7 +95,7 @@ def make_movie(path,mismatch=[]):
     if len(mismatch)==0:
         mismatch=os.listdir(path)
     for f in mismatch:
-        if f.lower().endswith('mp4'):
+        if f.lower().endswith('mp4') or f.lower().endswith('mov'):
             video_file = open(os.path.join(path,f), 'rb')
             video_bytes = video_file.read()
             yield video_bytes
