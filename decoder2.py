@@ -131,7 +131,7 @@ def main():
     maabada = st.sidebar.selectbox('Please select maabada',labs)
     path = 'Overview.csv'
     if path:
-        st.sidebar.warning('This button press is done once a year only!', icon="👇")
+        st.sidebar.warning('This button press is done once a year only! 👇")
         if st.sidebar.button("Press to make new student list  ❗"):
             make_student_list(path,labs)
             st.write('New students list was created')
