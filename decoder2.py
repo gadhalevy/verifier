@@ -93,7 +93,7 @@ def download_blob(year,semester,maabada,group,file):
     """Downloads a blob from the bucket."""
     source_blob_name='Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file)
     # destination_file_name=os.path.join(year,semester,maabada)
-    destination_file_name ='/{}/{}/{}'.format(year,semester,maabada)
+    destination_file_name ='{}/{}/{}'.format(year,semester,maabada)
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
