@@ -113,9 +113,10 @@ def make_movie(path,mismatch=[]):
             yield video_bytes
 
 # @st.cache(allow_output_mutation=True)
-def show_movies(rem,groups,group,maabada):
+def show_movies(groups,group,maabada):
     groups = groups.astype({'num': 'int8'})
-    groups.loc[(groups.num == group), maabada] = st.session_state['grade']
+    grade,rem=st.session_state['grade'].split(',')
+    groups.loc[(groups.num == group), maabada] = grade
     groups.loc[(groups.num == group), maabada + '_rem'] = rem
     groups.to_csv('grades.csv',index=False)
     st.session_state['counter']+=1
