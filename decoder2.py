@@ -233,5 +233,8 @@ import streamlit as st
 #                 st.write('groups {} submitted files on wrong OS in {}.'.format(','.join(tmp_set),maabada))
 
 # main()
-txt='###Under constraction!###'
-st.markdown(txt)
+import streamlit as st
+
+st.markdown('Streamlit is **_really_ cool**.')
+st.markdown(”This text is :red[colored red], and this is **:blue[colored]** and bold.”)
+st.markdown(":green[$\sqrt{x^2+y^2}=1$] is a Pythagorean identity. :pencil:")
