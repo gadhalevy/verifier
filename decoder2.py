@@ -13,7 +13,7 @@ from moviepy.editor import *
 This is decoder2.py in git_hub.
 '''
 
-@st.cache_resource
+@st.experimental_singlton
 def init():
     try:
         firebase_admin.delete_app(firebase_admin.get_app())
@@ -28,7 +28,7 @@ def init():
         cred = credentials.Certificate('apikey.json')
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
-@st.experimental_singlton
+@st.experimental_memo
 def make_student_list(path,labs):
     df = pd.read_csv(path, header=0)
     skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
@@ -51,7 +51,7 @@ def make_student_list(path,labs):
     concated=pd.concat([groups,grades],axis=1)
     concated.to_csv('grades.csv')
 
-@st.cache_data
+@st.experimental_memo
 def from_db(year,semester,maabada):
     init()
     year=str(year)
@@ -70,7 +70,7 @@ def from_db(year,semester,maabada):
     df=df.astype('string')
     return df
 
-@st.cache_data
+@st.experimental_memo
 def download_blob(year,semester,maabada,group,file):
     """Downloads a blob from the bucket."""
     source_blob_name='Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file)
@@ -118,7 +118,7 @@ def grade_movie(team,lab):
     st.session_state.counter += 1
     # st.write(st.session_state.mark,st.session_state.heara)
 
-@st.cache_data
+@st.experimental_memo
 def not_make_maabada(df,maabada):
     txt='### All groups make this {}'.format(maabada)
     groups = pd.read_csv('grades.csv')
@@ -129,7 +129,7 @@ def not_make_maabada(df,maabada):
         txt = '### Groups {} did not make maabada {} yet'.format(' '.join(str(dif)), maabada)
     return txt
 
-@st.cache_data
+@st.experimental_memo
 def not_completed_lab(numEx,labs,maabada,df):
     txt='### All groups completed all missions in {}'.format(maabada)
     tarMaabada = numEx[labs.index(maabada) - 1]
