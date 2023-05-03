@@ -13,7 +13,7 @@ from moviepy.editor import *
 This is decoder2.py in git_hub.
 '''
 
-@st.cache_resource
+
 def init():
     try:
         firebase_admin.delete_app(firebase_admin.get_app())
@@ -50,7 +50,6 @@ def make_student_list(path,labs):
     concated=pd.concat([groups,grades],axis=1)
     concated.to_csv('grades.csv')
 
-@st.cache_data
 def from_db(year,semester,maabada):
     init()
     year=str(year)
@@ -69,7 +68,6 @@ def from_db(year,semester,maabada):
     df=df.astype('string')
     return df
 
-@st.cache_data
 def download_blob(year,semester,maabada,group,file):
     """Downloads a blob from the bucket."""
     source_blob_name='Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file)
