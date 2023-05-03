@@ -28,7 +28,7 @@ def init():
         cred = credentials.Certificate('apikey.json')
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
-@st.cache_data
+@st.experimental_singlton
 def make_student_list(path,labs):
     df = pd.read_csv(path, header=0)
     skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
