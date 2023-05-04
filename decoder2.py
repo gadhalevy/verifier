@@ -197,7 +197,7 @@ def main():
             txt=not_completed_lab(numEx,labs,maabada,df)
             st.markdown(txt)
         with open('grades.csv') as f:
-            st.sidebar.download_button(label='Download Grades', f)
+            st.sidebar.download_button('Download Grades', f)
 main()
 
 
