@@ -196,7 +196,7 @@ def main():
             numEx = [2, 2, 3, 3, 2, 3, 1, 0, 0]
             txt=not_completed_lab(numEx,labs,maabada,df)
             st.markdown(txt)
-#         st.sidebar.download_button(label='Download Grades', data='grades.csv', file_name='grades.csv', mime='text/csv',)
+        st.sidebar.download_button(label='Download Grades', data='grades.csv', file_name='grades.csv', mime='text/csv',)
 main()
 
 
