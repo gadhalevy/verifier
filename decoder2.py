@@ -196,6 +196,7 @@ def main():
             numEx = [2, 2, 3, 3, 2, 3, 1, 0, 0]
             txt=not_completed_lab(numEx,labs,maabada,df)
             st.markdown(txt)
+        st.download_button('Download Grades', text_contents, 'grades.csv', 'text/csv')
 main()
 
 
