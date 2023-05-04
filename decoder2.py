@@ -168,10 +168,7 @@ def main():
         if st.sidebar.checkbox('Grade Movies?'):
             if st.session_state.counter <= len(os.listdir(Path)) - 1:            
                 holder = st.empty()
-                try:
-                    video,v_name=make_movie(Path)
-                except TypeError:
-                    pass
+                video,v_name=make_movie(Path)                
                 col1,col2=st.columns([8,2])
                 with col1:
                     st.video(video)
