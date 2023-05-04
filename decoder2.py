@@ -24,7 +24,6 @@ def init():
         cred = credentials.Certificate('apikey.json')
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
-@st.cache_data
 def make_student_list(path,labs):
     df = pd.read_csv(path, header=0)
     skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
@@ -47,7 +46,6 @@ def make_student_list(path,labs):
     concated=pd.concat([groups,grades],axis=1)
     concated.to_csv('grades.csv')
 
-@st.cache_data
 def from_db(year,semester,maabada):
     init()
     year=str(year)
@@ -66,7 +64,6 @@ def from_db(year,semester,maabada):
     df=df.astype('string')
     return df
 
-@st.cache_data
 def download_blob(year,semester,maabada,group,file):
     """Downloads a blob from the bucket."""
     source_blob_name='Movies/{}/{}/{}/{}_{}'.format(year, semester, maabada, group, file)
@@ -114,7 +111,6 @@ def grade_movie(team,lab):
     st.session_state.counter += 1
     # st.write(st.session_state.mark,st.session_state.heara)
 
-@st.cache_data
 def not_make_maabada(df,maabada):
     txt='### All groups make this {}'.format(maabada)
     groups = pd.read_csv('grades.csv')
@@ -125,7 +121,6 @@ def not_make_maabada(df,maabada):
         txt = '### Groups {} did not make maabada {} yet'.format(' '.join(str(dif)), maabada)
     return txt
 
-@st.cache_data
 def not_completed_lab(numEx,labs,maabada,df):
     txt='### All groups completed all missions in {}'.format(maabada)
     tarMaabada = numEx[labs.index(maabada) - 1]
@@ -135,6 +130,7 @@ def not_completed_lab(numEx,labs,maabada,df):
     if len(lst) > 0:
         txt = '### Groups {} did not complete all missions'.format(' '.join(lst))
     return txt
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
