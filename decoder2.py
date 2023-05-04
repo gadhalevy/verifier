@@ -9,11 +9,7 @@ import pandas as pd
 import platform
 from uuid import uuid4
 from moviepy.editor import *
-'''
-This is decoder2.py in git_hub.
-'''
 
-@st.cache_resource
 def init():
     try:
         firebase_admin.delete_app(firebase_admin.get_app())
