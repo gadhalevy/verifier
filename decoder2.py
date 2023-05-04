@@ -166,10 +166,12 @@ def main():
             st.session_state['counter']=0
         Path=f'{year}/{semester}/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            st.write('check=',st.session_state.counter,len(os.listdir(Path)) - 1)
             if st.session_state.counter <= len(os.listdir(Path)) - 1:            
                 holder = st.empty()
-                video,v_name=make_movie(Path)
+                try:
+                    video,v_name=make_movie(Path)
+                except TypeError:
+                    pass
                 col1,col2=st.columns([8,2])
                 with col1:
                     st.video(video)
