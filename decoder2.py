@@ -183,10 +183,10 @@ def main():
                         st.text_area('Remark','Checked',key='heara')
                         st.form_submit_button("Submit",on_click=grade_movie,args=(kvutsa,maabada))
                 holder.text_input('Remarks', 'movie {} of group {} is being checked'.format(seret, kvutsa))
-        elif st.session_state.counter == len(os.listdir(Path)) :
-            comp_grades(maabada)
-        else:
-            st.warning('No more movies ❗ 🛑')
+            elif st.session_state.counter == len(os.listdir(Path)) :
+                comp_grades(maabada)
+            else:
+                st.warning('No more movies ❗ 🛑')
         if st.sidebar.button('Show grades?'):
             groups=pd.read_csv('grades.csv')
             st.dataframe(groups)
