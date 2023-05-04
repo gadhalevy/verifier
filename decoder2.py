@@ -79,7 +79,9 @@ def download_blob(year,semester,maabada,group,file):
 
 def make_movie(path):
     movie=os.listdir(path)[st.session_state['counter']]
-    st.write('movie=',movie)
+    if movie=='0_0':
+        st.session_state['counter']+=1
+        movie=os.listdir(path)[st.session_state['counter']]
     if movie.lower().endswith('mp4') or movie.lower().endswith('mov') or movie.lower().endswith('avi'):
         video_file = open(os.path.join(path,movie), 'rb')
         video_bytes = video_file.read()
