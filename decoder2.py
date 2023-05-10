@@ -197,7 +197,7 @@ def main():
             txt=not_completed_lab(numEx,labs,maabada,df)
             st.markdown(txt)
         df = pd.read_csv('grades.csv')
-        downloaded=df.encode('utf-8')
+        downloaded=df.to_csv().encode('utf-8')
         st.sidebar.download_button(label='Download Grades',data=downloaded, file_name='grades.csv', mime='text/csv')
 main()
 
