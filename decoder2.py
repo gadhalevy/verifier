@@ -1,10 +1,10 @@
 import os
-import firebase-admin
+import firebase_admin
 import streamlit as st
-from firebase-admin import credentials
-from firebase-admin import db
-from firebase-admin import storage
-import pytesseract as ocr
+from firebase_admin import credentials
+from firebase_admin import db
+from firebase_admin import storage
+import pytesseract as ocrstreamlit 
 import pandas as pd
 import platform
 from uuid import uuid4
