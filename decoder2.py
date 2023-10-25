@@ -1,9 +1,9 @@
 import os
 import firebase_admin
 import streamlit as st
-from firebase_admin import credentials
-from firebase_admin import db
-from firebase_admin import storage
+from firebase-admin import credentials
+from firebase-admin import db
+from firebase-admin import storage
 import pytesseract as ocr
 import pandas as pd
 import platform
