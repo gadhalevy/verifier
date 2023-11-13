@@ -18,7 +18,7 @@ from moviepy.editor import *
 
 class Decoder():
     def __init__(self):
-        cred = credentials.Certificate("mykey.json")
+        cred = credentials.Certificate("apikey.json")
         firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/'})
         # path=input('Enter path of CimLab groups csv file\n')
         # if not path:

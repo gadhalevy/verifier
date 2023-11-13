@@ -7,7 +7,7 @@ import pickle,datetime
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 
-Window.size = (320, 470)
+# Window.size = (320, 470)
 Window.set_title('Kartis Avoda')
 class Form(GridLayout):
     group = ObjectProperty()

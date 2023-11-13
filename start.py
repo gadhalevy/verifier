@@ -7,7 +7,7 @@ import pickle,datetime
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 
-Window.size = (320, 470)
+# Window.size = (320, 470)
 Window.set_title('Kartis Avoda')
 class Form(GridLayout):
     group = ObjectProperty()
@@ -25,7 +25,6 @@ class Form(GridLayout):
             year=input('Please enter year of semester A\n')
             semester=input('Please enter semester A or B (capitals).\n')
             station=input('Please enter station number\n')
-            self.dic
             self.dic['station']=station
 
 

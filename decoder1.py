@@ -20,10 +20,10 @@ def init():
     tmp = platform.platform()
     # print(tmp)
     if 'Windows' in tmp:
-        cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
+        cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/apikey.json")
         ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     elif 'Linux' in tmp:
-        cred = credentials.Certificate("/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/mykey.json")
+        cred = credentials.Certificate("/media/cimlab/Transcend/Gibui260318/pythonStuff/verifier/apikey.json")
         ocr.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/'})
 @st.cache(allow_output_mutation=True)
@@ -43,7 +43,7 @@ def make_student_list(path):
 @st.cache(allow_output_mutation=True)
 def from_db(maabada):
     init()
-    # cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/mykey.json")
+    # cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/apikey.json")
     ref=db.reference(maabada)
     df=pd.json_normalize(ref.get())
     print(df.to_string())

@@ -25,7 +25,7 @@ class AntyCopy(BoxLayout):
             self.dic = pickle.load(open("save.p", "rb"))
         except FileNotFoundError:
             input("Don't copy! Please fill Kartis Avoda")
-        cred = credentials.Certificate("mykey.json")
+        cred = credentials.Certificate("apikey.json")
         firebase_admin.initialize_app(cred,{
     'databaseURL': 'https://Lab9.firebaseio.com/'})
         Clock.schedule_once(self.start, 0.1)
