@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import streamlit as st,string,secrets
 import firebase_admin
 from firebase_admin import credentials
@@ -104,6 +106,12 @@ def find_members(group):
     groups=make_student_list('auth.csv')
     return groups[groups['num'].str.strip()==group]
 
+def fbwrite(*args,**kwards):
+    # print(f,created_os,start,created,processed,station,group,lab)
+    year,semester,lab,group,student=args
+    ref = db.reference(f'/{year}/{semester}/{lab}/{group}/{student}/')
+    for k,v in kwards.items():
+        ref.set({f'{k}':f'{v}'})
 
 def load(what,f,year,semester,lab,group):
     ds=storage.bucket()
@@ -146,10 +154,9 @@ def main():
             end=len(members)
             # home=st.sidebar.radio('Mark yourself',members)
         for i in range(end):
-            with st.sidebar.form(f'Home{i}'):
+            with st.sidebar.form(f'Location{i}'):
                 member=st.radio('Who R U?',members)
                 reciver=df_group[df_group['Group members'].str.strip()==member]['Email address'].values
-                # st.write(reciver)
                 submitted = st.form_submit_button("Send password")
                 if submitted:
                     st_pass = send_pass(reciver[0].strip())
@@ -160,12 +167,22 @@ def main():
                 second_button=st.form_submit_button("Verify password")
                 if second_button:
                     if st.session_state.user_pass==st.session_state.st_pass:
+                        if end==1:
+                            param='start read'
+                        else:
+                            param='start lab'
+                        fbwrite(year,semester,lab,group,member,param=datetime.now())
                         st.session_state.counter+=1
                     else:
                         st.error('Wrong password',icon="🚨")
+                missing = st.form_submit_button('Missing')
+                if missing:
+                    st.write(member[:-1])
+                    fbwrite(year,semester,lab,group,member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
+                    st.session_state.counter += 1
         if st.session_state.counter==end and lab!='Choose':
             base_path = base_path + f'/{lab}'
-            st.write(os.path.dirname(base_path))
+            # st.write(os.path.dirname(base_path))
             for f in (os.listdir(os.path.dirname(base_path + '/%s' % lab))):
                 # st.write(f)
                 if f.endswith('pdf'):
@@ -173,6 +190,16 @@ def main():
                     # st.write(base_path+f'/{f}')
                     pdf = displayPDF(base_path + f'/{f}')
                     st.markdown(pdf, unsafe_allow_html=True)
+            session_end=st.button('Done close application')
+            if session_end:
+                if end==1:
+                    param='end read'
+                    fbwrite(year,semester,lab,group,member,param=datetime.now())
+                else:
+                    param='finish lab'
+                    for m in members:
+                        fbwrite(year,semester,lab,group,m,param=datetime.now())
+
         if 'st_pass' in st.session_state:
             st.write('st_pass',st.session_state.st_pass)
         if 'user_pass' in st.session_state:
