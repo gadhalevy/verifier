@@ -13,7 +13,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pandas as pd
 def send_email(subject, body, receiver,files=None):
-    with open('pass.txt') as f:
+    with open('passtxt') as f:
         password = f.read()
     sender='khanuka1912@gmail.com'
     # Create a multipart message and set headers
@@ -64,7 +64,8 @@ def send_pass(receiver):
     subject='Password for ITL'
     pswrd=make_pass()
     body=f'Please enter this password: {pswrd}'
-    send_email(subject,body,receiver)
+    # Unmark line below in production
+    # send_email(subject,body,receiver)
     return pswrd
 
 
@@ -111,7 +112,7 @@ def fbwrite(*args,**kwards):
     year,semester,lab,group,student=args
     ref = db.reference(f'/{year}/{semester}/{lab}/{group}/{student}/')
     for k,v in kwards.items():
-        ref.set({f'{k}':f'{v}'})
+        ref.push({f'{k}':f'{v}'})
 
 def load(what,f,year,semester,lab,group):
     ds=storage.bucket()
@@ -128,23 +129,28 @@ def displayPDF(file):
     pdf_display = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
     return pdf_display
     # Displaying File
-
-def main():
+def base():
     init()
     st.header("Verifier")
     st.subheader('Assist you with your submissions')
-    if not 'counter' in st.session_state:
-        st.session_state['counter']=0
-#     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
-#     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
-    year=st.sidebar.selectbox('Please choose year',['Tashpad','Tashpah','Tashpav'])
-    labs=('Choose', 'Robotica', 'Vision', 'Robolego', 'Yetsur', 'Android', 'IOT','Auto car 1','Auto car 2')
-    semester=st.sidebar.selectbox("Please choose semester",('A','B'))
-    lab = st.sidebar.selectbox('Please select maabada',labs)
-    base_path=os.path.abspath(os.curdir)
+    #     path = st.sidebar.file_uploader("Find the Overview.csv file of students groups")
+    #     year=st.sidebar.selectbox('Please choose year',['תשפג','תשפד','תשפה','תשפו','תשפז','תשפח','Tashpag'])
+    year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'])
+    labs = ('Choose', 'Robotica', 'Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
+    semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
+    lab = st.sidebar.selectbox('Please select maabada', labs)
     options = range(1, 21)
     group = st.sidebar.select_slider('Please choose group number', options)
-    location = st.sidebar.radio('Please choose location', ['None','Home', 'Lab'])
+    location = st.sidebar.radio('Please choose location', ['None', 'Home', 'Lab'],key='location')
+    return year,semester,lab,group,location
+
+# def display_form():
+
+
+def main():
+    year,semester,lab,group,location=base()
+    if 'counter' not in st.session_state:
+        st.session_state['counter']=0
     if location !='None':
         df_group=find_members(f'{group:02}')
         members=df_group['Group members']
@@ -153,6 +159,7 @@ def main():
         else:
             end=len(members)
             # home=st.sidebar.radio('Mark yourself',members)
+
         for i in range(end):
             with st.sidebar.form(f'Location{i}'):
                 member=st.radio('Who R U?',members)
@@ -164,41 +171,52 @@ def main():
                         st.session_state['st_pass']=st_pass
                     st.write('Password was sent to your email')
                     st.text_input('Write password',max_chars=8,type="password",key="user_pass")
-                second_button=st.form_submit_button("Verify password")
-                if second_button:
+                verify_btn=st.form_submit_button("Verify password")
+                if verify_btn:
                     if st.session_state.user_pass==st.session_state.st_pass:
+                        st.session_state.counter += 1
                         if end==1:
                             param='start read'
                         else:
                             param='start lab'
-                        fbwrite(year,semester,lab,group,member,param=datetime.now())
-                        st.session_state.counter+=1
+                        fbwrite(year,semester,lab,group,member[:-1],**{param:datetime.now()})
+                        st.write('Your password verified please press start session')
                     else:
                         st.error('Wrong password',icon="🚨")
-                missing = st.form_submit_button('Missing')
-                if missing:
-                    st.write(member[:-1])
-                    fbwrite(year,semester,lab,group,member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
-                    st.session_state.counter += 1
-        if st.session_state.counter==end and lab!='Choose':
-            base_path = base_path + f'/{lab}'
-            # st.write(os.path.dirname(base_path))
-            for f in (os.listdir(os.path.dirname(base_path + '/%s' % lab))):
-                # st.write(f)
-                if f.endswith('pdf'):
+                if location=='Lab':
+                    missing = st.form_submit_button('Missing')
+                    if missing:
+                        st.write(member[:-1])
+                        fbwrite(year,semester,lab,group,member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
+                        if 'missing' not in st.session_state:
+                            st.session_state['missing']=member
+                        st.session_state.counter += 1
+        session_start=st.button("Start session")
+        if session_start:
+            # st.write(st.session_state.counter,end )
+            base_path = os.path.abspath(os.curdir)
+            if st.session_state.counter>=end and lab!='Choose':
+                base_path = base_path + f'/{lab}'
+                # st.write(os.path.dirname(base_path))
+                for f in (os.listdir(os.path.dirname(base_path + '/%s' % lab))):
                     # st.write(f)
-                    # st.write(base_path+f'/{f}')
-                    pdf = displayPDF(base_path + f'/{f}')
-                    st.markdown(pdf, unsafe_allow_html=True)
-            session_end=st.button('Done close application')
+                    if f.endswith('pdf'):
+                        # st.write(f)
+                        # st.write(base_path+f'/{f}')
+                        pdf = displayPDF(base_path + f'/{f}')
+                        st.markdown(pdf, unsafe_allow_html=True)
+        session_end=st.button('End session')
+        if session_end:
+            st.write('end=', end, 'members=', members,'member=',member)
             if session_end:
                 if end==1:
                     param='end read'
-                    fbwrite(year,semester,lab,group,member,param=datetime.now())
+                    fbwrite(year,semester,lab,group,member[:-1],**{param:datetime.now()})
                 else:
                     param='finish lab'
                     for m in members:
-                        fbwrite(year,semester,lab,group,m,param=datetime.now())
+                        if m not in st.session_state.missing:
+                            fbwrite(year,semester,lab,group,m[:-1],**{param:datetime.now()})
 
         if 'st_pass' in st.session_state:
             st.write('st_pass',st.session_state.st_pass)
