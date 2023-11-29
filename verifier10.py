@@ -211,13 +211,13 @@ def upload(kind,obj,ref):
     if kind=='movie':
         siomet=('mp4',)
         err_code='Must be mp4'
-    else:
+    elif kind=='code':
         siomet=('txt','.py','.kv','txt','logo','csv')
         err_code='Must be one of py,kv,txt,nlogo or csv files'
     for c in obj:
         if c.name.lower()[-3:] in siomet:
-            load('Code', c, *ref[:-1])
-            new_ref = ref[:-1] + ('code',)
+            load(kind, c, *ref[:-1])
+            new_ref = ref[:-1] + (kind,)
             fbwrite(*new_ref, **{c.name: datetime.now()})
         else:
             st.error(f'{err_code}', icon="🚨")
