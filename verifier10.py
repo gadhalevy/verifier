@@ -187,6 +187,7 @@ def display_form(members,df_group,i,end,ref):
             else:
                 st.session_state['member'] = member
 
+
 def end_session(ref,members):
     year, semester, lab, group, location = ref
     if location == 'Home':
@@ -198,22 +199,28 @@ def end_session(ref,members):
             if m not in st.session_state.missing:
                 fbwrite(year, semester, lab, group, m[:-1], **{param: datetime.now()})
 
-def upload_movie(movie,ref):
-    if movie.name.lower().endswith('mp4'):
-        load('Movies',movie,*ref[:-1])
-        new_ref=ref[:-1]+('movie',)
-        fbwrite(*new_ref ,**{movie.name: datetime.now()})
-    else:
-        st.error('Must be mp4',icon="🚨")
+# def upload_movie(movie,ref):
+#     if movie.name.lower().endswith('mp4'):
+#         load('Movies',movie,*ref[:-1])
+#         new_ref=ref[:-1]+('movie',)
+#         fbwrite(*new_ref ,**{movie.name: datetime.now()})
+#     else:
+#         st.error('Must be mp4',icon="🚨")
 
-def upload_code(code,ref):
-    for c in code:
-        if c.name.lower()[-3:] in ('.py', '.kv', 'txt'):
+def upload(kind,obj,ref):
+    if kind=='movie':
+        siomet=('mp4',)
+        err_code='Must be mp4'
+    else:
+        siomet=('txt','.py','.kv','txt','logo','csv')
+        err_code='Must be one of py,kv,txt,nlogo or csv files'
+    for c in obj:
+        if c.name.lower()[-3:] in siomet:
             load('Code', c, *ref[:-1])
             new_ref = ref[:-1] + ('code',)
             fbwrite(*new_ref, **{c.name: datetime.now()})
         else:
-            st.error('Must be py or kv or txt files', icon="🚨")
+            st.error(f'{err_code}', icon="🚨")
 
 def main():
     year,semester,lab,group,location=base()
@@ -240,9 +247,10 @@ def main():
             if session_end:
                 end_session(ref,members)
         elif location=='Lab':
-            movie=st.file_uploader("Please select your movie",accept_multiple_files=False,key='movie')
+            st.write(st.session_state.counter)
+            movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
             if movie:
-                upload_movie(movie,ref)
+                upload('movie',movie,ref)
                 # if movie.name.lower().endswith('mp4'):
                 #     load('Movies',movie,year,semester,lab,group)
                 #     new_ref=ref[:-1]+('movie',)
@@ -251,7 +259,7 @@ def main():
                 #     st.error('Must be mp4',icon="🚨")
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
-                upload_code(code,ref)
+                upload('code',code,ref)
                 # st.write(code[0].name)
                 # for c in code:
                 #     if c.name.lower()[-3:] in('.py','.kv','txt'):
