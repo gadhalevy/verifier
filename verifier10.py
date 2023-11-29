@@ -76,7 +76,7 @@ def init():
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
         pass
-    cred = credentials.Certificate(dict(st.secrets['credentials']['fb']))
+    cred = credentials.Certificate(dict(st.secrets['fb']))
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
 @st.cache_data()
