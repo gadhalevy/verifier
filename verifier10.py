@@ -232,7 +232,7 @@ def main():
         members=df_group['Group members']
         if location=='Home':
             end=1
-            member=display_form(members,df_group,0,1,ref)
+            display_form(members,df_group,0,1,ref)
         else:
             end=len(members)
             for i in range(end):
@@ -247,19 +247,20 @@ def main():
             if session_end:
                 end_session(ref,members)
         elif location=='Lab':
-            st.write(st.session_state.counter)
-            movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
-            if movie:
-                upload('movie',movie,ref)
-                # if movie.name.lower().endswith('mp4'):
-                #     load('Movies',movie,year,semester,lab,group)
-                #     new_ref=ref[:-1]+('movie',)
-                #     fbwrite(*new_ref ,**{movie.name: datetime.now()})
-                # else:
-                #     st.error('Must be mp4',icon="🚨")
-            code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
-            if code:
-                upload('code',code,ref)
+            # st.write(st.session_state.counter)
+            if st.session_state.counter>=len(members):
+                movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
+                if movie:
+                    upload('movie',movie,ref)
+                    # if movie.name.lower().endswith('mp4'):
+                    #     load('Movies',movie,year,semester,lab,group)
+                    #     new_ref=ref[:-1]+('movie',)
+                    #     fbwrite(*new_ref ,**{movie.name: datetime.now()})
+                    # else:
+                    #     st.error('Must be mp4',icon="🚨")
+                code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
+                if code:
+                    upload('code',code,ref)
                 # st.write(code[0].name)
                 # for c in code:
                 #     if c.name.lower()[-3:] in('.py','.kv','txt'):
