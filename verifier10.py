@@ -75,7 +75,7 @@ def init():
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
         pass
-    cred = credentials.Certificate('apikey.json')
+    cred = credentials.Certificate(**st.secrets.credentials)
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
 @st.cache_data()
@@ -197,17 +197,23 @@ def end_session(ref,members):
             if m not in st.session_state.missing:
                 fbwrite(year, semester, lab, group, m[:-1], **{param: datetime.now()})
 
-def upload(kind,obj,args):
-    if kind=='movie':
-        siomet=['mp4']
+def upload_movie(movie,ref):
+    if movie.name.lower().endswith('mp4'):
+        load('Movies',movie,*ref[:-1])
+        new_ref=ref[:-1]+('movie',)
+        fbwrite(*new_ref ,**{movie.name: datetime.now()})
     else:
-        siomet=['txt','.py','.kv']
-    if obj.name.lower()[-3:] in siomet:
-        load(kind, obj, *args)
-        new_ref = args[:-1] + (kind,)
-        fbwrite(*new_ref, **{obj.name: datetime.now()})
-    else:
-        st.error('Must be mp4', icon="🚨")
+        st.error('Must be mp4',icon="🚨")
+
+def upload_code(code,ref):
+    for c in code:
+        if c.name.lower()[-3:] in ('.py', '.kv', 'txt'):
+            load('Code', c, *ref[:-1])
+            new_ref = ref[:-1] + ('code',)
+            fbwrite(*new_ref, **{c.name: datetime.now()})
+        else:
+            st.error('Must be py or kv or txt files', icon="🚨")
+
 def main():
     year,semester,lab,group,location=base()
     ref=year,semester,lab,group,location
@@ -235,7 +241,7 @@ def main():
         elif location=='Lab':
             movie=st.file_uploader("Please select your movie",accept_multiple_files=False,key='movie')
             if movie:
-                upload('movie',movie,ref)
+                upload_movie(movie,ref)
                 # if movie.name.lower().endswith('mp4'):
                 #     load('Movies',movie,year,semester,lab,group)
                 #     new_ref=ref[:-1]+('movie',)
@@ -244,14 +250,15 @@ def main():
                 #     st.error('Must be mp4',icon="🚨")
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
+                upload_code(code,ref)
                 # st.write(code[0].name)
-                for c in code:
-                    if c.name.lower()[-3:] in('.py','.kv','txt'):
-                        load('Code',c,year,semester,lab,group)
-                        new_ref = ref[:-1] + ('code',)
-                        fbwrite(*ref, **{c.name: datetime.now()})
-                    else:
-                        st.error('Must be py or kv or txt files',icon="🚨")
+                # for c in code:
+                #     if c.name.lower()[-3:] in('.py','.kv','txt'):
+                #         load('Code',c,year,semester,lab,group)
+                #         new_ref = ref[:-1] + ('code',)
+                #         fbwrite(*ref, **{c.name: datetime.now()})
+                #     else:
+                #         st.error('Must be py or kv or txt files',icon="🚨")
 
 
 main()
