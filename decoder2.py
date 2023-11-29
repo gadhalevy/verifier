@@ -19,9 +19,9 @@ def init():
     # print(tmp)
     if 'Windows' in tmp:
         cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/apikey.json")
-        ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+        # ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
     else:
-        cred = credentials.Certificate('apikey.json')
+        cred = credentials.Certificate(dict(st.secrets['fb']))
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
 def make_student_list(path,labs):
