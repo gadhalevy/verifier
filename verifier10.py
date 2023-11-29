@@ -13,8 +13,9 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pandas as pd
 def send_email(subject, body, receiver,files=None):
-    with open('passtxt') as f:
-        password = f.read()
+    # with open('passtxt') as f:
+    #     password = f.read()
+    password=st.secrets.sisma
     sender='khanuka1912@gmail.com'
     # Create a multipart message and set headers
     message = MIMEMultipart()
@@ -65,7 +66,7 @@ def send_pass(receiver):
     pswrd=make_pass()
     body=f'Please enter this password: {pswrd}'
     # Unmark line below in production
-    # send_email(subject,body,receiver)
+    send_email(subject,body,receiver)
     return pswrd
 
 
