@@ -240,9 +240,9 @@ def main():
                     display_form(members,df_group,i,end,ref)
             session_start=st.button("Start session")
             if session_start:
-            if st.session_state.counter>=end and lab!='Choose':
-                pdf=displayPDF(lab)
-                st.markdown(pdf, unsafe_allow_html=True)
+                if st.session_state.counter>=end and lab!='Choose':
+                    pdf=displayPDF(lab)
+                    st.markdown(pdf, unsafe_allow_html=True)
         if location=='Home':
             session_end=st.button('End session')
             if session_end:
