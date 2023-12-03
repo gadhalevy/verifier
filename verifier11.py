@@ -234,7 +234,7 @@ def main():
             end=len(members)
             for i in range(end):
                 display_form(members,df_group,i,end,ref)
-        if st.session_state.counter >= end and lab != 'Choose':
+        if st.session_state.counter >= len(members) and lab != 'Choose':
             session_start=st.button("Start session")
             if session_start:
                 st.session_state.state='pdf'
