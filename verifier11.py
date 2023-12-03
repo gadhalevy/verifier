@@ -230,7 +230,7 @@ def main():
             st.session_state['counter']=0
         if location=='Home':
             display_form(members,df_group,0,1,ref)
-        else:
+        elif location=='Lab':
             end=len(members)
             for i in range(end):
                 display_form(members,df_group,i,end,ref)
