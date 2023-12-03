@@ -155,7 +155,7 @@ def display_form(members,df_group,i,end,ref):
             member = st.radio('Who R U?', members)
         else:
             member=members[i]
-            st.markdown(member)
+            st.markdown(f'###{member}')
         reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
         if submitted:
