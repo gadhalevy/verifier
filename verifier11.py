@@ -222,6 +222,7 @@ def main():
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
     members = df_group['Group members']
+    st.write(len(members))
     if st.session_state.state=='init':
         init()
         st.session_state.state='auth'
