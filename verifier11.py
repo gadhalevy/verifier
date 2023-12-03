@@ -72,10 +72,6 @@ def send_pass(receiver):
 
 @st.cache_resource()
 def init():
-    # try:
-    #     firebase_admin.delete_app(firebase_admin.get_app())
-    # except ValueError:
-    #     pass
     cred = credentials.Certificate(dict(st.secrets['fb']))
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
@@ -217,32 +213,34 @@ def upload(kind,obj,ref):
         else:
             st.error(f'{err_code}', icon="🚨")
 
+
+
 def main():
     if 'state' not in st.session_state:
         st.session_state.state='init'
+    year, semester, lab, group, location = base()
+    ref = year, semester, lab, group, location
+    df_group = find_members(f'{group:02}')
+    members = df_group['Group members']
     if st.session_state.state=='init':
         init()
-        st.session_state.state='autho'
-    elif st.session_state.state=='autho':
-        year,semester,lab,group,location=base()
-        ref=year,semester,lab,group,location
+        st.session_state.state='auth'
+    elif st.session_state.state=='auth':
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
-        if location !='None':
-            df_group=find_members(f'{group:02}')
-            members=df_group['Group members']
-            if location=='Home':
-                end=1
-                display_form(members,df_group,0,1,ref)
-            else:
-                end=len(members)
-                for i in range(end):
-                    display_form(members,df_group,i,end,ref)
+        if location=='Home':
+            display_form(members,df_group,0,1,ref)
+        else:
+            end=len(members)
+            for i in range(end):
+                display_form(members,df_group,i,end,ref)
+        if st.session_state.counter >= end and lab != 'Choose':
             session_start=st.button("Start session")
             if session_start:
-                if st.session_state.counter>=end and lab!='Choose':
-                    pdf=displayPDF(lab)
-                    st.markdown(pdf, unsafe_allow_html=True)
+                st.session_state.state='pdf'
+    elif st.session_state.state=='pdf':
+        pdf=displayPDF(lab)
+        st.markdown(pdf, unsafe_allow_html=True)
         if location=='Home':
             session_end=st.button('End session')
             if session_end:
