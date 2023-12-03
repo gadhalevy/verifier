@@ -150,7 +150,7 @@ def display_form(members,df_group,i,end,ref):
         if end==1:
             member = st.radio('Who R U?', members)
         else:
-            member=members[i]
+            member=members.iloc[i]
             st.markdown("**:red[%s]**" %member)
         reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
@@ -222,7 +222,6 @@ def main():
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
     members = df_group['Group members']
-    st.write(len(members))
     if st.session_state.state=='init':
         init()
         st.session_state.state='auth'
