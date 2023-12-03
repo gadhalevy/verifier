@@ -151,7 +151,11 @@ def base():
 def display_form(members,df_group,i,end,ref):
     year, semester, lab, group, location=ref
     with st.sidebar.form(f'Location{i}'):
-        member = st.radio('Who R U?', members)
+        if end==1:
+            member = st.radio('Who R U?', members)
+        else:
+            member=members[i]
+            st.markdown(member)
         reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
         if submitted:
@@ -219,23 +223,23 @@ def main():
     if st.session_state.state=='init':
         init()
         st.session_state.state='autho'
-
-    year,semester,lab,group,location=base()
-    ref=year,semester,lab,group,location
-    if 'counter' not in st.session_state:
-        st.session_state['counter']=0
-    if location !='None':
-        df_group=find_members(f'{group:02}')
-        members=df_group['Group members']
-        if location=='Home':
-            end=1
-            display_form(members,df_group,0,1,ref)
-        else:
-            end=len(members)
-            for i in range(end):
-                display_form(members,df_group,i,end,ref)
-        session_start=st.button("Start session")
-        if session_start:
+    elif st.session_state.state=='autho':
+        year,semester,lab,group,location=base()
+        ref=year,semester,lab,group,location
+        if 'counter' not in st.session_state:
+            st.session_state['counter']=0
+        if location !='None':
+            df_group=find_members(f'{group:02}')
+            members=df_group['Group members']
+            if location=='Home':
+                end=1
+                display_form(members,df_group,0,1,ref)
+            else:
+                end=len(members)
+                for i in range(end):
+                    display_form(members,df_group,i,end,ref)
+            session_start=st.button("Start session")
+            if session_start:
             if st.session_state.counter>=end and lab!='Choose':
                 pdf=displayPDF(lab)
                 st.markdown(pdf, unsafe_allow_html=True)
