@@ -239,7 +239,7 @@ def main():
             start_session(members,lab,location)
         elif location=='Lab':
             end=len(members)
-            display_form(members,df_group,st.session_state.counter,end,ref)
+            display_form(members,df_group,ref)
             start_session(members,lab,location)
     elif st.session_state.state=='pdf':
         pdf=displayPDF(lab)
