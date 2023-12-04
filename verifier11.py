@@ -188,7 +188,12 @@ def display_form(members,df_group,i,end,ref):
             else:
                 st.session_state['member'] = member
 
-
+def start_session(members,lab,location):
+    if lab!='Choose':
+        if (location=='Lab' and st.session_state.counter >= len(members) ) or location=='Home':
+            session_start = st.button("Start session")
+            if session_start:
+                st.session_state.state = 'pdf'
 def end_session(ref,members):
     year, semester, lab, group, location = ref
     if location == 'Home':
@@ -232,13 +237,15 @@ def main():
             st.session_state['counter']=0
         if location=='Home':
             display_form(members,df_group,0,1,ref)
+            start_session(members,lab,location)
         elif location=='Lab':
             end=len(members)
             display_form(members,df_group,st.session_state.counter,end,ref)
-            if st.session_state.counter >= len(members) and lab != 'Choose':
-                session_start=st.button("Start session")
-                if session_start:
-                    st.session_state.state='pdf'
+            start_session(members,lab,location)
+            # if st.session_state.counter >= len(members) and lab != 'Choose':
+            #     session_start=st.button("Start session")
+            #     if session_start:
+            #         st.session_state.state='pdf'
     elif st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
