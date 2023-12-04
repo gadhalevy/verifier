@@ -145,7 +145,7 @@ def base():
     return year,semester,lab,group,location
 
 def display_form(members,df_group,i,end,ref):
-    if i<=st.session_state.count:
+    if i<=st.session_state.counter:
         year, semester, lab, group, location=ref
         with st.sidebar.form(f'Location{i}'):
             if end==1:
