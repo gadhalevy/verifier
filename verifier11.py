@@ -136,7 +136,7 @@ def base():
     st.header("Verifier")
     st.subheader('Assist you with your submissions')
     year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'])
-    labs = ('Choose', 'Robotica', 'Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
+    labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
     lab = st.sidebar.selectbox('Please select maabada', labs)
     options = range(1, 21)
@@ -232,8 +232,7 @@ def main():
             display_form(members,df_group,0,1,ref)
         elif location=='Lab':
             end=len(members)
-            for i in range(end):
-                display_form(members,df_group,i,end,ref)
+            display_form(members,df_group,st.session_state.counter,end,ref)
         if st.session_state.counter >= len(members) and lab != 'Choose':
             session_start=st.button("Start session")
             if session_start:
