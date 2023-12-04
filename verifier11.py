@@ -75,6 +75,7 @@ def init():
     cred = credentials.Certificate(dict(st.secrets['fb']))
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
+
 @st.cache_data()
 def make_student_list(path):
     df = pd.read_csv(path, header=0)
@@ -144,15 +145,16 @@ def base():
     location = st.sidebar.radio('Please choose location', ['None', 'Home', 'Lab'],key='location')
     return year,semester,lab,group,location
 
-def display_form(members,df_group,i,end,ref):
+def display_form(members,df_group,ref):
     year, semester, lab, group, location=ref
-    with st.sidebar.form(f'Location{i}'):
-        if end==1:
+    with st.sidebar.form('Location'):
+        if location=='Home':
             member = st.radio('Who R U?', members)
+            param='start_read'
         else:
-            st.write(i,members)
-            member=members.iloc[i]
+            member=members[st.session_state.counter]
             st.markdown("**:red[%s]**" %member)
+            param='start_lab'
         reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
         if submitted:
@@ -165,10 +167,6 @@ def display_form(members,df_group,i,end,ref):
         if verify_btn:
             if st.session_state.user_pass == st.session_state.st_pass:
                 st.session_state.counter += 1
-                if end == 1:
-                    param = 'start read'
-                else:
-                    param = 'start lab'
                 fbwrite(year, semester, lab, group, member[:-1], **{param: datetime.now()})
                 st.write('Your password verified please press start session')
                 st.form_submit_button('Submit')
