@@ -235,7 +235,7 @@ def main():
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
         if location=='Home':
-            display_form(members,df_group,0,1,ref)
+            display_form(members,df_group,ref)
             start_session(members,lab,location)
         elif location=='Lab':
             end=len(members)
