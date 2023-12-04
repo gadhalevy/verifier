@@ -235,10 +235,10 @@ def main():
         elif location=='Lab':
             end=len(members)
             display_form(members,df_group,st.session_state.counter,end,ref)
-        if st.session_state.counter >= len(members) and lab != 'Choose':
-            session_start=st.button("Start session")
-            if session_start:
-                st.session_state.state='pdf'
+            if st.session_state.counter >= len(members) and lab != 'Choose':
+                session_start=st.button("Start session")
+                if session_start:
+                    st.session_state.state='pdf'
     elif st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
