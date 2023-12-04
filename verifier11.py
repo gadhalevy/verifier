@@ -170,16 +170,18 @@ def display_form(members,df_group,i,end,ref):
                     param = 'start lab'
                 fbwrite(year, semester, lab, group, member[:-1], **{param: datetime.now()})
                 st.write('Your password verified please press start session')
+                st.form_submit_button('Submit')
             else:
                 st.error('Wrong password', icon="🚨")
         if location == 'Lab':
             missing = st.form_submit_button('Missing')
             if missing:
-                st.write(member[:-1])
+                # st.write(member[:-1])
                 fbwrite(year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
                 if 'missing' not in st.session_state:
                     st.session_state['missing'] = member
                 st.session_state.counter += 1
+                st.form_submit_button('Submit')
         else:
             if 'member' not in st.session_state:
                 st.session_state['member']=member
