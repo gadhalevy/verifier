@@ -145,48 +145,49 @@ def base():
     return year,semester,lab,group,location
 
 def display_form(members,df_group,i,end,ref):
-    year, semester, lab, group, location=ref
-    with st.sidebar.form(f'Location{i}'):
-        if end==1:
-            member = st.radio('Who R U?', members)
-        else:
-            member=members.iloc[i]
-            st.markdown("**:red[%s]**" %member)
-        reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
-        submitted = st.form_submit_button("Send password")
-        if submitted:
-            st_pass = send_pass(reciver[0].strip())
-            if st_pass not in st.session_state:
-                st.session_state['st_pass'] = st_pass
-            st.write('Password was sent to your email')
-            st.text_input('Write password', max_chars=8, type="password", key="user_pass")
-        verify_btn = st.form_submit_button("Verify password")
-        if verify_btn:
-            if st.session_state.user_pass == st.session_state.st_pass:
-                st.session_state.counter += 1
-                if end == 1:
-                    param = 'start read'
+    if i<=st.session_state.count:
+        year, semester, lab, group, location=ref
+        with st.sidebar.form(f'Location{i}'):
+            if end==1:
+                member = st.radio('Who R U?', members)
+            else:
+                member=members.iloc[i]
+                st.markdown("**:red[%s]**" %member)
+            reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
+            submitted = st.form_submit_button("Send password")
+            if submitted:
+                st_pass = send_pass(reciver[0].strip())
+                if st_pass not in st.session_state:
+                    st.session_state['st_pass'] = st_pass
+                st.write('Password was sent to your email')
+                st.text_input('Write password', max_chars=8, type="password", key="user_pass")
+            verify_btn = st.form_submit_button("Verify password")
+            if verify_btn:
+                if st.session_state.user_pass == st.session_state.st_pass:
+                    st.session_state.counter += 1
+                    if end == 1:
+                        param = 'start read'
+                    else:
+                        param = 'start lab'
+                    fbwrite(year, semester, lab, group, member[:-1], **{param: datetime.now()})
+                    st.write('Your password verified please press start session')
+                    st.form_submit_button('Submit')
                 else:
-                    param = 'start lab'
-                fbwrite(year, semester, lab, group, member[:-1], **{param: datetime.now()})
-                st.write('Your password verified please press start session')
-                st.form_submit_button('Submit')
+                    st.error('Wrong password', icon="🚨")
+            if location == 'Lab':
+                missing = st.form_submit_button('Missing')
+                if missing:
+                    # st.write(member[:-1])
+                    fbwrite(year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
+                    if 'missing' not in st.session_state:
+                        st.session_state['missing'] = member
+                    st.session_state.counter += 1
+                    st.form_submit_button('Submit')
             else:
-                st.error('Wrong password', icon="🚨")
-        if location == 'Lab':
-            missing = st.form_submit_button('Missing')
-            if missing:
-                # st.write(member[:-1])
-                fbwrite(year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
-                if 'missing' not in st.session_state:
-                    st.session_state['missing'] = member
-                st.session_state.counter += 1
-                st.form_submit_button('Submit')
-        else:
-            if 'member' not in st.session_state:
-                st.session_state['member']=member
-            else:
-                st.session_state['member'] = member
+                if 'member' not in st.session_state:
+                    st.session_state['member']=member
+                else:
+                    st.session_state['member'] = member
 
 def start_session(members,lab,location):
     if lab!='Choose':
@@ -242,10 +243,6 @@ def main():
             end=len(members)
             display_form(members,df_group,st.session_state.counter,end,ref)
             start_session(members,lab,location)
-            # if st.session_state.counter >= len(members) and lab != 'Choose':
-            #     session_start=st.button("Start session")
-            #     if session_start:
-            #         st.session_state.state='pdf'
     elif st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
