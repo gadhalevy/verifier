@@ -73,6 +73,7 @@ def send_pass(receiver):
 @st.cache_resource()
 def init():
     cred = credentials.Certificate(dict(st.secrets['fb']))
+    # cred = credentials.Certificate('fb_key.json')
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
 
@@ -134,27 +135,50 @@ def displayPDF(lab):
 
     # Displaying File
 def base():
+    if 'edflg' not in st.session_state:
+        st.session_state.edflg=False
     st.header("Verifier")
     st.subheader('Assist you with your submissions')
-    year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'])
-    labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
-    semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
-    lab = st.sidebar.selectbox('Please select maabada', labs)
+    year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'],disabled=st.session_state.edflg)
+    labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
+    semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),disabled=st.session_state.edflg)
+    lab = st.sidebar.selectbox('Please select maabada', labs,disabled=st.session_state.edflg)
     options = range(1, 21)
-    group = st.sidebar.select_slider('Please choose group number', options)
-    location = st.sidebar.radio('Please choose location', ['None', 'Home', 'Lab'],key='location')
+    group = st.sidebar.select_slider('Please choose group number', options,disabled=st.session_state.edflg)
+    location = st.sidebar.radio('Please choose location', ['None', 'Home', 'Lab'],key='location',disabled=st.session_state.edflg)
     return year,semester,lab,group,location
 
+def form_home(members,df_group,ref):
+    year, semester, lab, group, location = ref
+    with st.sidebar.form('Location'):
+        member = st.radio('Who R U?', members)
+        param = 'start_read'
+        reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
+        submitted = st.form_submit_button("Send password")
+        if submitted:
+            st_pass = send_pass(reciver[0].strip())
+            if st_pass not in st.session_state:
+                st.session_state['st_pass'] = st_pass
+            st.write('Password was sent to your email')
+            st.text_input('Write password', max_chars=8, type="password", key="user_pass")
+        verify_btn = st.form_submit_button("Verify password")
+        if verify_btn:
+            if st.session_state.user_pass == st.session_state.st_pass:
+                fbwrite(year, semester, lab, group, member[:-1], **{param: datetime.now()})
+                st.write('Your password verified please press start session')
+                st.session_state.state='verified'
+            else:
+                st.error('Wrong password', icon="🚨")
+            if 'member' not in st.session_state:
+                st.session_state['member'] = member
+            else:
+                st.session_state['member'] = member
 def display_form(members,df_group,ref):
     year, semester, lab, group, location=ref
     with st.sidebar.form('Location'):
-        if location=='Home':
-            member = st.radio('Who R U?', members)
-            param='start_read'
-        else:
-            member=members[st.session_state.counter]
-            st.markdown("**:red[%s]**" %member)
-            param='start_lab'
+        member=members.iloc[st.session_state.counter]
+        st.markdown("**:red[%s]**" %member)
+        param='start_lab'
         reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
         if submitted:
@@ -172,27 +196,23 @@ def display_form(members,df_group,ref):
                 st.form_submit_button('Submit')
             else:
                 st.error('Wrong password', icon="🚨")
-        if location == 'Lab':
-            missing = st.form_submit_button('Missing')
-            if missing:
-                # st.write(member[:-1])
-                fbwrite(year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
-                if 'missing' not in st.session_state:
-                    st.session_state['missing'] = member
-                st.session_state.counter += 1
-                st.form_submit_button('Submit')
-        else:
-            if 'member' not in st.session_state:
-                st.session_state['member']=member
-            else:
-                st.session_state['member'] = member
+        missing = st.form_submit_button('Missing')
+        if missing:
+            # st.write(member[:-1])
+            fbwrite(year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
+            if 'missing' not in st.session_state:
+                st.session_state['missing'] = member
+            st.session_state.counter += 1
+            st.form_submit_button('Continue')
+        if st.session_state.counter>=len(members):
+            st.session_state.state='verified'
+
 
 def start_session(members,lab,location):
-    if lab!='Choose':
-        if (location=='Lab' and st.session_state.counter >= len(members) ) or location=='Home':
-            session_start = st.button("Start session")
-            if session_start:
-                st.session_state.state = 'pdf'
+    if (location=='Lab' and st.session_state.counter >= len(members) ) or (location=='Home' and st.session_state.state=='verified'):
+        session_start = st.button("Start session")
+        if session_start:
+            st.session_state.state = 'pdf'
 def end_session(ref,members):
     year, semester, lab, group, location = ref
     if location == 'Home':
@@ -230,20 +250,26 @@ def main():
     members = df_group['Group members']
     if st.session_state.state=='init':
         init()
-        st.session_state.state='auth'
-    elif st.session_state.state=='auth':
+        auth=st.sidebar.button('Authenticate')
+        if auth:
+            st.session_state.edflg=True
+            st.session_state.state='auth'
+    st.write(st.session_state.state)
+    if st.session_state.state=='auth':
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
         if location=='Home':
-            display_form(members,df_group,ref)
-            start_session(members,lab,location)
+            form_home(members,df_group,ref)
         elif location=='Lab':
-            end=len(members)
             display_form(members,df_group,ref)
-            start_session(members,lab,location)
-    elif st.session_state.state=='pdf':
+    if st.session_state.state=='verified':
+        pdf=st.button('Start session')
+        if pdf:
+            st.session_state.state='pdf'
+    if st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
+
         if location=='Home':
             session_end=st.button('End session')
             if session_end:
