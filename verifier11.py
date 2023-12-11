@@ -12,10 +12,10 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pandas as pd
-def send_email(subject, body, receiver,files=None):
-    # with open('passtxt') as f:
-    #     password = f.read()
-    password=st.secrets.sisma
+def send_email(subject, body, receiver,files=None,nativ=None):
+    with open('passtxt') as f:
+        password = f.read()
+    # password=st.secrets.sisma
     sender='khanuka1912@gmail.com'
     # Create a multipart message and set headers
     message = MIMEMultipart()
@@ -28,7 +28,7 @@ def send_email(subject, body, receiver,files=None):
     if files:
         for i,filename in enumerate(files):
             # Open PDF file in binary mode
-            with open(filename, "rb") as attachment:
+            with open(nativ+filename, "rb") as attachment:
                 # Add file as application/octet-stream
                 part = MIMEBase("application", "octet-stream")
                 # Email client can usually download this automatically as attachment
@@ -76,8 +76,8 @@ def init():
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
         pass
-    cred = credentials.Certificate(dict(st.secrets['fb']))
-    # cred = credentials.Certificate('fb_key.json')
+    # cred = credentials.Certificate(dict(st.secrets['fb']))
+    cred = credentials.Certificate('fb_key.json')
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
 
@@ -113,7 +113,6 @@ def fbwrite(*args,**kwards):
         # st.write({f'{k[:-4]}': f'{v}'})
         ref.push({f'{k[:-4]}':f'{v}'})
 
-
 def load(what,f,year,semester,lab,group):
     ds=storage.bucket()
     bob=ds.blob(f.name)
@@ -144,7 +143,7 @@ def base():
     st.header("Verifier")
     st.subheader('Assist you with your submissions')
     year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'],disabled=st.session_state.edflg)
-    labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
+    labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1')
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),disabled=st.session_state.edflg)
     lab = st.sidebar.selectbox('Please select maabada', labs,disabled=st.session_state.edflg)
     options = range(1, 21)
@@ -243,6 +242,20 @@ def upload(kind,obj,ref):
         else:
             st.error(f'{err_code}', icon="🚨")
 
+def send_help(lab,members,ref):
+    year,semester,lab,group,location=ref
+    nativ = f'Help/{lab}/'
+    for f in os.listdir(nativ):
+        subject = f'Help file {f} for {lab}'
+        body = f'Attached your file {f}'
+        if f:
+            if st.sidebar.button(f):
+                for m in members:
+                    param=f'help file {f} was sent'
+                    send_email(subject, body, m, f, nativ)
+                    fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
+        else:
+            st.write(f'No help file for {lab}')
 
 
 def main():
@@ -273,19 +286,21 @@ def main():
     if st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
-
-        if location=='Home':
-            session_end=st.button('End session')
-            if session_end:
-                end_session(ref,members)
-        elif location=='Lab':
-            # st.write(st.session_state.counter)
-            if st.session_state.counter>=len(members):
-                movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
-                if movie:
-                    upload('movie',movie,ref)
-                code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
-                if code:
-                    upload('code',code,ref)
+        ezra=st.checkbox('Do you need help coding?')
+        if ezra:
+            send_help(lab,members,ref)
+        # if location=='Home':
+        #     session_end=st.button('End session')
+        #     if session_end:
+        #         end_session(ref,members)
+        # elif location=='Lab':
+        #     # st.write(st.session_state.counter)
+        #     if st.session_state.counter>=len(members):
+        #         movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
+        #         if movie:
+        #             upload('movie',movie,ref)
+        #         code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
+        #         if code:
+        #             upload('code',code,ref)
 
 main()
