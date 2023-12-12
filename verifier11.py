@@ -12,6 +12,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pandas as pd
+from uuid import uuid4
 def send_email(subject, body, receiver,files=None,nativ=None):
     with open('passtxt') as f:
         password = f.read()
@@ -241,18 +242,30 @@ def upload(kind,obj,ref):
             fbwrite(*new_ref, **{c.name: datetime.now()})
         else:
             st.error(f'{err_code}', icon="🚨")
+def download_blob(maabada):
+    """Downloads a blob from the bucket."""
+    source_blob_name=f'Help/{maabada}/'
+    # destination_file_name=os.path.join(year,semester,maabada)
+    destination_file_name =f'tmp/{maabada}/'
+    bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
+    blob = bucket.blob(source_blob_name)
+    new_token = uuid4()
+    metadata = {"firebaseStorageDownloadTokens": new_token}
+    blob.metadata = metadata
+    blob.download_to_filename(destination_file_name)
+    return destination_file_name
 
-def send_help(lab,members,ref):
+def send_help(members,ref):
     year,semester,lab,group,location=ref
-    nativ = f'Help/{lab}/'
-    for f in os.listdir(nativ):
+    out_dir=download_blob(lab)
+    for f in os.listdir(out_dir):
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
         if f:
             if st.sidebar.button(f):
                 for m in members:
                     param=f'help file {f} was sent'
-                    send_email(subject, body, m, f, nativ)
+                    send_email(subject, body, m, f, out_dir)
                     fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
         else:
             st.write(f'No help file for {lab}')
@@ -288,7 +301,7 @@ def main():
         st.markdown(pdf, unsafe_allow_html=True)
         ezra=st.checkbox('Do you need help coding?')
         if ezra:
-            send_help(lab,members,ref)
+            send_help(members,ref)
         # if location=='Home':
         #     session_end=st.button('End session')
         #     if session_end:
