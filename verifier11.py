@@ -258,7 +258,7 @@ def download_blob(maabada,counter):
     blob.download_to_filename(destination_file_name)
     return destination_file_name
 
-def send_help(emails,ref,dic):
+def send_help(members,emails,ref,dic):
     year,semester,lab,group,location=ref
     files=[]
     for i in range (dic[lab]):
@@ -268,10 +268,10 @@ def send_help(emails,ref,dic):
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
         if st.button(f):
-            for e in emails:
+            for m,e in zip(members,emails):
                 param=f'help file {f} was sent'
                 send_email(subject, body, e, [f])
-                fbwrite(year,semester,lab,group,e,**{param: datetime.now()})
+                fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
 
 
 def main():
@@ -306,7 +306,7 @@ def main():
         if ezra:
             emails=df_group['Email address'].values
             st.write(emails)
-            send_help(emails,ref,dic4Help)
+            send_help(members,emails,ref,dic4Help)
         # if location=='Home':
         #     session_end=st.button('End session')
         #     if session_end:
