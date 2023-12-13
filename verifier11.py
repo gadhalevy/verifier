@@ -259,7 +259,7 @@ def download_blob(maabada,counter):
 
 def send_help(members,ref,dic):
     year,semester,lab,group,location=ref
-    out_dir=f'f/tmp'
+    out_dir=f'/tmp'
     for i in range (dic[lab]):
         download_blob(lab,i)
     for f in os.listdir(out_dir):
