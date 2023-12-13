@@ -109,9 +109,9 @@ def fbwrite(*args,**kwards):
     # print(f,created_os,start,created,processed,station,group,lab)
     year,semester,lab,group,student=args
     ref = db.reference(f'/{year}/{semester}/{lab}/{group}/{student}/')
-    st.write(args)
+    # st.write(args)
     for k,v in kwards.items():
-        # st.write({f'{k[:-4]}': f'{v}'})
+        st.write({f'{k[:-4]}': f'{v}'})
         ref.push({f'{k[:-4]}':f'{v}'})
 
 def load(what,f,year,semester,lab,group):
