@@ -244,11 +244,11 @@ def upload(kind,obj,ref):
             fbwrite(*new_ref, **{c.name: datetime.now()})
         else:
             st.error(f'{err_code}', icon="🚨")
-def download_blob(maabada):
+def download_blob(maabada,counter):
     """Downloads a blob from the bucket."""
-    source_blob_name=f'Help/{maabada}/{maabada}'
+    source_blob_name=f'Help/{maabada}/{maabada}{counter}'
     # destination_file_name=os.path.join(year,semester,maabada)
-    destination_file_name =f'tmp/{maabada}/{maabada}'
+    destination_file_name =f'tmp/{maabada}/{maabada}{counter}'
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
@@ -261,7 +261,7 @@ def send_help(members,ref,dic):
     year,semester,lab,group,location=ref
     out_dir=f'f/tmp/{lab}'
     for i in range (dic[lab]):
-        download_blob(lab)
+        download_blob(lab,i)
     for f in os.listdir(out_dir):
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
