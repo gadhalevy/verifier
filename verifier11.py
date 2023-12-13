@@ -238,10 +238,11 @@ def upload(kind,obj,ref):
         siomet=('txt','.py','.kv','txt','logo','csv')
         err_code='Must be one of py,kv,txt,nlogo or csv files'
     for c in obj:
+        pre,post=c.split('.')
         if c.name.lower()[-3:] in siomet:
             load(kind, c, *ref[:-1])
             new_ref = ref[:-1] + (kind,)
-            fbwrite(*new_ref, **{c.name: datetime.now()})
+            fbwrite(*new_ref, **{pre: datetime.now()})
         else:
             st.error(f'{err_code}', icon="🚨")
 def download_blob(maabada,counter):
@@ -306,20 +307,19 @@ def main():
         ezra=st.checkbox('Do you need help coding?')
         if ezra:
             emails=df_group['Email address'].values
-            st.write(emails)
             send_help(members,emails,ref,dic4Help)
-        # if location=='Home':
-        #     session_end=st.button('End session')
-        #     if session_end:
-        #         end_session(ref,members)
-        # elif location=='Lab':
-        #     # st.write(st.session_state.counter)
-        #     if st.session_state.counter>=len(members):
-        #         movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
-        #         if movie:
-        #             upload('movie',movie,ref)
-        #         code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
-        #         if code:
-        #             upload('code',code,ref)
+        if location=='Lab':
+            # st.write(st.session_state.counter)
+            # if st.session_state.counter>=len(members):
+            movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
+            if movie:
+                upload('movie',movie,ref)
+            code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
+            if code:
+                upload('code',code,ref)
+        session_end = st.button('End session')
+        if session_end:
+            end_session(ref, members)
+            st.stop()
 
 main()
