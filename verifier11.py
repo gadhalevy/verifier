@@ -270,7 +270,7 @@ def send_help(members,ref,dic):
         if st.button(f):
             for m in members:
                 param=f'help file {f} was sent'
-                send_email(subject, body, m, f)
+                send_email(subject, body, m, [f])
                 fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
 
 
