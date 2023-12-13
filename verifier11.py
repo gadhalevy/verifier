@@ -144,13 +144,15 @@ def base():
     st.header("Verifier")
     st.subheader('Assist you with your submissions')
     year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'],disabled=st.session_state.edflg)
-    labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1')
+    labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android','HMI', 'IOT', 'Auto car','Social networks')
+    help_4_lab=(0,7,2,1,1,1,2,3,2,2)
+    dic_4_help={labs[i]:help_4_lab[i] for i in range(len(labs))}
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),disabled=st.session_state.edflg)
     lab = st.sidebar.selectbox('Please select maabada', labs,disabled=st.session_state.edflg)
     options = range(1, 21)
     group = st.sidebar.select_slider('Please choose group number', options,disabled=st.session_state.edflg)
     location = st.sidebar.radio('Please choose location', ['None', 'Home', 'Lab'],key='location',disabled=st.session_state.edflg)
-    return year,semester,lab,group,location
+    return year,semester,lab,group,location,dic_4_help
 
 def form_home(members,df_group,ref):
     year, semester, lab, group, location = ref
@@ -244,9 +246,9 @@ def upload(kind,obj,ref):
             st.error(f'{err_code}', icon="🚨")
 def download_blob(maabada):
     """Downloads a blob from the bucket."""
-    source_blob_name=f'Help/{maabada}/'
+    source_blob_name=f'Help/{maabada}/{maabada}'
     # destination_file_name=os.path.join(year,semester,maabada)
-    destination_file_name =f'tmp/{maabada}/'
+    destination_file_name =f'tmp/{maabada}/{maabada}'
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
@@ -255,9 +257,11 @@ def download_blob(maabada):
     blob.download_to_filename(destination_file_name)
     return destination_file_name
 
-def send_help(members,ref):
+def send_help(members,ref,dic):
     year,semester,lab,group,location=ref
-    out_dir=download_blob(lab)
+    out_dir=f'f/tmp/{lab}'
+    for i in range (dic[lab]):
+        download_blob(lab)
     for f in os.listdir(out_dir):
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
@@ -274,7 +278,7 @@ def send_help(members,ref):
 def main():
     if 'state' not in st.session_state:
         st.session_state.state='init'
-    year, semester, lab, group, location = base()
+    year, semester, lab, group, location, dic4Help= base()
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
     members = df_group['Group members']
@@ -301,7 +305,7 @@ def main():
         st.markdown(pdf, unsafe_allow_html=True)
         ezra=st.checkbox('Do you need help coding?')
         if ezra:
-            send_help(members,ref)
+            send_help(members,ref,dic4Help)
         # if location=='Home':
         #     session_end=st.button('End session')
         #     if session_end:
