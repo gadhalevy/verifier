@@ -111,8 +111,8 @@ def fbwrite(*args,**kwards):
     ref = db.reference(f'/{year}/{semester}/{lab}/{group}/{student}/')
     # st.write(args)
     for k,v in kwards.items():
-        st.write({f'{k[:-4]}': f'{v}'})
-        ref.push({f'{k[:-4]}':f'{v}'})
+        # st.write({f'{k[:-4]}': f'{v}'})
+        ref.push({f'{k}':f'{v}'})
 
 def load(what,f,year,semester,lab,group):
     ds=storage.bucket()
@@ -269,7 +269,8 @@ def send_help(members,emails,ref,dic):
         body = f'Attached your file {f}'
         if st.button(f):
             for m,e in zip(members,emails):
-                param=f'help file {f} was sent'
+                file=f[4:]
+                param=f'help file {file} was sent'
                 send_email(subject, body, e, [f])
                 fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
 
