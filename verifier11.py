@@ -13,7 +13,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pandas as pd
 from uuid import uuid4
-def send_email(subject, body, receiver,files=None,nativ=None):
+def send_email(subject, body, receiver,files=None):
     with open('passtxt') as f:
         password = f.read()
     # password=st.secrets.sisma
@@ -29,7 +29,7 @@ def send_email(subject, body, receiver,files=None,nativ=None):
     if files:
         for i,filename in enumerate(files):
             # Open PDF file in binary mode
-            with open(nativ+filename, "rb") as attachment:
+            with open(filename, "rb") as attachment:
                 # Add file as application/octet-stream
                 part = MIMEBase("application", "octet-stream")
                 # Email client can usually download this automatically as attachment
