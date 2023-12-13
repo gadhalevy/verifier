@@ -260,21 +260,18 @@ def download_blob(maabada,counter):
 
 def send_help(members,ref,dic):
     year,semester,lab,group,location=ref
-    out_dir=f'/tmp/'
+    files=[]
     for i in range (dic[lab]):
         dir=download_blob(lab,i)
-    st.write(os.listdir(out_dir))
-    for f in os.listdir(out_dir):
+        files.append(dir)
+    for f in files:
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
-        if f:
-            if st.button(f):
-                for m in members:
-                    param=f'help file {f} was sent'
-                    send_email(subject, body, m, f, out_dir)
-                    fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
-        else:
-            st.write(f'No help file for {lab}')
+        if st.button(f):
+            for m in members:
+                param=f'help file {f} was sent'
+                send_email(subject, body, m, f)
+                fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
 
 
 def main():
