@@ -263,7 +263,7 @@ def send_help(members,ref,dic):
     out_dir=f'/tmp/'
     for i in range (dic[lab]):
         dir=download_blob(lab,i)
-        st.write(dir)
+    st.write(os.listdir(out_dir))
     for f in os.listdir(out_dir):
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
