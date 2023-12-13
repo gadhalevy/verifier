@@ -280,6 +280,7 @@ def main():
     year, semester, lab, group, location, dic4Help= base()
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
+    df_group
     members = df_group['Group members']
     if st.session_state.state=='init':
         init()
