@@ -246,6 +246,7 @@ def upload(kind,obj,ref):
             st.error(f'{err_code}', icon="🚨")
 def download_blob(maabada,counter):
     """Downloads a blob from the bucket."""
+    counter+=1
     source_blob_name=f'Help/{maabada}/{maabada}{counter}'
     # destination_file_name=os.path.join(year,semester,maabada)
     destination_file_name =f'tmp/{maabada}/{maabada}{counter}'
