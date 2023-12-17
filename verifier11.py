@@ -312,11 +312,11 @@ def main():
         if location=='Lab':
             # st.write(st.session_state.counter)
             # if st.session_state.counter>=len(members):
-            st.caption('Upload only mp4 movies', icon="🚨")
+            st.caption('Upload only mp4 movies:rotating_light:')
             movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
             if movie:
                 upload('movie',movie,ref)
-            st.caption('Upload only py, txt, nlogo, csv, or kv files', icon="🚨")
+            st.caption('Upload only py, txt, nlogo, csv, or kv files :rotating_light:')
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
                 upload('code',code,ref)
