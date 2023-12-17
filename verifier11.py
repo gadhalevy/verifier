@@ -317,7 +317,8 @@ def main():
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
                 upload('code',code,ref)
-        "##When you done please press End session otherwise your session won't be registered in our system"
+        msg="When you done please press End session otherwise your session won't be registered in our system"
+        st.subheader(':red[msg]:red_circle:')
         session_end = st.button('End session')
         if session_end:
             end_session(ref, members)
