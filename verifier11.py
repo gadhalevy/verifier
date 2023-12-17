@@ -304,6 +304,7 @@ def main():
     if st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
+        st.caption('If you check :point_down: an help file will be sent to you, we recommend not using help unless you are stack')
         ezra=st.checkbox('Do you need help coding?')
         if ezra:
             emails=df_group['Email address'].values
@@ -311,9 +312,11 @@ def main():
         if location=='Lab':
             # st.write(st.session_state.counter)
             # if st.session_state.counter>=len(members):
+            st.caption('Upload only mp4 movies', icon="🚨")
             movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
             if movie:
                 upload('movie',movie,ref)
+            st.caption('Upload only py, txt, nlogo, csv, or kv files', icon="🚨")
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
                 upload('code',code,ref)
