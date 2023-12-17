@@ -322,8 +322,8 @@ def main():
         if session_end:
             end_session(ref, members)
             st.session_state.state='end'
-    if st.session_state.state=='end':
-        st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
+    if st.session_state.state=='end':        
+        st.success("##We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
 
 
 main()
