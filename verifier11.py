@@ -318,7 +318,7 @@ def main():
             if code:
                 upload('code',code,ref)
         msg="When you done please press End session otherwise your session won't be registered in our system"
-        st.subheader(':red[msg]:red_circle:')
+        st.subheader(f':red[{msg}]:red_circle:')
         session_end = st.button('End session')
         if session_end:
             end_session(ref, members)
