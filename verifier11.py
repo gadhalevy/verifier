@@ -289,7 +289,7 @@ def main():
         if auth:
             st.session_state.edflg=True
             st.session_state.state='auth'
-    st.write(st.session_state.state)
+    # st.write(st.session_state.state)
     if st.session_state.state=='auth':
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
@@ -317,9 +317,13 @@ def main():
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
                 upload('code',code,ref)
+        "##When you done please press End session otherwise your session won't be registered in our system"
         session_end = st.button('End session')
         if session_end:
             end_session(ref, members)
-            st.stop()
+            st.session_state='end'
+    if st.session_state=='end':
+        st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
+
 
 main()
