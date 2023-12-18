@@ -235,11 +235,10 @@ def upload(kind,obj,ref):
         siomet=('mp4',)
         err_code='Must be mp4'
     elif kind=='code':
-        siomet=('txt','.py','.kv','txt','logo','csv')
+        siomet=('txt','py','kv','txt','logo','csv')
         err_code='Must be one of py,kv,txt,nlogo or csv files'
     for c in obj:
         pre,post=c.name.split('.')
-        st.write(post,post.lower() in siomet)
         if pre.isdigit():
             if post.lower() in siomet:
                 load(kind, c, *ref[:-1])
