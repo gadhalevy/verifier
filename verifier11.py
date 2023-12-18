@@ -239,12 +239,15 @@ def upload(kind,obj,ref):
         err_code='Must be one of py,kv,txt,nlogo or csv files'
     for c in obj:
         pre,post=c.split('.')
-        if c.name.lower()[-3:] in siomet:
-            load(kind, c, *ref[:-1])
-            new_ref = ref[:-1] + (kind,)
-            fbwrite(*new_ref, **{pre: datetime.now()})
+        if pre.isdigit():
+            if post.lower() in siomet:
+                load(kind, c, *ref[:-1])
+                new_ref = ref[:-1] + (kind,)
+                fbwrite(*new_ref, **{pre: datetime.now()})
+            else:
+                st.error(f'{err_code}', icon="🚨")
         else:
-            st.error(f'{err_code}', icon="🚨")
+            st.error('Name of file should be the exercise number', icon="🚨")
 def download_blob(maabada,counter):
     """Downloads a blob from the bucket."""
     counter+=1
