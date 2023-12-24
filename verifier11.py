@@ -145,7 +145,7 @@ def base():
     st.subheader('Assist you with your submissions')
     year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'],disabled=st.session_state.edflg)
     labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android','HMI', 'IOT', 'Auto car','Social networks')
-    help_4_lab=(0,7,2,1,1,1,2,3,2,2)
+    help_4_lab=(2,7,2,1,1,1,2,3,2,2)
     dic_4_help={labs[i]:help_4_lab[i] for i in range(len(labs))}
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),disabled=st.session_state.edflg)
     lab = st.sidebar.selectbox('Please select maabada', labs,disabled=st.session_state.edflg)
