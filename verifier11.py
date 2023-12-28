@@ -145,7 +145,7 @@ def base():
     st.subheader('Assist you with your submissions')
     year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'],disabled=st.session_state.edflg)
     labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android','HMI', 'IOT', 'Auto car','Social networks')
-    help_4_lab=(2,7,2,1,1,1,2,3,2,2)
+    help_4_lab=(0,7,2,1,1,1,2,3,2,2)
     dic_4_help={labs[i]:help_4_lab[i] for i in range(len(labs))}
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),disabled=st.session_state.edflg)
     lab = st.sidebar.selectbox('Please select maabada', labs,disabled=st.session_state.edflg)
@@ -235,19 +235,16 @@ def upload(kind,obj,ref):
         siomet=('mp4',)
         err_code='Must be mp4'
     elif kind=='code':
-        siomet=('txt','py','kv','txt','logo','csv')
+        siomet=('txt','.py','.kv','txt','logo','csv')
         err_code='Must be one of py,kv,txt,nlogo or csv files'
     for c in obj:
-        pre,post=c.name.split('.')
-        if pre.isdigit():
-            if post.lower() in siomet:
-                load(kind, c, *ref[:-1])
-                new_ref = ref[:-1] + (kind,)
-                fbwrite(*new_ref, **{pre: datetime.now()})
-            else:
-                st.error(f'{err_code}', icon="🚨")
+        pre,post=c.split('.')
+        if c.name.lower()[-3:] in siomet:
+            load(kind, c, *ref[:-1])
+            new_ref = ref[:-1] + (kind,)
+            fbwrite(*new_ref, **{pre: datetime.now()})
         else:
-            st.error('Name of file should be the exercise number', icon="🚨")
+            st.error(f'{err_code}', icon="🚨")
 def download_blob(maabada,counter):
     """Downloads a blob from the bucket."""
     counter+=1
@@ -281,12 +278,12 @@ def send_help(members,emails,ref,dic):
 
 def main():
     if 'state' not in st.session_state:
-        st.session_state.state='start'
+        st.session_state.state='init'
     year, semester, lab, group, location, dic4Help= base()
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
     members = df_group['Group members']
-    if st.session_state.state=='start':
+    if st.session_state.state=='init':
         init()
         auth=st.sidebar.button('Authenticate')
         if auth:
@@ -307,7 +304,6 @@ def main():
     if st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
-        st.caption('If you check :point_down: an help file will be sent to you, we recommend not using help unless you are stack')
         ezra=st.checkbox('Do you need help coding?')
         if ezra:
             emails=df_group['Email address'].values
@@ -315,21 +311,18 @@ def main():
         if location=='Lab':
             # st.write(st.session_state.counter)
             # if st.session_state.counter>=len(members):
-            st.caption('Upload only mp4 movies:rotating_light:')
             movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
             if movie:
                 upload('movie',movie,ref)
-            st.caption('Upload only py, txt, nlogo, csv, or kv files :rotating_light:')
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
                 upload('code',code,ref)
-        msg="When you done please press End session otherwise your session won't be registered in our system"
-        st.subheader(f':red[{msg}]:red_circle:')
+        "##When you done please press End session otherwise your session won't be registered in our system"
         session_end = st.button('End session')
         if session_end:
             end_session(ref, members)
-            st.session_state.state='end'
-    if st.session_state.state=='end':
+            st.session_state='end'
+    if st.session_state=='end':
         st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
 
 
