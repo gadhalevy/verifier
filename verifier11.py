@@ -161,7 +161,7 @@ def form_home(members,df_group,ref):
         param = 'start_read'
         reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
-        pratiut=st.checkbox('red[Same privacy and copyright statements that I signed in Moodle are valid here]:rotating_light:')
+        pratiut=st.checkbox(':red[Same privacy and copyright statements that I signed in Moodle are valid here]:rotating_light:')
         if submitted and pratiut:
             st_pass = send_pass(reciver[0].strip())
             if st_pass not in st.session_state:
@@ -189,7 +189,7 @@ def display_form(members,df_group,ref):
         reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
         pratiut = st.checkbox(
-            'red[Same privacy and copyright statements that I signed in Moodle are valid here]:rotating_light:')
+            ':red[Same privacy and copyright statements that I signed in Moodle are valid here]:rotating_light:')
         if submitted and pratiut:
             st_pass = send_pass(reciver[0].strip())
             if st_pass not in st.session_state:
