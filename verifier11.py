@@ -102,7 +102,7 @@ def make_student_list(path):
     return groups
 
 def find_members(group):
-    groups=make_student_list('auth.csv')
+    groups=make_student_list('Overview.csv')
     return groups[groups['num'].str.strip()==group]
 
 def fbwrite(*args,**kwards):
