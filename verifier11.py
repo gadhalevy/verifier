@@ -143,7 +143,7 @@ def base():
         st.session_state.edflg=False
     st.header("Verifier")
     st.subheader('Assist you with your submissions')
-    year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav'],disabled=st.session_state.edflg)
+    year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav','Demo'],disabled=st.session_state.edflg)
     labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android','HMI', 'IOT', 'Auto car','Social networks')
     help_4_lab=(0,7,2,1,1,1,2,3,2,2)
     dic_4_help={labs[i]:help_4_lab[i] for i in range(len(labs))}
