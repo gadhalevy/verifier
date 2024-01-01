@@ -265,9 +265,11 @@ def download_blob(maabada,counter):
 def send_help(members,emails,ref,dic):
     year,semester,lab,group,location=ref
     files=[]
+    st.write('send_help')
     for i in range (dic[lab]):
         dir=download_blob(lab,i)
         files.append(dir)
+    st.write(files)
     for f in files:
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
@@ -280,6 +282,7 @@ def send_help(members,emails,ref,dic):
 
 
 def main():
+    st.session_state.update(st.session_state)
     if 'state' not in st.session_state:
         st.session_state['state']='begin'
     year, semester, lab, group, location, dic4Help= base()
