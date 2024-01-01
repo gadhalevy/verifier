@@ -281,7 +281,7 @@ def send_help(members,emails,ref,dic):
 
 def main():
     if 'state' not in st.session_state:
-        st.session_state.state='begin'
+        st.session_state['state']='begin'
     year, semester, lab, group, location, dic4Help= base()
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
