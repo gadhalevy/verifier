@@ -230,8 +230,11 @@ def end_session(ref,members):
     else:
         param = 'finish lab'
         for m in members:
-            if m not in st.session_state.missing:
-                fbwrite(year, semester, lab, group, m[:-1], **{param: datetime.now()})
+            try:
+                if m not in st.session_state.missing:
+                    fbwrite(year, semester, lab, group, m[:-1], **{param: datetime.now()})
+            except AttributeError:
+                pass
 
 def upload(kind,obj,ref):
     if kind=='movie':
