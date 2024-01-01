@@ -242,7 +242,7 @@ def upload(kind,obj,ref):
         err_code='Must be one of py,kv,txt,nlogo or csv files'
     st.write(obj)
     for c in obj:
-        pre,post=c.split('.')
+        pre,post=c.name.split('.')
         if c.name.lower()[-3:] in siomet:
             load(kind, c, *ref[:-1])
             new_ref = ref[:-1] + (kind,)
