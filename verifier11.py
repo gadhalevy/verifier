@@ -269,6 +269,7 @@ def send_help(members,emails,ref,dic):
     for i in range (dic[lab]):
         dir=download_blob(lab,i)
         files.append(dir)
+    st.write(files)
     for f in files:
         subject = f'Help file {f} for {lab}'
         body = f'Attached your file {f}'
