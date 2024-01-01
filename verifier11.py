@@ -240,6 +240,7 @@ def upload(kind,obj,ref):
     elif kind=='code':
         siomet=('txt','.py','.kv','txt','logo','csv')
         err_code='Must be one of py,kv,txt,nlogo or csv files'
+    st.write(obj)
     for c in obj:
         pre,post=c.split('.')
         if c.name.lower()[-3:] in siomet:
