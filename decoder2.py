@@ -51,6 +51,7 @@ def from_db(year,semester,maabada):
     year=str(year)
     ref=db.reference('{}/{}/{}'.format(year,semester,maabada))
     df=pd.json_normalize(ref.get())
+    df
     # print(df.to_string())
     group=[col[0] for col in df.columns.str.split('.')][::7]
     pics=[col[2] for col in df.columns.str.split('.')][::7]
