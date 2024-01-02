@@ -142,8 +142,8 @@ def main():
     global Path
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
-    year = st.sidebar.selectbox('Please choose year', ['Tashpag', 'Tashpad', 'Tashpah'])
-    labs = ('Choose', 'Robotica', 'Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
+    year = st.sidebar.selectbox('Please choose year', ['Tashpag', 'Tashpad', 'Tashpah','Demo'])
+    labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
     maabada = st.sidebar.selectbox('Please select maabada', labs)
     path = 'Overview.csv'
