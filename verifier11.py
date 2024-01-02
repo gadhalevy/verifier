@@ -285,6 +285,7 @@ def send_help(members,emails,ref,dic):
 
 def main():
     # st.session_state.update(st.session_state)
+    st.write(st.session_state.keys())
     if 'state' not in st.session_state:
         st.session_state['state']='begin'
     year, semester, lab, group, location, dic4Help= base()
