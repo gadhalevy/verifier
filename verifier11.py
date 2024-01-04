@@ -330,10 +330,10 @@ def main():
         session_end = st.button('End session')
         if session_end:
             end_session(ref, members)
-            st.session_state='end'
-    if st.session_state=='end':
-        st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
-        st.session_state.state='begin'
+    #         st.session_state='end'
+    # if st.session_state=='end':
+            st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
+    #     st.session_state.state='begin'
 
-
-main()
+if __name__=='__main__':
+    main()
