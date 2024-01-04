@@ -149,7 +149,7 @@ def base():
     dic_4_help={labs[i]:help_4_lab[i] for i in range(len(labs))}
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),disabled=st.session_state.edflg)
     lab = st.sidebar.selectbox('Please select maabada', labs,disabled=st.session_state.edflg)
-    options = range(1, 22)
+    options = range(1, 23)
     group = st.sidebar.select_slider('Please choose group number', options,disabled=st.session_state.edflg)
     location = st.sidebar.radio('Please choose location', ['None', 'Home', 'Lab'],key='location',disabled=st.session_state.edflg)
     return year,semester,lab,group,location,dic_4_help
