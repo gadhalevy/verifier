@@ -333,6 +333,7 @@ def main():
             st.session_state='end'
     if st.session_state=='end':
         st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
+        st.session_state.state='begin'
 
 
 main()
