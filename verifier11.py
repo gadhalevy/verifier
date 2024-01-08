@@ -172,7 +172,7 @@ def form_home(members,df_group,ref):
         verify_btn = st.form_submit_button("Verify password")
         if verify_btn:
             if st.session_state.user_pass == st.session_state.st_pass:
-                fbwrite('push',year, semester, lab, group, member[:-1], **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+                fbwrite('push',year, semester, lab, group, member, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
                 st.write('Your password verified please press start session')
                 st.session_state.state='verified'
             else:
@@ -201,7 +201,7 @@ def display_form(members,df_group,ref):
         if verify_btn:
             if st.session_state.user_pass == st.session_state.st_pass:
                 st.session_state.counter += 1
-                fbwrite('push',year, semester, lab, group, member[:-1], **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+                fbwrite('push',year, semester, lab, group, member, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
                 st.write('Your password verified please press start session')
                 st.form_submit_button('Submit')
             else:
@@ -209,7 +209,7 @@ def display_form(members,df_group,ref):
         missing = st.form_submit_button('Missing')
         if missing:
             # st.write(member[:-1])
-            fbwrite('set',year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
+            fbwrite('set',year, semester, lab, group, member, missing=datetime.now().strftime("%d/%m/%y"))
             if 'missing' not in st.session_state:
                 st.session_state['missing'] = member
             st.session_state.counter += 1
@@ -233,7 +233,7 @@ def end_session(ref,members):
         for m in members:
             try:
                 if m not in st.session_state.missing:
-                    fbwrite('push',year, semester, lab, group, m[:-1], **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+                    fbwrite('push',year, semester, lab, group, m, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
             except AttributeError:
                 pass
 
