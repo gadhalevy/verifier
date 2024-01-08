@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import pytz
 import streamlit as st,string,secrets
 import firebase_admin
 from firebase_admin import credentials
@@ -107,12 +107,13 @@ def find_members(group):
 
 def fbwrite(*args,**kwards):
     # print(f,created_os,start,created,processed,station,group,lab)
-    year,semester,lab,group,student=args
+    todo,year,semester,lab,group,student=args
     ref = db.reference(f'/{year}/{semester}/{lab}/{group}/{student}/')
     # st.write(args)
+    attr=getattr(ref,todo)
     for k,v in kwards.items():
         # st.write({f'{k[:-4]}': f'{v}'})
-        ref.push({f'{k}':f'{v}'})
+        attr({f'{k}':f'{v}'})
 
 def load(what,f,year,semester,lab,group):
     ds=storage.bucket()
@@ -171,7 +172,7 @@ def form_home(members,df_group,ref):
         verify_btn = st.form_submit_button("Verify password")
         if verify_btn:
             if st.session_state.user_pass == st.session_state.st_pass:
-                fbwrite(year, semester, lab, group, member[:-1], **{param: datetime.now()})
+                fbwrite('push',year, semester, lab, group, member[:-1], **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
                 st.write('Your password verified please press start session')
                 st.session_state.state='verified'
             else:
@@ -200,7 +201,7 @@ def display_form(members,df_group,ref):
         if verify_btn:
             if st.session_state.user_pass == st.session_state.st_pass:
                 st.session_state.counter += 1
-                fbwrite(year, semester, lab, group, member[:-1], **{param: datetime.now()})
+                fbwrite('push',year, semester, lab, group, member[:-1], **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
                 st.write('Your password verified please press start session')
                 st.form_submit_button('Submit')
             else:
@@ -208,7 +209,7 @@ def display_form(members,df_group,ref):
         missing = st.form_submit_button('Missing')
         if missing:
             # st.write(member[:-1])
-            fbwrite(year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
+            fbwrite('set',year, semester, lab, group, member[:-1], missing=datetime.now().strftime("%d/%m/%y"))
             if 'missing' not in st.session_state:
                 st.session_state['missing'] = member
             st.session_state.counter += 1
@@ -226,13 +227,13 @@ def end_session(ref,members):
     year, semester, lab, group, location = ref
     if location == 'Home':
         param = 'end read'
-        fbwrite(year, semester, lab, group, st.session_state.member, **{param: datetime.now()})
+        fbwrite('push',year, semester, lab, group, st.session_state.member, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
     else:
         param = 'finish lab'
         for m in members:
             try:
                 if m not in st.session_state.missing:
-                    fbwrite(year, semester, lab, group, m[:-1], **{param: datetime.now()})
+                    fbwrite('push',year, semester, lab, group, m[:-1], **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
             except AttributeError:
                 pass
 
@@ -243,13 +244,13 @@ def upload(kind,obj,ref):
     elif kind=='code':
         siomet=('txt','.py','.kv','txt','logo','csv')
         err_code='Must be one of py,kv,txt,nlogo or csv files'
-    st.write(obj)
+    # st.write(obj)
     for c in obj:
         pre,post=c.name.split('.')
         if c.name.lower()[-3:] in siomet:
             load(kind, c, *ref[:-1])
-            new_ref = ref[:-1] + (kind,)
-            fbwrite(*new_ref, **{pre: datetime.now()})
+            new_ref = ('set',)+ref[:-1] + (kind,)
+            fbwrite(*new_ref, **{pre: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
         else:
             st.error(f'{err_code}', icon="🚨")
 def download_blob(maabada,counter):
@@ -280,7 +281,7 @@ def send_help(members,emails,ref,dic):
                 file=f[4:]
                 param=f'help file {file} was sent'
                 send_email(subject, body, e, [f])
-                fbwrite(year,semester,lab,group,m,**{param: datetime.now()})
+                fbwrite('set',year,semester,lab,group,m,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
 
 def main():
