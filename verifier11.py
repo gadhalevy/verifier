@@ -99,6 +99,7 @@ def make_student_list(path):
     df = df.reset_index()
     final = df.join(stam)
     groups = final[['Group members', 'num','Email address']]
+    return groups
 
 def find_members(group):
     groups=make_student_list('Overview.csv')
