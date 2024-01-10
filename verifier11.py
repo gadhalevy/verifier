@@ -99,7 +99,6 @@ def make_student_list(path):
     df = df.reset_index()
     final = df.join(stam)
     groups = final[['Group members', 'num','Email address']]
-    return groups
 
 def find_members(group):
     groups=make_student_list('Overview.csv')
@@ -243,11 +242,11 @@ def upload(kind,obj,ref):
         err_code='Must be mp4'
     elif kind=='code':
         siomet=('txt','.py','.kv','txt','logo','csv')
-        err_code='Must be one of py,kv,txt,nlogo or csv files'
+        err_code='Must be one of py,kv,txt,nlogo or csv files and file name should be the same as the exercise number'
     # st.write(obj)
     for c in obj:
         pre,post=c.name.split('.')
-        if c.name.lower()[-3:] in siomet:
+        if c.name.lower()[-3:] in siomet and pre.isdigit():
             load(kind, c, *ref[:-1])
             new_ref = ('set',)+ref[:-1] + (kind,)
             fbwrite(*new_ref, **{pre: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
