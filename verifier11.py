@@ -285,7 +285,7 @@ def send_help(members,emails,ref,dic):
                 file=f[4:]
                 param=f'help file {file} was sent'
                 send_email(subject, body, e, [f])
-                fbwrite('set',year,semester,lab,group,m,f,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+                fbwrite('set',year,semester,lab,group,m,file,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
 
 def main():
