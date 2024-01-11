@@ -253,7 +253,7 @@ def upload(kind,obj,ref):
         pre,post=c.name.split('.')
         if c.name.lower()[-3:] in siomet and pre.isdigit():
             load(kind, c, *ref[:-1])
-            new_ref = ('set',)+ref[:-1] + (kind,pre)
+            new_ref = ('set',)+ref[:-1] + (kind,c.name)
             fbwrite(*new_ref, **{pre: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
         else:
             st.error(f'{err_code}', icon="🚨")
