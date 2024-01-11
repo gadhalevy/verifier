@@ -110,7 +110,7 @@ def fbwrite(*args,**kwargs):
     todo=args[0]
     mystr=''
     for r in (args[1:]):
-        mystr+=r+'/'
+        mystr+=str(r)+'/'
     ref=db.reference(mystr)
     attr=getattr(ref,todo)
     for k,v in kwargs.items():
