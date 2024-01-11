@@ -105,13 +105,15 @@ def find_members(group):
     groups=make_student_list('Overview.csv')
     return groups[groups['num'].str.strip()==group]
 
-def fbwrite(*args,**kwards):
+def fbwrite(*args,**kwargs):
     # print(f,created_os,start,created,processed,station,group,lab)
-    todo,year,semester,lab,group,student=args
-    ref = db.reference(f'/{year}/{semester}/{lab}/{group}/{student}/')
-    # st.write(args)
+    todo=args[0]
+    mystr=''
+    for r in (args[1:]):
+        mystr+=r+'/'
+    ref=db.reference(mystr)
     attr=getattr(ref,todo)
-    for k,v in kwards.items():
+    for k,v in kwargs.items():
         # st.write({f'{k[:-4]}': f'{v}'})
         attr({f'{k}':f'{v}'})
 
@@ -211,7 +213,9 @@ def display_form(members,df_group,ref):
             # st.write(member[:-1])
             fbwrite('set',year, semester, lab, group, member, missing=datetime.now().strftime("%d/%m/%y"))
             if 'missing' not in st.session_state:
-                st.session_state['missing'] = member
+                st.session_state['missing'] = [member]
+            else:
+                st.session_state['missing'].append(member)
             st.session_state.counter += 1
             st.form_submit_button('Continue')
         if st.session_state.counter>=len(members):
@@ -243,13 +247,13 @@ def upload(kind,obj,ref):
         err_code='Must be mp4'
     elif kind=='code':
         siomet=('txt','.py','.kv','txt','logo','csv')
-        err_code='Must be one of py,kv,txt,nlogo or csv files and file name should be the same as the exercise number'
+        err_code='Must be one of py,kv,txt,nlogo or csv files and file name should be exercise number'
     # st.write(obj)
     for c in obj:
         pre,post=c.name.split('.')
         if c.name.lower()[-3:] in siomet and pre.isdigit():
             load(kind, c, *ref[:-1])
-            new_ref = ('set',)+ref[:-1] + (kind,)
+            new_ref = ('set',)+ref[:-1] + (kind,pre)
             fbwrite(*new_ref, **{pre: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
         else:
             st.error(f'{err_code}', icon="🚨")
@@ -281,7 +285,7 @@ def send_help(members,emails,ref,dic):
                 file=f[4:]
                 param=f'help file {file} was sent'
                 send_email(subject, body, e, [f])
-                fbwrite('set',year,semester,lab,group,m,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+                fbwrite('set',year,semester,lab,group,m,f**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
 
 def main():
