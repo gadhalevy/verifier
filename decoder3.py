@@ -1,6 +1,5 @@
 import os
 import firebase_admin
-import jmespath
 import streamlit as st
 from firebase_admin import credentials
 from firebase_admin import db
@@ -10,7 +9,6 @@ import pandas as pd
 import platform
 from uuid import uuid4
 from moviepy.editor import *
-import json
 
 def init():
     try:
