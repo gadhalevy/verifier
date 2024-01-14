@@ -178,10 +178,12 @@ def main():
             for c in codes:
                 f=c.replace('-','.')
                 dir=download_blob('code',year, semester, maabada,f)
+                dir
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
                 f = m.reolace('-', '.')
                 dir=download_blob('movie',year, semester, maabada,f)
+                dir
         if 'grades' not in st.session_state:
             st.session_state['grades']=[]
         if 'remarks' not in st.session_state:
