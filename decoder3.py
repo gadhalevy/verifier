@@ -171,7 +171,7 @@ def main():
     maabada = st.sidebar.selectbox('Please select maabada', labs)
     init()
     if not os.path.isfile('grades.csv'):
-        make_student_list('Overview.csv')
+        make_student_list('Overview.csv',labs)
     else:
         movies,codes=get_download_lst(year,semester,maabada)
     # movies
