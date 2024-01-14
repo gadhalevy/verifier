@@ -169,9 +169,11 @@ def main():
     labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur','HMI', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
     maabada = st.sidebar.selectbox('Please select maabada', labs)
-    st.write(os.path.isfile('logica.txt'))
     init()
-    movies,codes=get_download_lst(year,semester,maabada)
+    if not os.path.isfile('grades.csv'):
+        make_student_list('Overview.csv')
+    else:
+        movies,codes=get_download_lst(year,semester,maabada)
     # movies
 
     # ToDo config page make student list
@@ -222,7 +224,7 @@ def main():
         #     numEx = [2, 2, 3, 3, 2, 3, 1, 0, 0]
         #     txt=not_completed_lab(numEx,labs,maabada,df)
         #     st.markdown(txt)
-        df = pd.read_csv('grades.csv')
-        downloaded=df.to_csv().encode('utf-8')
-        st.sidebar.download_button(label='Download Grades',data=downloaded, file_name='grades.csv', mime='text/csv')
+        # df = pd.read_csv('grades.csv')
+        # downloaded=df.to_csv().encode('utf-8')
+        # st.sidebar.download_button(label='Download Grades',data=downloaded, file_name='grades.csv', mime='text/csv')
 main()
