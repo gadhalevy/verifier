@@ -169,6 +169,7 @@ def main():
     labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur','HMI', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
     maabada = st.sidebar.selectbox('Please select maabada', labs)
+    st.write(os.path.isfile('logica.txt'))
     init()
     movies,codes=get_download_lst(year,semester,maabada)
     # movies
