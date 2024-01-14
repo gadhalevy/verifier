@@ -111,7 +111,7 @@ def fbwrite(*args,**kwargs):
     mystr=''
     for r in (args[1:]):
         mystr+=str(r)+'/'
-    ref=db.reference(mystr)
+    ref=db.reference(mystr[:-1])
     attr=getattr(ref,todo)
     for k,v in kwargs.items():
         # st.write({f'{k[:-4]}': f'{v}'})
