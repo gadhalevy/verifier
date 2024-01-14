@@ -181,7 +181,7 @@ def main():
                 dir
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
-                f = m.reolace('-', '.')
+                f = m.replace('-', '.')
                 dir=download_blob('movie',year, semester, maabada,f)
                 dir
         if 'grades' not in st.session_state:
