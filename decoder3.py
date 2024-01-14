@@ -83,7 +83,7 @@ def make_movie(path):
     if movie=='0_0':
         st.session_state['counter']+=1
         movie=os.listdir(path)[st.session_state['counter']]
-        st.session_state['counter']
+        st.write(st.session_state['counter'],st.session_state['grades'])
     if movie.lower().endswith('mp4') or movie.lower().endswith('mov') or movie.lower().endswith('avi'):
         video_file = open(os.path.join(path,movie), 'rb')
         video_bytes = video_file.read()
