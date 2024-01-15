@@ -215,7 +215,7 @@ def main():
             elif st.session_state.counter == len(os.listdir(Path)) :
                 comp_grades(maabada)
             else:
-                st.write(st.session_state.counter,len(os.listdir(Path)))
+                st.write(st.session_state.counter,len(os.listdir(Path),os.listdir(Path)))
                 st.warning('No more movies ❗ 🛑')
         if st.sidebar.button('Show grades?'):
             groups=pd.read_csv('grades.csv')
