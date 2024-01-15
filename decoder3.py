@@ -183,12 +183,10 @@ def main():
             for c in codes:
                 f=c.replace('-','.')
                 dir=download_blob('code',year, semester, maabada,f)
-                dir
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
                 f = m.replace('-', '.')
                 dir=download_blob('movie',year, semester, maabada,f)
-                dir
         if 'grades' not in st.session_state:
             st.session_state['grades']=[]
         if 'remarks' not in st.session_state:
@@ -225,7 +223,8 @@ def main():
         #     numEx = [2, 2, 3, 3, 2, 3, 1, 0, 0]
         #     txt=not_completed_lab(numEx,labs,maabada,df)
         #     st.markdown(txt)
-        # df = pd.read_csv('grades.csv')
-        # downloaded=df.to_csv().encode('utf-8')
-        # st.sidebar.download_button(label='Download Grades',data=downloaded, file_name='grades.csv', mime='text/csv')
+        if st.sidebar.button('Download grades.csv?'):
+            df = pd.read_csv('grades.csv')
+            downloaded=df.to_csv().encode('utf-8')
+            st.sidebar.download_button(label='Download Grades',data=downloaded, file_name='grades.csv', mime='text/csv')
 main()
