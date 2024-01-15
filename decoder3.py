@@ -225,6 +225,6 @@ def main():
         #     st.markdown(txt)
         if st.sidebar.button('Download grades.csv?'):
             df = pd.read_csv('grades.csv',index_col=False)
-            # downloaded=df.to_csv('grades.csv',encoding='utf-8',sep=',')
-            st.sidebar.download_button(label='Download Grades',data=df, file_name='grades.csv', mime='text/csv')
+            downloaded=df.to_csv('grades.csv',encoding='utf-8',sep=',')
+            st.sidebar.download_button(label='Download Grades',data='grades.csv', file_name='grades.csv', mime='csv')
 main()
