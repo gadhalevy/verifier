@@ -174,9 +174,7 @@ def main():
     if not os.path.isfile('grades.csv'):
         make_student_list('Overview.csv',labs)
     else:
-        st.write(os.path.abspath('grades.csv'))
         movies,codes=get_download_lst(year,semester,maabada)
-        movies
 
     # ToDo config page make student list
     if maabada != 'Choose':
