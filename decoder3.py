@@ -215,7 +215,7 @@ def main():
             else:
                 st.warning('No more movies ❗ 🛑')
         if st.sidebar.button('Show grades?'):
-            groups=pd.read_csv('grades.csv')
+            groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
         # if st.sidebar.button('Summarize Lab?'):
         #     txt=not_make_maabada(df,maabada)
