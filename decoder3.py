@@ -176,7 +176,7 @@ def main():
     else:
         os.path.abspath('grades.csv')
         movies,codes=get_download_lst(year,semester,maabada)
-    # movies
+        movies
 
     # ToDo config page make student list
     if maabada != 'Choose':
