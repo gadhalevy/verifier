@@ -243,7 +243,7 @@ def end_session(ref,members):
 
 def upload(kind,obj,ref):
     if kind=='movie':
-        siomet=('mp4',)
+        siomet=('mp4','mpeg4')
         err_code='Must be mp4'
     elif kind=='code':
         siomet=('txt','.py','.kv','txt','logo','csv')
