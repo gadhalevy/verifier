@@ -45,6 +45,7 @@ def make_student_list(path,labs):
     grades=pd.DataFrame(columns=new_cols,data=data)
     concated=pd.concat([groups,grades],axis=1)
     concated.to_csv('grades.csv')
+    st.write('grades.csv was created')
     return groups,grades
 
 def from_db(year,semester,maabada):
