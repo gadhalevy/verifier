@@ -133,13 +133,13 @@ def not_make_maabada(movies,maabada):
     return txt
 
 def not_completed_lab(numEx,labs,maabada,df):
-    txt=f'### :green[All groups completed all missions in {maabada}']
+    txt=f'### :green[All groups completed all missions in {maabada}]'
     tarMaabada = numEx[labs.index(maabada) - 1]
     tmp = df['group'].value_counts()
     tmp = tmp[tmp < tarMaabada]
     lst = [str(i) for i in tmp.index]
     if len(lst) > 0:
-        txt = f'### :red[Groups {" ".join(lst)} did not complete all missions']
+        txt = f'### :red[Groups {" ".join(lst)} did not complete all missions]'
     return txt
 
 def get_download_lst(year,semester,maabada):
