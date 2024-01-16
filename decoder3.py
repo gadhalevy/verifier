@@ -119,7 +119,7 @@ def grade_movie(team,lab):
     # st.write(st.session_state.mark,st.session_state.heara)
 
 def not_make_maabada(movies,maabada):
-    txt='### All groups make this {}'.format(maabada)
+    txt=f'### :green[All groups make this {maabada}]'
     groups = pd.read_csv('grades.csv',index_col=False)
     fb_groups=(m.split('_')[0] for m in movies)
     set_fb_groups=set(map(int,fb_groups))
@@ -129,17 +129,17 @@ def not_make_maabada(movies,maabada):
     set_fb_groups
     dif
     if len(dif) > 0:
-        txt = '### Groups {} did not make maabada {} yet'.format(' '.join(str(dif)), maabada)
+        txt = f'### :red[Groups {' '.join(str(dif))} did not make maabada {maabada} yet]'
     return txt
 
 def not_completed_lab(numEx,labs,maabada,df):
-    txt='### All groups completed all missions in {}'.format(maabada)
+    txt=f'### :green[All groups completed all missions in {maabada}']
     tarMaabada = numEx[labs.index(maabada) - 1]
     tmp = df['group'].value_counts()
     tmp = tmp[tmp < tarMaabada]
     lst = [str(i) for i in tmp.index]
     if len(lst) > 0:
-        txt = '### Groups {} did not complete all missions'.format(' '.join(lst))
+        txt = f'### :red[Groups {' '.join(lst)} did not complete all missions']
     return txt
 
 def get_download_lst(year,semester,maabada):
