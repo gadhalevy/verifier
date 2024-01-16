@@ -129,7 +129,7 @@ def not_make_maabada(movies,maabada):
     set_fb_groups
     dif
     if len(dif) > 0:
-        txt = f'### :red[Groups {' '.join(str(dif))} did not make maabada {maabada} yet]'
+        txt = f'### :red[Groups {" ".join(str(dif))} did not make maabada {maabada} yet]'
     return txt
 
 def not_completed_lab(numEx,labs,maabada,df):
