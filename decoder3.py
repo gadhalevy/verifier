@@ -139,7 +139,7 @@ def not_completed_lab(numEx,labs,maabada,df):
     tmp = tmp[tmp < tarMaabada]
     lst = [str(i) for i in tmp.index]
     if len(lst) > 0:
-        txt = f'### :red[Groups {' '.join(lst)} did not complete all missions']
+        txt = f'### :red[Groups {" ".join(lst)} did not complete all missions']
     return txt
 
 def get_download_lst(year,semester,maabada):
