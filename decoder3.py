@@ -224,7 +224,7 @@ def main():
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
         if st.sidebar.button('Summarize Lab?'):
-            not_make_maabada(df,maabada)
+            not_make_maabada(movies,maabada)
         #     st.markdown(txt)
         #     numEx = [2, 2, 3, 3, 2, 3, 1, 0, 0]
         #     txt=not_completed_lab(numEx,labs,maabada,df)
