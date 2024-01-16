@@ -120,7 +120,7 @@ def grade_movie(team,lab):
 
 def not_make_maabada(df,maabada):
     txt='### All groups make this {}'.format(maabada)
-    groups = pd.read_csv('grades.csv')
+    groups = pd.read_csv('grades.csv',index_col=False)
     set_fb_groups = set(df['group'].astype('int8'))
     set_groups = set(s for s in groups['num'])
     dif = set_groups - set_fb_groups
