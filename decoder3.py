@@ -158,6 +158,11 @@ def get_download_lst(year,semester,maabada):
         data = 'code'
     return m_lst,f_lst
 
+@st.cache
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -224,6 +229,6 @@ def main():
         #     st.markdown(txt)
         if st.sidebar.button('Download grades.csv?'):
             df = pd.read_csv('grades.csv',index_col=False)
-            downloaded=df.to_csv('grades.csv',encoding='utf-8',sep=',')
-            st.sidebar.download_button(label='Download Grades',data='grades.csv', file_name='grades.csv', mime='csv')
+            csv = convert_df(df)
+            st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
 main()
