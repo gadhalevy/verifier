@@ -124,11 +124,9 @@ def not_make_maabada(movies,maabada):
     set_fb_groups=set(m.split('_')[0] for m in movies)
     # set_fb_groups = set(df['group'].astype('int8'))
     set_groups = set(s for s in groups['num'])
-    set_fb_groups
-    set_groups
-    # dif = set_groups - set_fb_groups
-    # if len(dif) > 0:
-    #     txt = '### Groups {} did not make maabada {} yet'.format(' '.join(str(dif)), maabada)
+    dif = set_groups - set_fb_groups
+    if len(dif) > 0:
+        txt = '### Groups {} did not make maabada {} yet'.format(' '.join(str(dif)), maabada)
     return txt
 
 def not_completed_lab(numEx,labs,maabada,df):
@@ -225,8 +223,8 @@ def main():
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
         if st.sidebar.button('Summarize Lab?'):
-            not_make_maabada(movies,maabada)
-        #     st.markdown(txt)
+            txt=not_make_maabada(movies,maabada)
+            st.markdown(txt)
         #     numEx = [2, 2, 3, 3, 2, 3, 1, 0, 0]
         #     txt=not_completed_lab(numEx,labs,maabada,df)
         #     st.markdown(txt)
