@@ -118,14 +118,16 @@ def grade_movie(team,lab):
     st.session_state.counter += 1
     # st.write(st.session_state.mark,st.session_state.heara)
 
-def not_make_maabada(df,maabada):
+def not_make_maabada(movies,maabada):
     txt='### All groups make this {}'.format(maabada)
     groups = pd.read_csv('grades.csv',index_col=False)
-    set_fb_groups = set(df['group'].astype('int8'))
+    # set_fb_groups = set(df['group'].astype('int8'))
     set_groups = set(s for s in groups['num'])
-    dif = set_groups - set_fb_groups
-    if len(dif) > 0:
-        txt = '### Groups {} did not make maabada {} yet'.format(' '.join(str(dif)), maabada)
+    movies
+    set_groups
+    # dif = set_groups - set_fb_groups
+    # if len(dif) > 0:
+    #     txt = '### Groups {} did not make maabada {} yet'.format(' '.join(str(dif)), maabada)
     return txt
 
 def not_completed_lab(numEx,labs,maabada,df):
