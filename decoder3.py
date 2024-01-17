@@ -143,7 +143,7 @@ def not_completed_lab(numEx,labs,maabada,movies,flag):
     mystr=''
     for k,v in tmp.items():
         if v<tarMaabada:
-            mystr+=k+' '
+            mystr+=str(k)+' '
     if len(mystr)>0 and not flag:
         txt = f'### :red[Groups {mystr} did not complete all missions]'
     if flag:
