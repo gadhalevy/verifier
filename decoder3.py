@@ -132,8 +132,8 @@ def not_make_maabada(movies,maabada):
     if len(dif)==len(set_groups):
         txt= f'### :red[Nobody make maabada {maabada} yet]'
         nobody=True
-    len(dif)
-    len(set_groups)
+    st.write(len(dif))
+    st.write(len(set_groups))
     return txt,nobody
 
 def not_completed_lab(numEx,labs,maabada,movies,flag):
