@@ -132,14 +132,13 @@ def not_make_maabada(movies,maabada):
     if len(dif)==len(set_groups):
         txt= f'### :red[Nobody make maabada {maabada} yet]'
         nobody=True
-    st.write(len(dif))
-    st.write(len(set_groups))
     return txt,nobody
 
 def not_completed_lab(numEx,labs,maabada,movies,flag):
     txt=f'### :green[All groups completed all missions in {maabada}]'
     tarMaabada = numEx[labs.index(maabada) - 1]
     fb_groups = (m.split('_')[0] for m in movies)
+    fb_groups = set(map(int, fb_groups))
     tmp=Counter(fb_groups)
     mystr=''
     for k,v in tmp.items():
