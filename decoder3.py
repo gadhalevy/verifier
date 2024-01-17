@@ -9,7 +9,6 @@ import pandas as pd
 import platform
 from uuid import uuid4
 from moviepy.editor import *
-from collections import  Counter
 
 def init():
     try:
@@ -126,21 +125,21 @@ def not_make_maabada(movies,maabada):
     set_fb_groups=set(map(int,fb_groups))
     set_groups = set(s for s in groups['num'])
     dif = set_groups - set_fb_groups
+    set_groups
+    set_fb_groups
+    dif
     if len(dif) > 0:
         txt = f'### :red[Groups {" ".join(str(dif))} did not make maabada {maabada} yet]'
     return txt
 
-def not_completed_lab(numEx,labs,maabada,movies):
+def not_completed_lab(numEx,labs,maabada,df):
     txt=f'### :green[All groups completed all missions in {maabada}]'
     tarMaabada = numEx[labs.index(maabada) - 1]
-    fb_groups = (m.split('_')[0] for m in movies)
-    tmp=Counter(fb_groups)
-    mystr=''
-    for k,v in tmp.items():
-        if v<tarMaabada:
-            mystr+=k+' '
-    if len(mystr)>0:
-        txt = f'### :red[Groups {mystr} did not complete all missions]'
+    tmp = df['group'].value_counts()
+    tmp = tmp[tmp < tarMaabada]
+    lst = [str(i) for i in tmp.index]
+    if len(lst) > 0:
+        txt = f'### :red[Groups {" ".join(lst)} did not complete all missions]'
     return txt
 
 def get_download_lst(year,semester,maabada):
@@ -177,7 +176,7 @@ def main():
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
     year = st.sidebar.selectbox('Please choose year', ['Tashpag', 'Tashpad', 'Tashpah','Demo'])
-    labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur','HMI', 'Android', 'IOT', 'Auto car 1', 'Auto car 2','Social networks')
+    labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur','HMI', 'Android', 'IOT', 'Auto car 1', 'Auto car 2')
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
     maabada = st.sidebar.selectbox('Please select maabada', labs)
     init()
@@ -229,9 +228,9 @@ def main():
         if st.sidebar.button('Summarize Lab?'):
             txt=not_make_maabada(movies,maabada)
             st.markdown(txt)
-            numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
-            txt=not_completed_lab(numEx,labs,maabada,movies)
-            st.markdown(txt)
+        #     numEx = [2, 2, 3, 3, 2, 3, 1, 0, 0]
+        #     txt=not_completed_lab(numEx,labs,maabada,df)
+        #     st.markdown(txt)
         if st.sidebar.button('Download grades.csv?'):
             df = pd.read_csv('grades.csv',index_col=False)
             csv = convert_df(df)
