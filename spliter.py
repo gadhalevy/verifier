@@ -23,3 +23,4 @@ def main():
     labs = ('Robotica', 'PreVision', 'Vision', 'Robolego', 'Yetsur', 'HMI', 'Android', 'IOT', 'Auto car 1','Social networks')
     for l in labs:
         st.write(os.listdir(l))
+main()
