@@ -12,7 +12,7 @@ def split_pdfs(input_file_path,lab):
         output = PdfWriter()
         output.add_page(page)
 
-        out_file_path = f"splitted/{lab}/{lab}_{i}.pdf"
+        out_file_path = f"{lab}/splitted/{lab}_{i}.pdf"
         with open(out_file_path, "wb") as output_stream:
             output.write(output_stream)
 
