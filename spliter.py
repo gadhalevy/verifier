@@ -23,14 +23,14 @@ def split_pdfs(input_file_path,lab):
 # split_pdfs('PreVision/preVision.pdf')
 def main():
     if 'numpage' not in st.session_state:
-        st.session_state.numpage = 0
+        st.session_state['numpage'] = 0
     labs = ('Robotica', 'PreVision', 'Vision', 'Robolego', 'Yetsur', 'HMI', 'Android', 'IOT', 'Auto car 1','Social networks')
     lab = st.sidebar.selectbox('Please select maabada', options=labs,on_change=new_lab())
     lstdir = os.listdir(f'splitted/{lab}')
     read = st.button('Press to read a page')
     if read:
-        st.write(st.session_state.numpage)
-        st.session_state.numpage+=1
+        st.write(st.session_state['numpage'])
+        st.session_state['numpage']+=1
         # if st.session_state.numpage>=len(lstdir):
         #     st.error('No more pages!',icon="🚨")
         # else:
