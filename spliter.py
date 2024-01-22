@@ -1,6 +1,8 @@
 import streamlit as st,os
 from pypdf import PdfReader,PdfWriter
 import base64,os
+def new_lab():
+    st.session_state.numpage = 0
 def split_pdfs(input_file_path,lab):
     inputpdf = PdfReader(open(input_file_path, "rb"))
 
@@ -20,9 +22,23 @@ def split_pdfs(input_file_path,lab):
     return out_paths
 # split_pdfs('PreVision/preVision.pdf')
 def main():
+    if 'numpage' not in st.session_state:
+        st.session_state.numpage = 0
     labs = ('Robotica', 'PreVision', 'Vision', 'Robolego', 'Yetsur', 'HMI', 'Android', 'IOT', 'Auto car 1','Social networks')
-    for lab in labs:
-        st.write(os.listdir(f'splitted/{lab}'))
+    lab = st.sidebar.selectbox('Please select maabada', options=labs,on_change=new_lab())
+    lstdir = os.listdir(f'splitted/{lab}')
+    read = st.button('Press to read a page')
+    if read:
+        if st.session_state.numpage>=len(lstdir):
+            st.error('No more pages!',icon="🚨")
+        else:
+            with open(f'splitted/{lab}/{lab}_{st.session_state.numpage}', "rb") as file:
+                base64_pdf = base64.b64encode(file.read()).decode('utf-8')
+                pdf = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+                st.markdown(pdf, unsafe_allow_html=True)
+                st.session_state.numpage+=1
+    # for lab in labs:
+    #     st.write(os.listdir(f'splitted/{lab}'))
         # for l in os.listdir(lab):
         #     if l.endswith('pdf'):
         #         split_pdfs(f'{lab}/{l}',lab)
