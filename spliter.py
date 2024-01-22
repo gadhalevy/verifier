@@ -37,8 +37,8 @@ def main():
                 pdf = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
                 st.markdown(pdf, unsafe_allow_html=True)
                 st.session_state.numpage+=1
-    # for lab in labs:
-    #     st.write(os.listdir(f'splitted/{lab}'))
+    for lab in labs:
+        st.write(os.listdir(f'splitted/{lab}'))
         # for l in os.listdir(lab):
         #     if l.endswith('pdf'):
         #         split_pdfs(f'{lab}/{l}',lab)
