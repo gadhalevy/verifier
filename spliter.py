@@ -24,6 +24,6 @@ def main():
     for lab in labs:
         for l in os.listdir(lab):
             if l.endswith('pdf'):
-                split_pdfs(f'{lab}/l',lab)
+                split_pdfs(f'{lab}/{l}',lab)
 
 main()
