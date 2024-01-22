@@ -5,14 +5,14 @@ def split_pdfs(input_file_path,lab):
     inputpdf = PdfReader(open(input_file_path, "rb"))
 
     out_paths = []
-    if not os.path.exists("splitted"):
-        os.makedirs("splitted")
+    if not os.path.exists(f"splitted/{lab}"):
+        os.makedirs(f"splitted/{lab}")
 
     for i, page in enumerate(inputpdf.pages):
         output = PdfWriter()
         output.add_page(page)
 
-        out_file_path = f"{lab}/splitted/{lab}_{i}.pdf"
+        out_file_path = f"splitted/{lab}/{lab}_{i}.pdf"
         with open(out_file_path, "wb") as output_stream:
             output.write(output_stream)
 
