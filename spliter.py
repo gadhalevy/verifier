@@ -32,7 +32,7 @@ def main():
     lstdir = os.listdir(f'splitted/{lab}')
     read = st.button('Press to read a page',on_click=next_page())
     if read:
-        st.write(st.session_state['numpage'])
+        st.write(st.session_state)
         # st.session_state['numpage']+=1
         # if st.session_state.numpage>=len(lstdir):
         #     st.error('No more pages!',icon="🚨")
