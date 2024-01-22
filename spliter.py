@@ -29,15 +29,17 @@ def main():
     lstdir = os.listdir(f'splitted/{lab}')
     read = st.button('Press to read a page')
     if read:
-        if st.session_state.numpage>=len(lstdir):
-            st.error('No more pages!',icon="🚨")
-        else:
-            st.write(st.session_state.numpage)
-            with open(f'splitted/{lab}/{lab}_{st.session_state.numpage}.pdf', "rb") as file:
-                base64_pdf = base64.b64encode(file.read()).decode('utf-8')
-            pdf = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
-            st.markdown(pdf, unsafe_allow_html=True)
-            st.session_state.numpage+=1
+        st.write(st.session_state.numpage)
+        st.session_state.numpage+=1
+        # if st.session_state.numpage>=len(lstdir):
+        #     st.error('No more pages!',icon="🚨")
+        # else:
+        #     st.write(st.session_state.numpage)
+        #     with open(f'splitted/{lab}/{lab}_{st.session_state.numpage}.pdf', "rb") as file:
+        #         base64_pdf = base64.b64encode(file.read()).decode('utf-8')
+        #     pdf = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+        #     st.markdown(pdf, unsafe_allow_html=True)
+        #     st.session_state.numpage+=1
     # for lab in labs:
     #     st.write(os.listdir(f'splitted/{lab}'))
         # for l in os.listdir(lab):
