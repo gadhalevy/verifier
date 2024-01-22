@@ -34,8 +34,8 @@ def main():
         else:
             with open(f'splitted/{lab}/{lab}_{st.session_state.numpage}.pdf', "rb") as file:
                 base64_pdf = base64.b64encode(file.read()).decode('utf-8')
-                pdf = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
-                st.markdown(pdf, unsafe_allow_html=True)
+            pdf = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+            st.markdown(pdf, unsafe_allow_html=True)
             st.session_state.numpage+=1
     # for lab in labs:
     #     st.write(os.listdir(f'splitted/{lab}'))
