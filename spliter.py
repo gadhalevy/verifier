@@ -22,8 +22,9 @@ def split_pdfs(input_file_path,lab):
 def main():
     labs = ('Robotica', 'PreVision', 'Vision', 'Robolego', 'Yetsur', 'HMI', 'Android', 'IOT', 'Auto car 1','Social networks')
     for lab in labs:
-        for l in os.listdir(lab):
-            if l.endswith('pdf'):
-                split_pdfs(f'{lab}/{l}',lab)
+        st.write(os.listdir(f'splitted/{lab}'))
+        # for l in os.listdir(lab):
+        #     if l.endswith('pdf'):
+        #         split_pdfs(f'{lab}/{l}',lab)
 
 main()
