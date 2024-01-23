@@ -92,7 +92,10 @@ def make_movie(path):
         return video_bytes,movie
 
 def comp_grades(lab):
-    avg = sum(st.session_state['grades']) / len(st.session_state['grades'])
+    try:
+        avg = sum(st.session_state['grades']) / len(st.session_state['grades'])
+    except ZeroDivisionError:
+        avg=0
     groups = pd.read_csv('grades.csv')
     # st.dataframe(groups)
     groups = groups.astype({'num': 'int8'})
