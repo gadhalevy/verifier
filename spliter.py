@@ -5,7 +5,8 @@ def new_lab():
     st.session_state.numpage = 0
     
 def next_page():
-    st.session_state.numpage+=1
+    st.session_state.numpage=int(st.session_state.numpage)+1
+    
 def split_pdfs(input_file_path,lab):
     inputpdf = PdfReader(open(input_file_path, "rb"))
 
