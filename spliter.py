@@ -29,9 +29,9 @@ def main():
     if 'numpage' not in st.session_state:
         st.session_state['numpage'] = 0
     labs = ('Robotica', 'PreVision', 'Vision', 'Robolego', 'Yetsur', 'HMI', 'Android', 'IOT', 'Auto car 1','Social networks')
-    lab = st.sidebar.selectbox('Please select maabada', options=labs,on_change=new_lab())
+    lab = st.sidebar.selectbox('Please select maabada', options=labs,on_change=new_lab)
     lstdir = os.listdir(f'splitted/{lab}')
-    read = st.button('Press to read a page',on_click=next_page())
+    read = st.button('Press to read a page',on_click=next_page)
     if read:
         st.write(st.session_state)
         # st.session_state['numpage']+=1
