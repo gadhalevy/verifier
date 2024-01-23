@@ -4,8 +4,8 @@ import base64,os
 def new_lab():
     st.session_state.numpage = 0
     
-def next_page():
-    st.session_state.numpage+=1
+# def next_page():
+#     st.session_state.numpage+=1
     
 def split_pdfs(input_file_path,lab):
     inputpdf = PdfReader(open(input_file_path, "rb"))
@@ -27,7 +27,7 @@ def main():
     labs = ('Robotica', 'PreVision', 'Vision', 'Robolego', 'Yetsur', 'HMI', 'Android', 'IOT', 'Auto car 1','Social networks')
     lab = st.sidebar.selectbox('Please select maabada', options=labs,on_change=new_lab)
     lstdir = os.listdir(f'splitted/{lab}')
-    read = st.button('Press to read a page',on_click=next_page)
+    read = st.button('Press to read a page')
     if read:
         if st.session_state.numpage>=len(lstdir):
             st.error('No more pages!',icon="🚨")
