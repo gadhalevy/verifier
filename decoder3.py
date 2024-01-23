@@ -209,7 +209,7 @@ def main():
             st.session_state['remarks']=[]
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
-        Path=f'movie/{year}/{semester}/{maabada}/'
+        Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
             os.listdir(Path)
             if st.session_state.counter < len(os.listdir(Path)) - 1:
