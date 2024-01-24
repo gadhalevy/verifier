@@ -174,10 +174,12 @@ def convert_df(df):
 
 def check_siomet(f):
     siomet = ('txt', 'py', 'kv', 'txt', 'logo', 'csv', 'mp4','mpeg4')
-    pre,post=f.split('.')
-    if post.lower() in siomet:
-        return True
-    return False
+    try:
+        pre,post=f.split('.')
+        if post.lower() in siomet:
+            return True
+    except:
+        return False
 
 def main():
     '''
