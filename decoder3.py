@@ -176,7 +176,12 @@ def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')
 
-
+def check_siomet(f):
+    siomet = ('txt', '.py', '.kv', 'txt', 'logo', 'csv', 'mp4','mpeg4')
+    if siomet in f:
+        return True
+    return False
+    
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -200,11 +205,13 @@ def main():
         if st.sidebar.button('Download codes from Firebase?'):
             for c in codes:
                 f=c.replace('-','.')
-                download_blob('code',year, semester, maabada,f)
+                if check_siomet(f):
+                    download_blob('code',year, semester, maabada,f)
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
                 f = m.replace('-', '.')
-                download_blob('movie',year, semester, maabada,f)
+                if check_siomet(f):
+                    download_blob('movie',year, semester, maabada,f)
         if 'grades' not in st.session_state:
             st.session_state['grades']=[]
         if 'remarks' not in st.session_state:
