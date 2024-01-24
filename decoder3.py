@@ -212,6 +212,7 @@ def main():
         Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
             st.session_state
+            os.listdir(Path)
             if st.session_state.counter < len(os.listdir(Path)) :
                 holder = st.empty()
                 video,v_name=make_movie(Path)
