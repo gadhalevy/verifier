@@ -198,11 +198,11 @@ def main():
         if st.sidebar.button('Download codes from Firebase?'):
             for c in codes:
                 f=c.replace('-','.')
-                dir=download_blob('code',year, semester, maabada,f)
+                download_blob('code',year, semester, maabada,f)
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
                 f = m.replace('-', '.')
-                dir=download_blob('movie',year, semester, maabada,f)
+                download_blob('movie',year, semester, maabada,f)
         if 'grades' not in st.session_state:
             st.session_state['grades']=[]
         if 'remarks' not in st.session_state:
@@ -211,7 +211,7 @@ def main():
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            os.listdir(Path)
+            st.write(os.listdir(Path))
             if st.session_state.counter < len(os.listdir(Path)) - 1:
                 holder = st.empty()
                 video,v_name=make_movie(Path)
