@@ -10,6 +10,7 @@ import platform
 from uuid import uuid4
 from moviepy.editor import *
 from collections import  Counter
+import pycode_similar
 
 def init():
     try:
@@ -175,6 +176,7 @@ def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')
 
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -211,8 +213,6 @@ def main():
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            st.session_state
-            st.write(os.listdir(Path))
             if st.session_state.counter < len(os.listdir(Path)) -1:
                 holder = st.empty()
                 video,v_name=make_movie(Path)
@@ -234,6 +234,8 @@ def main():
         if st.sidebar.button('Show grades?'):
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
+        if st.sidebar.button('Compare codes?'):
+            codes
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
