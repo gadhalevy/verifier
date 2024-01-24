@@ -211,8 +211,8 @@ def main():
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            # st.session_state
-            # st.write(os.listdir(Path))
+            st.session_state
+            st.write(os.listdir(Path))
             if st.session_state.counter < len(os.listdir(Path)) -1:
                 holder = st.empty()
                 video,v_name=make_movie(Path)
@@ -227,7 +227,7 @@ def main():
                         st.text_area('Remark','Checked',key='heara')
                         st.form_submit_button("Submit",on_click=grade_movie,args=(kvutsa,maabada))
                 holder.text_input('Remarks', 'movie {} of group {} is being checked'.format(seret, kvutsa))
-            elif st.session_state.counter == (len(os.listdir(Path))-1) :
+            elif st.session_state.counter == (len(os.listdir(Path))-1) and len(os.listdir(Path))>0:
                 comp_grades(maabada)
             else:
                 st.warning('No more movies ❗ 🛑')
