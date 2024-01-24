@@ -91,12 +91,12 @@ def make_movie(path):
         video_bytes = video_file.read()
         return video_bytes,movie
 
-def comp_grades(lab):
-    avg = sum(st.session_state['grades']) / len(st.session_state['grades'])
+def comp_grades(lab):    
     groups = pd.read_csv('grades.csv')
     # st.dataframe(groups)
     groups = groups.astype({'num': 'int8'})
     # groups.loc[(groups.num == 1), 'IOT'] = 31
+    avg = sum(st.session_state['grades']) / len(st.session_state['grades'])
     groups.loc[(groups.num == int(st.session_state['team'])), lab] = avg
     groups.loc[(groups.num == int(st.session_state['team'])), lab + '_rem'] = ' '.join(st.session_state.remarks)
     # st.dataframe(groups)
@@ -211,7 +211,6 @@ def main():
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            st.write(os.listdir(Path))
             if st.session_state.counter < len(os.listdir(Path)) - 1:
                 holder = st.empty()
                 video,v_name=make_movie(Path)
