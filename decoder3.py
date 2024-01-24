@@ -241,7 +241,9 @@ def main():
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
         if st.sidebar.button('Compare codes?'):
-            st.write(os.listdir(f'code/{maabada}'))
+            for f in os.listdir(f'code/{maabada}'):
+                if f.endswith('py'):
+                    st.download_button(f'{f}',f,f)
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
