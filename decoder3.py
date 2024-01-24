@@ -243,7 +243,7 @@ def main():
         if st.sidebar.button('Compare codes?'):
             for f in os.listdir(f'code/{maabada}'):
                 if f.endswith('py'):
-                    st.download_button(f'{f}',f,f)
+                    st.download_button(f'{f}',f,f,'py')
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
