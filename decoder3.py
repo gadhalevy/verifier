@@ -91,7 +91,7 @@ def make_movie(path):
         video_bytes = video_file.read()
         return video_bytes,movie
 
-def comp_grades(lab):    
+def comp_grades(lab):
     groups = pd.read_csv('grades.csv')
     # st.dataframe(groups)
     groups = groups.astype({'num': 'int8'})
@@ -211,7 +211,7 @@ def main():
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            if st.session_state.counter < len(os.listdir(Path)) - 1:
+            if st.session_state.counter < len(os.listdir(Path)) :
                 holder = st.empty()
                 video,v_name=make_movie(Path)
                 col1,col2=st.columns([8,2])
