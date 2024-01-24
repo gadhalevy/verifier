@@ -12,18 +12,14 @@ from moviepy.editor import *
 from collections import  Counter
 import pycode_similar
 
+@st.cache_resource()
 def init():
     try:
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
         pass
-    tmp = platform.platform()
-    # print(tmp)
-    if 'Windows' in tmp:
-        cred = credentials.Certificate("H:/Gibui260318/pythonStuff/verifier/fb_key.json")
-        # ocr.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-    else:
-        cred = credentials.Certificate(dict(st.secrets['fb']))
+    cred = credentials.Certificate(dict(st.secrets['fb']))
+    # cred = credentials.Certificate('fb_key.json')
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
 def make_student_list(path,labs):
@@ -181,7 +177,7 @@ def check_siomet(f):
     if siomet in f:
         return True
     return False
-    
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
