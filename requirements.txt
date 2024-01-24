@@ -7,3 +7,4 @@ streamlit~=1.22.0
 firebase-admin~=5.4.0
 opencv-python-headless~=4.5.3.56
 pypdf~=3.17.4
+pycode-similar~=1.4
