@@ -173,8 +173,9 @@ def convert_df(df):
     return df.to_csv().encode('utf-8')
 
 def check_siomet(f):
-    siomet = ('txt', '.py', '.kv', 'txt', 'logo', 'csv', 'mp4','mpeg4')
-    if siomet in f:
+    siomet = ('txt', 'py', 'kv', 'txt', 'logo', 'csv', 'mp4','mpeg4')
+    pre,post=f.split('.')
+    if post.lower() in siomet:
         return True
     return False
 
