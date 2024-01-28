@@ -10,7 +10,7 @@ import platform
 from uuid import uuid4
 from moviepy.editor import *
 from collections import  Counter
-import pycode_similar
+from difflib import *
 
 @st.cache_resource()
 def init():
