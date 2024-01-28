@@ -242,7 +242,6 @@ def main():
             st.dataframe(groups)
         if st.sidebar.button('Compare codes?'):
             for f in os.listdir(f'code/{maabada}'):
-                f
                 if f.endswith('py'):
                     with open(f'code/{maabada}/{f}') as data:
                         st.download_button(label=f'{f}',data=data,file_name=f'{f}',mime='text/plain')
