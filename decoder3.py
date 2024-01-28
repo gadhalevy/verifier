@@ -11,6 +11,7 @@ from uuid import uuid4
 from moviepy.editor import *
 from collections import  Counter
 from difflib import *
+import math
 
 @st.cache_resource()
 def init():
@@ -244,14 +245,13 @@ def main():
             dic = {}
             for f in os.listdir(f'code/{maabada}'):
                 if f.endswith('py'):
-                    pre,post=f.split('_')
                     with open(f'code/{maabada}/{f}') as data:
                         dic[f]=data.read()
+            similar= {}
             for k in list(dic.keys())[1:]:
                 s=SequenceMatcher(None,dic[list(dic.keys())[0]],dic[k])
-                st.write('first',round(s.ratio(),2))
-                s=SequenceMatcher(None,dic[k],dic[list(dic.keys())[0]])
-                st.write('second',round(s.ratio(),2))
+                similar[k]=round(s.ratio(),2)
+            similar    
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
