@@ -249,9 +249,9 @@ def main():
                         dic[f]=data.read()
             for k in list(dic.keys())[1:]:
                 s=SequenceMatcher(None,dic[list(dic.keys())[0]],dic[k])
-                st.write('first',s.ratio())
+                st.write('first',round(s.ratio(),2))
                 s=SequenceMatcher(None,dic[k],dic[list(dic.keys())[0]])
-                st.write('second',s.ratio())
+                st.write('second',round(s.ratio(),2))
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
