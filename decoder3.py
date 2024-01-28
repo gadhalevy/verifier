@@ -261,7 +261,7 @@ def main():
 
             # Create a new dictionary with only the keys whose value has a count greater than 1
             result = {k: v for k, v in similar.items() if counts[v] > 1}
-            result.keys()
+            st.write(result.keys())
                     
                 
 
