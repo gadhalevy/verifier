@@ -204,7 +204,7 @@ def main():
         if st.sidebar.button('Download codes from Firebase?'):
             for c in codes:
                 f=c.replace('-','.')
-                if check_siomet(f):                    
+                if check_siomet(f):
                     download_blob('code',year, semester, maabada,f)
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
@@ -241,10 +241,17 @@ def main():
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
         if st.sidebar.button('Compare codes?'):
+            dic = {}
             for f in os.listdir(f'code/{maabada}'):
                 if f.endswith('py'):
+                    pre,post=f.split('_')
                     with open(f'code/{maabada}/{f}') as data:
-                        st.download_button(label=f'{f}',data=data,file_name=f'{f}',mime='text/plain')
+                        dic[f]=data.read()
+            for k in dic.keys()[1:]:
+                s=SequenceMatcher(None,dic[dic.keys()[0]],dic[k])
+                s.ratio()
+                s=SequenceMatcher(None,dic[k],dic[dic.keys()[0]])
+                s.ratio()
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
