@@ -248,9 +248,9 @@ def main():
                     with open(f'code/{maabada}/{f}') as data:
                         dic[f]=data.read()
             for k in list(dic.keys())[1:]:
-                s=SequenceMatcher(None,dic[dic.keys()[0]],dic[k])
+                s=SequenceMatcher(None,dic[list(dic.keys())[0]],dic[k])
                 s.ratio()
-                s=SequenceMatcher(None,dic[k],dic[dic.keys()[0]])
+                s=SequenceMatcher(None,dic[k],dic[list(dic.keys())[0]])
                 s.ratio()
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
