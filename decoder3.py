@@ -251,7 +251,7 @@ def main():
             for k in list(dic.keys())[1:]:
                 s=SequenceMatcher(None,dic[list(dic.keys())[0]],dic[k])
                 ratios[k]=round(s.ratio(),2)
-            suspects=[k for k,v in ratios if v==1]
+            suspects=[k for k,v in ratios.items() if v==1]
             if len(suspects)>0:
                 suspects.append(list(dic.keys())[0])
             counts = Counter(ratios.values())
