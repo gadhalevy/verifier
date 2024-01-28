@@ -256,7 +256,7 @@ def main():
             except ValueError:
                 suspect=-1
             if suspect!=-1:
-                st.write(list(dic.keys())[0],dic[list(similar.keys())[suspect]])
+                st.write(list(dic.keys())[0],list(similar.keys())[suspect])
             st.write(Counter(similar.values()))
 
 
