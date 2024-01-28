@@ -251,7 +251,17 @@ def main():
             for k in list(dic.keys())[1:]:
                 s=SequenceMatcher(None,dic[list(dic.keys())[0]],dic[k])
                 similar[k]=round(s.ratio(),2)
-            similar    
+            try:
+                suspect=list(similar.values()).index(1)
+            except ValueError:
+                suspect=-1
+            if suspect!=-1:
+                st.write(list(dic.keys())[0],dic[suspect])
+            st.write(Counter(similar.values()))
+
+
+
+
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
