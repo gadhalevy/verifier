@@ -257,7 +257,14 @@ def main():
                 suspect=-1
             if suspect!=-1:
                 st.write(list(dic.keys())[0],list(similar.keys())[suspect])
-            st.write(Counter(similar.values()))
+            counts = Counter(similar.values())
+
+            # Create a new dictionary with only the keys whose value has a count greater than 1
+            result = {k: v for k, v in similar.items() if counts[v] > 1}
+            result.keys()
+                    
+                
+
 
 
 
