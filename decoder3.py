@@ -205,8 +205,8 @@ def main():
             for c in codes:
                 f=c.replace('-','.')
                 if check_siomet(f):
-                    with open(f'code/{maabada}/{f}'):
-                        file=f.read()
+                    with open(f'code/{maabada}/{f}') as kovets:
+                        file=kovets.read()
                         download_blob('code',year, semester, maabada,file)
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
