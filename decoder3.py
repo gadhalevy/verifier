@@ -247,7 +247,7 @@ def main():
                     pre,post=f.split('_')
                     with open(f'code/{maabada}/{f}') as data:
                         dic[f]=data.read()
-            for k in list(dic.keys()[1:]):
+            for k in list(dic.keys())[1:]:
                 s=SequenceMatcher(None,dic[dic.keys()[0]],dic[k])
                 s.ratio()
                 s=SequenceMatcher(None,dic[k],dic[dic.keys()[0]])
