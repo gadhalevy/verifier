@@ -265,7 +265,7 @@ def main():
             for k,v in suspects.items():
                 st.write(f'**:red[Suspected files {" ".join(v)}]**')
                 for f in v:
-                    st.download_button(label=f'Download {k}?',data=dic[f],file_name=f,mime='text/py')
+                    st.download_button(label=f'Download {f}?',data=dic[f],file_name=f,mime='text/py')
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
