@@ -210,6 +210,16 @@ def compare_code(maabada):
             st.download_button(label=f'Download {f}?', data=dic[f], file_name=f, mime='text/py')
     return suspects
 
+def show_suspects(suspects):
+    for v in suspects.values():
+        str = f'### :red[Groups '
+        for f in v:
+            group, tmp = f.split('_')
+            ex, _ = tmp.split('.')
+            str += f'{group} '
+        str += f'Suspected of coping exercise {ex}]'
+        st.markdown(str)
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -273,16 +283,7 @@ def main():
             suspects=compare_code(maabada)
         if st.sidebar.button('Summarize Lab?'):
             if len(suspects)>0:
-                for v in suspects.values():
-                    str=f'### :red[Groups '
-                    for f in v:
-                        group, tmp = f.split('_')
-                        ex,_=tmp.split('.')
-                        str+=f'{group} '
-                    str+=f'Suspected of coping {ex}]'
-                    st.markdown(str)
-
-
+                show_suspects(suspects)
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
