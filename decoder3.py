@@ -274,7 +274,7 @@ def main():
         if st.sidebar.button('Summarize Lab?'):
             if len(suspects)>0:
                 for v in suspects.values():
-                    str=f'###:red[Groups '
+                    str=f'### :red[Groups '
                     for f in v:
                         group, tmp = f.split('_')
                         ex,_=tmp.split('.')
