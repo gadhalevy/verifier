@@ -257,7 +257,7 @@ def main():
             counts = Counter(ratios.values())
             # Create a new dictionary with only the keys whose value has a count greater than 1
             result = {k: v for k, v in ratios.items() if counts[v] > 1}
-            set_ratios={list(result.values())}
+            set_ratios=set(list(result.values()))
             st.write(set_ratios)
 
 
