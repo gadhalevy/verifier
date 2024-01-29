@@ -272,6 +272,7 @@ def main():
         if st.sidebar.checkbox('Compare codes?'):
             suspects=compare_code(maabada)
         if st.sidebar.button('Summarize Lab?'):
+            st.write(suspects)
             if len(suspects)>0:
                 for v in suspects.values():
                     str=f'Groups '
@@ -280,8 +281,8 @@ def main():
                         str+=f'{group} '
                     str+=f'Suspected of coping {ex}'
                     st.write(str)
-                        
-                    
+
+
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
