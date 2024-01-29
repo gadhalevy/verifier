@@ -262,9 +262,10 @@ def main():
             for i,s in enumerate(set_ratios,2):
                 lst=[k for k,v in result.items() if v==s]
                 suspects[i]=lst
-            st.write(suspects)
-                
-                
+            for k,v in suspects.items():
+                st.write(f'Suspected files{' '.join(v)}')
+
+
 
 
 
