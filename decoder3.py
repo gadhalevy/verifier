@@ -263,7 +263,7 @@ def main():
                 lst=[k for k,v in result.items() if v==s]
                 suspects[i]=lst
             for k,v in suspects.items():
-                st.write(f'Suspected files{" ".join(v)}')
+                st.write(f'Suspected files {" ".join(v)}')
 
 
 
