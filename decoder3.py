@@ -247,18 +247,24 @@ def main():
                 if f.endswith('py'):
                     with open(f'code/{maabada}/{f}') as data:
                         dic[f]=data.read()
-            ratios= {}
+            ratios= {};suspects={}
             for k in list(dic.keys())[1:]:
                 s=SequenceMatcher(None,dic[list(dic.keys())[0]],dic[k])
                 ratios[k]=round(s.ratio(),2)
-            suspects=[k for k,v in ratios.items() if v==1]
-            if len(suspects)>0:
-                suspects.append(list(dic.keys())[0])
+            lst=[k for k,v in ratios.items() if v==1]
+            if len(lst)>0:
+                lst.append(list(dic.keys())[0])
+            suspects[1]=lst
             counts = Counter(ratios.values())
             # Create a new dictionary with only the keys whose value has a count greater than 1
             result = {k: v for k, v in ratios.items() if counts[v] > 1}
             set_ratios=set(list(result.values()))
-            st.write(set_ratios)
+            for i,s in enumerate(set_ratios,2):
+                lst=[k for k,v in result.items() if v==s]
+                suspects[i]=lst
+            st.write(suspects)
+                
+                
 
 
 
