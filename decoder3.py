@@ -182,6 +182,33 @@ def check_siomet(f):
     except:
         return False
 
+def compare_code(maabada):
+    dic = {}
+    for f in os.listdir(f'code/{maabada}'):
+        if f.endswith('py'):
+            with open(f'code/{maabada}/{f}') as data:
+                dic[f] = data.read()
+    ratios = {};
+    suspects = {}
+    for k in list(dic.keys())[1:]:
+        s = SequenceMatcher(None, dic[list(dic.keys())[0]], dic[k])
+        ratios[k] = round(s.ratio(), 2)
+    lst = [k for k, v in ratios.items() if v == 1]
+    if len(lst) > 0:
+        lst.append(list(dic.keys())[0])
+    suspects[1] = lst
+    counts = Counter(ratios.values())
+    # Create a new dictionary with only the keys whose value has a count greater than 1
+    result = {k: v for k, v in ratios.items() if counts[v] > 1}
+    set_ratios = set(list(result.values()))
+    for i, s in enumerate(set_ratios, 2):
+        lst = [k for k, v in result.items() if v == s]
+        suspects[i] = lst
+    for k, v in suspects.items():
+        st.write(f'**:red[Suspected files {" ".join(v)}]**')
+        for f in v:
+            st.download_button(label=f'Download {f}?', data=dic[f], file_name=f, mime='text/py')
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -241,31 +268,8 @@ def main():
         if st.sidebar.button('Show grades?'):
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
-        if st.sidebar.button('Compare codes?'):
-            dic = {}
-            for f in os.listdir(f'code/{maabada}'):
-                if f.endswith('py'):
-                    with open(f'code/{maabada}/{f}') as data:
-                        dic[f]=data.read()
-            ratios= {};suspects={}
-            for k in list(dic.keys())[1:]:
-                s=SequenceMatcher(None,dic[list(dic.keys())[0]],dic[k])
-                ratios[k]=round(s.ratio(),2)
-            lst=[k for k,v in ratios.items() if v==1]
-            if len(lst)>0:
-                lst.append(list(dic.keys())[0])
-            suspects[1]=lst
-            counts = Counter(ratios.values())
-            # Create a new dictionary with only the keys whose value has a count greater than 1
-            result = {k: v for k, v in ratios.items() if counts[v] > 1}
-            set_ratios=set(list(result.values()))
-            for i,s in enumerate(set_ratios,2):
-                lst=[k for k,v in result.items() if v==s]
-                suspects[i]=lst
-            for k,v in suspects.items():
-                st.write(f'**:red[Suspected files {" ".join(v)}]**')
-                for f in v:
-                    st.download_button(label=f'Download {f}?',data=dic[f],file_name=f,mime='text/py')
+        if st.sidebar.checkbox('Compare codes?'):
+            compare_code()
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
