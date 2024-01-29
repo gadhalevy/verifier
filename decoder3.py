@@ -269,7 +269,7 @@ def main():
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
         if st.sidebar.checkbox('Compare codes?'):
-            compare_code()
+            compare_code(maabada)
         if st.sidebar.button('Summarize Lab?'):
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
