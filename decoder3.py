@@ -208,6 +208,7 @@ def compare_code(maabada):
         st.write(f'**:red[Suspected files {" ".join(v)}]**')
         for f in v:
             st.download_button(label=f'Download {f}?', data=dic[f], file_name=f, mime='text/py')
+    return suspects
 
 def main():
     '''
@@ -269,8 +270,18 @@ def main():
             groups=pd.read_csv('grades.csv',index_col=False)
             st.dataframe(groups)
         if st.sidebar.checkbox('Compare codes?'):
-            compare_code(maabada)
+            suspects=compare_code(maabada)
         if st.sidebar.button('Summarize Lab?'):
+            if len(suspects)>0:
+                for v in suspects.values():
+                    str=f'Groups '
+                    for f in v:
+                        group, ex = f.split('_')
+                        str+=f'{group} '
+                    str+=f'Suspected of coping {ex}'
+                    st.write(str)
+                        
+                    
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
