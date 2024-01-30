@@ -39,9 +39,9 @@ def main():
     #         st.markdown(pdf, unsafe_allow_html=True)
     #         st.session_state.numpage+=1
     for lab in labs:
-        st.write(os.listdir(f'splitted/{lab}'))
-        # for l in os.listdir(lab):
-        #     if l.endswith('pdf'):
-        #         split_pdfs(f'{lab}/{l}',lab)
+        # st.write(os.listdir(f'splitted/{lab}'))
+        for l in os.listdir(lab):
+            if l.endswith('pdf'):
+                split_pdfs(f'{lab}/{l}',lab)
 
 main()
