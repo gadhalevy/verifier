@@ -227,7 +227,7 @@ def show_missings(year,semester,maabada):
     tmp=pd.json_normalize(ref.get())
     cols=[c for c in tmp.columns if 'missing' in c]
     df=tmp[cols]
-    res=[df.c.value for c in df.columns if df.c.value is not None]
+    res=[df[c].value for c in df.columns if df.c.value is not None]
     st.write(res)
 
 
