@@ -234,7 +234,7 @@ def show_missings(year,semester,maabada):
     my_str=''
     for k,v in dic.items():
         match=re.search(r'\d+/\d+/\d+',str(v))
-        my_str+=f' {k} {match.group(1)},'
+        my_str+=f' {k} {match.group()},'
     st.markdown(f'###red[{my_str}]')
 
 
