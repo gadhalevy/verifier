@@ -224,7 +224,7 @@ def show_missings(year,semester,maabada):
     # tmp = pd.read_csv('grades.csv', index_col=False)
     # df=tmp[['Group members','num']]
     ref=db.reference(f'{year}/{semester}/{maabada}')
-    pd.json_normalize(ref)
+    pd.json_normalize(ref.get())
 
 
 
