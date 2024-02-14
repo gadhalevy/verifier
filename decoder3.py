@@ -231,10 +231,8 @@ def show_missings(year,semester,maabada):
     # for c in df.columns:
         # dic[c]=df[c].apply(lambda num : num if num is not None else 0)
     for k,v in df.items():
-        for vv in v:
-            if '/' in vv:
-                dic[k]=vv
-        
+        w=v.dropna()
+        dic[k]=w 
     st.write(dic)
 
 
