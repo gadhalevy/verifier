@@ -230,12 +230,13 @@ def show_missings(year,semester,maabada):
     for k,v in df.items():
         w=v.dropna()
         dic[k]=w
-    st.markdown('##:red[Missings]:')
+    st.markdown('## :red[Missings]:')
     my_str=''
     for k,v in dic.items():
         match=re.search(r'\d+/\d+/\d+',str(v))
-        my_str+=f' {k} {match.group()},'
-    st.markdown(f'###red[{my_str}]')
+        pre,post=str(k).split('.')
+        my_str+=f' {pre} {match.group()},'
+    st.markdown(f'### :red[{my_str}]')
 
 
 
