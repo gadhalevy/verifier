@@ -219,7 +219,7 @@ def show_suspects(suspects):
             str += f'{group} '
         str += f'Suspected of coping exercise {ex}]'
         st.markdown(str)
-    
+
 def show_missings(year,semester,maabada):
     # tmp = pd.read_csv('grades.csv', index_col=False)
     # df=tmp[['Group members','num']]
@@ -231,7 +231,7 @@ def show_missings(year,semester,maabada):
     # for c in df.columns:
         # dic[c]=df[c].apply(lambda num : num if num is not None else 0)
     for k,v in df.items():
-        if '/' in v:
+        if v is not None:
             dic[k]=v 
     st.write(dic)
 
