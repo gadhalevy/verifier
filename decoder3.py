@@ -226,7 +226,7 @@ def show_missings(year,semester,maabada):
     ref=db.reference(f'{year}/{semester}/{maabada}')
     tmp=pd.json_normalize(ref.get())
     cols=[c for c in tmp.columns if 'missing' in c]
-    st.write(tmp[cols].__nonzero__().any())
+    st.write(tmp[cols].to_numpy().nonzero())
 
 
 
