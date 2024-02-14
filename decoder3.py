@@ -220,6 +220,15 @@ def show_suspects(suspects):
         str += f'Suspected of coping exercise {ex}]'
         st.markdown(str)
 
+def show_missings(year,semester,maabada):
+    # tmp = pd.read_csv('grades.csv', index_col=False)
+    # df=tmp[['Group members','num']]
+    ref=db.reference(f'{year}/{semester}/{maabada}')
+    pd.json_normalize(ref,record_path='missing')
+
+
+
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -287,6 +296,7 @@ def main():
                     show_suspects(suspects)
             except:
                 pass
+            show_missings(year,semester,maabada)
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
