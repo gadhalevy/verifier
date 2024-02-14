@@ -11,6 +11,7 @@ from uuid import uuid4
 from moviepy.editor import *
 from collections import  Counter
 from difflib import *
+import re
 import math
 
 @st.cache_resource()
@@ -221,19 +222,20 @@ def show_suspects(suspects):
         st.markdown(str)
 
 def show_missings(year,semester,maabada):
-    # tmp = pd.read_csv('grades.csv', index_col=False)
-    # df=tmp[['Group members','num']]
     ref=db.reference(f'{year}/{semester}/{maabada}')
     tmp=pd.json_normalize(ref.get())
     cols=[c for c in tmp.columns if 'missing' in c]
     df=tmp[cols]
     dic={}
-    # for c in df.columns:
-        # dic[c]=df[c].apply(lambda num : num if num is not None else 0)
     for k,v in df.items():
         w=v.dropna()
-        dic[k]=w 
-    st.write(dic)
+        dic[k]=w
+    st.markdown('##:red[Missings]:')
+    str=''
+    for k,v in dic.items():
+        match=re.search(r'\d+/\d+/\d+',v)
+        str+=f' {k} {match.group(1)},'
+    st.markdown(f'###red[{str}]')
 
 
 
