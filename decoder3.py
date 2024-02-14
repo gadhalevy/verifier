@@ -233,7 +233,7 @@ def show_missings(year,semester,maabada):
     st.markdown('##:red[Missings]:')
     str=''
     for k,v in dic.items():
-        match=re.search(r'\d+/\d+/\d+',v)
+        match=re.search(r'\d+/\d+/\d+',str(v))
         str+=f' {k} {match.group(1)},'
     st.markdown(f'###red[{str}]')
 
