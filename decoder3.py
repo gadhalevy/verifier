@@ -230,7 +230,7 @@ def from_fb(what,year,semester,maabada):
     for k,v in df.items():
         w=v.dropna()
         dic[k]=w
-    st.markdown('## :red[{what}]:')
+    st.markdown(f'## :red[{what}]:')
     my_str=''
     for k,v in dic.items():
         match=re.search(r'\d+/\d+/\d+',str(v))
