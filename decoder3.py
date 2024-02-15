@@ -230,6 +230,7 @@ def build_json_df(what,year,semester,maabada):
 
 def show_missings(what,year,semester,maabada):
     df=build_json_df(what,year,semester,maabada)
+    df
     dic={}
     for k,v in df.items():
         w=v.dropna()
