@@ -230,7 +230,7 @@ def build_json_df(what,year,semester,maabada):
 
 def show_missings(what,year,semester,maabada):
     df=build_json_df(what,year,semester,maabada)
-    df
+    file='stam'
     dic={}
     for k,v in df.items():
         w=v.dropna()
@@ -243,10 +243,10 @@ def show_missings(what,year,semester,maabada):
             pre,post=str(k).split('.')
         except ValueError:
             pre,file,post=str(k).split('.')
-        try:
+        if file!='stam':
+            my_str+=f' {pre} {file} {match.group()},'
+        else:
             my_str+=f' {pre} {match.group()},'
-        except AttributeError:
-            pass
     st.markdown(f'### :red[{my_str}]')
 
 # def show_help(what,year,semester,maabada):
