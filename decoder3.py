@@ -247,7 +247,7 @@ def show_missings(what,year,semester,maabada):
             my_str+=f' {pre} {file} {match.group()},'
         else:
             my_str+=f' {pre} {match.group()},'
-    st.markdown(f'### :red[{my_str}]')
+    st.markdown(f'#### :red[{my_str}]')
 
 # def show_help(what,year,semester,maabada):
 #     df=build_json_df(what,year,semester,maabada)
