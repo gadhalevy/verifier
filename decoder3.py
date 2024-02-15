@@ -242,12 +242,15 @@ def show_missings(what,year,semester,maabada):
             pre,post=str(k).split('.')
         except ValueError:
             pre,file,post=str(k).split('.')
-        my_str+=f' {pre} {match.group()},'
+        try:
+            my_str+=f' {pre} {match.group()},'
+        except AttributeError:
+            pass
     st.markdown(f'### :red[{my_str}]')
 
 # def show_help(what,year,semester,maabada):
 #     df=build_json_df(what,year,semester,maabada)
-    
+
 
 
 def main():
