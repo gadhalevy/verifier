@@ -229,7 +229,7 @@ def build_json_df(what,year,semester,maabada):
     return df
 
 def show_missings(what,year,semester,maabada):
-    df=build_json_df()
+    df=build_json_df(what,year,semester,maabada)
     st.write(df)
     dic={}
     for k,v in df.items():
