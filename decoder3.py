@@ -221,24 +221,22 @@ def show_suspects(suspects):
         str += f'Suspected of coping exercise {ex}]'
         st.markdown(str)
 
-def show_missings(year,semester,maabada):
+def from_fb(what,year,semester,maabada):
     ref=db.reference(f'{year}/{semester}/{maabada}')
     tmp=pd.json_normalize(ref.get())
-    cols=[c for c in tmp.columns if 'missing' in c]
+    cols=[c for c in tmp.columns if what in c]
     df=tmp[cols]
     dic={}
     for k,v in df.items():
         w=v.dropna()
         dic[k]=w
-    st.markdown('## :red[Missings]:')
+    st.markdown('## :red[{what}]:')
     my_str=''
     for k,v in dic.items():
         match=re.search(r'\d+/\d+/\d+',str(v))
         pre,post=str(k).split('.')
         my_str+=f' {pre} {match.group()},'
     st.markdown(f'### :red[{my_str}]')
-
-
 
 
 def main():
@@ -308,7 +306,8 @@ def main():
                     show_suspects(suspects)
             except:
                 pass
-            show_missings(year,semester,maabada)
+            from_fb('missing',year,semester,maabada)
+            from_fb('help file',year,semester,maabada)
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
