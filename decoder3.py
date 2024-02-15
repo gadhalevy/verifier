@@ -238,15 +238,18 @@ def show_missings(what,year,semester,maabada):
     my_str=''
     for k,v in dic.items():
         match=re.search(r'\d+/\d+/\d+',str(v))
-        pre,post=str(k).split('.')
+        try:
+            pre,post=str(k).split('.')
+        except ValueError:
+            pre,file,post=str(k).split('.')
         my_str+=f' {pre} {match.group()},'
     st.markdown(f'### :red[{my_str}]')
 
-def show_help(what,year,semester,maabada):
-    df=build_json_df(what,year,semester,maabada)
-    [c for c in df.columns]
+# def show_help(what,year,semester,maabada):
+#     df=build_json_df(what,year,semester,maabada)
     
-    
+
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -315,7 +318,7 @@ def main():
             except:
                 pass
             show_missings('missing',year,semester,maabada)
-            show_help('help file',year,semester,maabada)
+            show_missings('help file',year,semester,maabada)
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
