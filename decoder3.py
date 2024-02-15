@@ -235,7 +235,10 @@ def from_fb(what,year,semester,maabada):
     my_str=''
     for k,v in dic.items():
         match=re.search(r'\d+/\d+/\d+',str(v))
-        pre,post=str(k).split('.')
+        try:
+            pre,post=str(k).split('.')
+        except ValueError:
+            pre,_,post=str(k).split('.')
         my_str+=f' {pre} {match.group()},'
     st.markdown(f'### :red[{my_str}]')
 
