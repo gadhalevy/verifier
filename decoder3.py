@@ -226,6 +226,7 @@ def from_fb(what,year,semester,maabada):
     tmp=pd.json_normalize(ref.get())
     cols=[c for c in tmp.columns if what in c]
     df=tmp[cols]
+    st.write(df)
     dic={}
     for k,v in df.items():
         w=v.dropna()
