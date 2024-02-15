@@ -238,7 +238,7 @@ def show_missings(what,year,semester,maabada):
     st.markdown(f'## :red[{what}]:')
     my_str=''
     for k,v in dic.items():
-        match=re.search(r'\d+/[\-]d+/[\-]d+',str(v))
+        match=re.search(r'\d+/(\|-)d+/(\|-)d+',str(v))
         try:
             pre,post=str(k).split('.')
         except ValueError:
