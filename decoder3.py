@@ -264,6 +264,12 @@ def show_help(what,year,semester,maabada):
     for k,v in Counter(tmp).most_common():
         my_str+=f'{k} {v} '
     st.markdown(f'#### :green[{my_str}]')
+    return Counter(tmp).keys()
+
+def no_use_help():
+    tmp = pd.read_csv('grades.csv',index_col=False)
+    st.write(tmp)
+    
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -337,7 +343,9 @@ def main():
                 show_missings('help file',year,semester,maabada)
             help_summary=st.sidebar.checkbox('Help files summary')
             if help_summary:
-                df=show_help('help file',year,semester,maabada)
+                use_help=show_help('help file',year,semester,maabada)
+                if st.sidebar.button('Show students not used help?'):
+                    no_use_help()
 
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
