@@ -254,7 +254,10 @@ def show_help(what,year,semester,maabada):
     cols=df.columns
     tmp=[]
     for c in cols:
-        pre,post=c.split('.')
+        try:
+            pre,post=str(c).split('.')
+        except ValueError:
+            pre,file,post=str(c).split('.')
         tmp.append(pre)
     st.write(Counter(tmp))
 
