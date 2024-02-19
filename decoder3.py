@@ -261,7 +261,7 @@ def show_help(what,year,semester,maabada):
         tmp.append(pre)
     my_str=''
     st.markdown(f'## :red[{what}]:')
-    for k,v in Counter(tmp).items():
+    for k,v in Counter(tmp).most_common():
         my_str+=f'{k} {v} '
     st.markdown(f'#### :green[{my_str}]')
 def main():
