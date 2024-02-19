@@ -317,7 +317,7 @@ def main():
             st.dataframe(groups)
         if st.sidebar.checkbox('Compare codes?'):
             suspects=compare_code(maabada)
-        if st.sidebar.check_box('Summarize Lab?'):
+        if st.sidebar.checkbox('Summarize Lab?'):
             try:
                 if len(suspects)>0:
                     show_suspects(suspects)
