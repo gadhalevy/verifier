@@ -323,10 +323,10 @@ def main():
             except:
                 pass
             show_missings('missing',year,semester,maabada)
-            help_details=st.sidebar.button('Detailed help files activity')
+            help_details=st.sidebar.checkbox('Detailed help files activity')
             if help_details:
-                df=show_missings('help file',year,semester,maabada)
-            help_summary=st.sidebar.button('Help files summary')
+                show_missings('help file',year,semester,maabada)                
+            help_summary=st.sidebar.checkbox('Help files summary')
             if help_summary:
                 df=show_help('help file',year,semester,maabada)
                 st.write(df)
