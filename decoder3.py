@@ -251,6 +251,7 @@ def show_missings(what,year,semester,maabada):
 
 def show_help(what,year,semester,maabada):
     df=build_json_df(what,year,semester,maabada)
+    st.write(df)
     return df
 
 
