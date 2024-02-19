@@ -266,10 +266,12 @@ def show_help(what,year,semester,maabada):
     st.markdown(f'#### :green[{my_str}]')
     return Counter(tmp).keys()
 
-def no_use_help():
+def no_use_help(use_help):
     tmp = pd.read_csv('grades.csv',index_col=False)
-    st.write(tmp)
+    students=tmp['Group members']
+    return set(students)-set(use_help)
     
+
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
@@ -345,7 +347,8 @@ def main():
             if help_summary:
                 use_help=show_help('help file',year,semester,maabada)
                 if st.sidebar.button('Show students not used help?'):
-                    no_use_help()
+                    no=no_use_help(use_help)
+                    st.write(no)
 
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
