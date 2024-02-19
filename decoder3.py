@@ -224,9 +224,10 @@ def show_suspects(suspects):
 def build_json_df(what,year,semester,maabada):
     ref=db.reference(f'{year}/{semester}/{maabada}')
     tmp=pd.json_normalize(ref.get())
-    st.write(tmp)
     cols=[c for c in tmp.columns if what in c]
+    st.write(cols)
     df=tmp[cols]
+    st.write(df)
     return df
 
 def show_missings(what,year,semester,maabada):
