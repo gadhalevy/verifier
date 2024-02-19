@@ -251,7 +251,7 @@ def show_missings(what,year,semester,maabada):
 
 def show_help(what,year,semester,maabada):
     df=build_json_df(what,year,semester,maabada)
-    st.write(df)
+    return df
 
 
 
@@ -324,7 +324,8 @@ def main():
                 pass
             show_missings('missing',year,semester,maabada)
             if st.sidebar.button('Detailed help files activity'):
-                show_missings('help file',year,semester,maabada)
+                df=show_missings('help file',year,semester,maabada)
+                st.write(df)
             if st.sidebar.button('Help files summary'):
                 show_help('help file',year,semester,maabada)
             txt,flag=not_make_maabada(movies,maabada)
