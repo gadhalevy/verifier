@@ -225,9 +225,7 @@ def build_json_df(what,year,semester,maabada):
     ref=db.reference(f'{year}/{semester}/{maabada}')
     tmp=pd.json_normalize(ref.get())
     cols=[c for c in tmp.columns if what in c]
-    st.write(cols)
     df=tmp[cols]
-    st.write(df)
     return df
 
 def show_missings(what,year,semester,maabada):
@@ -325,10 +323,12 @@ def main():
             except:
                 pass
             show_missings('missing',year,semester,maabada)
-            if st.sidebar.button('Detailed help files activity'):
+            help_details=st.sidebar.button('Detailed help files activity')
+            if help_details:
                 df=show_missings('help file',year,semester,maabada)
                 st.write(df)
-            if st.sidebar.button('Help files summary'):
+            help_summary=st.sidebar.button('Help files summary')
+            if help_summary:
                 show_help('help file',year,semester,maabada)
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
