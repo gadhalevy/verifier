@@ -329,7 +329,8 @@ def main():
                 st.write(df)
             help_summary=st.sidebar.button('Help files summary')
             if help_summary:
-                show_help('help file',year,semester,maabada)
+                df=show_help('help file',year,semester,maabada)
+                st.write(df)
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
