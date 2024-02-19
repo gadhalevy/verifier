@@ -259,13 +259,11 @@ def show_help(what,year,semester,maabada):
         except ValueError:
             pre,file,post=str(c).split('.')
         tmp.append(pre)
-    st.write(Counter(tmp))
-
-
-
-
-
-
+    my_str=''
+    st.markdown(f'## :red[{what}]:')
+    for k,v in Counter(tmp).items():
+        my_str+=f'{k} {v} '
+    st.markdown(f'#### :green[{my_str}]')
 def main():
     '''
     session_state:counter,grades,mark,heara,team,remarks
