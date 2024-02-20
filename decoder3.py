@@ -272,6 +272,7 @@ def no_use_help(use_help):
     st.write(set(students))
     st.write(set(use_help))
     res=set(students)-set(use_help)
+    st.write(res)
     st.markdown(f'## :red[Students not used help files]:')
     st.markdown(f"### :red[{' '.join(res)}]")
 
