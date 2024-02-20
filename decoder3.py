@@ -268,7 +268,7 @@ def show_help(what,year,semester,maabada):
 
 def no_use_help(use_help):
     tmp = pd.read_csv('grades.csv',index_col=False)
-    st.write(tmp)
+    tmp=tmp.dropna()
     students=tmp['Group members']
     res=set(students)-set(use_help)
     st.markdown(f'## :red[Students not used help files]:')
