@@ -28,7 +28,6 @@ def main():
     lab = st.sidebar.selectbox('Please select maabada', options=labs,on_change=new_lab)
     lstdir = os.listdir(f'splitted/{lab}')
     read = st.button('Press to read a page')
-    st.write(os.listdir('tmp'))
     if read:
         if st.session_state.numpage>=len(lstdir):
             st.error('No more pages!',icon="🚨")
@@ -45,5 +44,7 @@ def main():
         #     if l.endswith('pdf'):
         #         split_pdfs(f'{lab}/{l}',lab)
 
-main()
-# st.write(os.listdir('tmp'))
+# main()
+def lst():
+    st.write(os.listdir('tmp'))
+lst()
