@@ -293,16 +293,21 @@ def send_help(members,emails,ref,dic):
                 fbwrite('set',year,semester,lab,group,m,file,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
 def download_files(maabada,group):
-    dic={}
-    for f in os.listdir(f'code/{maabada}'):
+    for f in os.listdir(f'tmp/{maabada}'):
         st.write(f)
-        kvutsa,_=f.split('_')
-        if kvutsa==group:
-            with open(f'code/{maabada}/{f}') as data:
-                dic[f] = data.read()
-    st.write(dic)
-    for k,v in dic.items():
-        st.download_button(label=f'Download {k}?', data=v, file_name=k, mime='text/py')
+    # for f in files:
+    #     kvutsa,_=f.split('_')
+    #     if kvutsa==group:
+    # dic={}
+    # for f in os.listdir(f'code/{maabada}'):
+    #     st.write(f)
+    #     kvutsa,_=f.split('_')
+    #     if kvutsa==group:
+    #         with open(f'code/{maabada}/{f}') as data:
+    #             dic[f] = data.read()
+    # st.write(dic)
+    # for k,v in dic.items():
+    #     st.download_button(label=f'Download {k}?', data=v, file_name=k, mime='text/py')
 
 
 def main():
