@@ -310,8 +310,7 @@ def download_files(year,semester,maabada,group):
     kvatsim=[]
     for f in files:
         kvutsa,_=f.split('_')
-        st.write(kvutsa==group)
-        if kvutsa==group:
+        if str(kvutsa)==str(group):
             dir=download_fb_files(year,semester,maabada,f)
             st.write(dir)
             kvatsim.append(dir)
