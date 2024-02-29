@@ -299,6 +299,7 @@ def download_files(maabada,group):
         if kvutsa==group:
             with open(f'code/{maabada}/{f}') as data:
                 dic[f] = data.read()
+    st.write(dic)
     for k,v in dic.items():
         st.download_button(label=f'Download {k}?', data=v, file_name=k, mime='text/py')
 
