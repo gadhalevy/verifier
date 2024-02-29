@@ -262,12 +262,25 @@ def upload(kind,obj,ref):
             fbwrite(*new_ref, **{pre: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
         else:
             st.error(f'{err_code}', icon="🚨")
-def download_blob(maabada,counter):
+def download_blob(what,maabada,counter):
     """Downloads a blob from the bucket."""
     counter+=1
-    source_blob_name=f'Help/{maabada}/{maabada}{counter}'
+    source_blob_name=f'{what}/{maabada}/{maabada}{counter}'
     # destination_file_name=os.path.join(year,semester,maabada)
     destination_file_name =f'tmp/{maabada}{counter}'
+    bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
+    blob = bucket.blob(source_blob_name)
+    new_token = uuid4()
+    metadata = {"firebaseStorageDownloadTokens": new_token}
+    blob.metadata = metadata
+    blob.download_to_filename(destination_file_name)
+    return destination_file_name
+
+def download_fb_files(year,semester,maabada,file):
+    """Downloads a blob from the bucket."""
+    source_blob_name=f'code/{year}/{semester}/{maabada}/{file}'    
+    # destination_file_name=os.path.join(year,semester,maabada)
+    destination_file_name =f'tmp/{file}'
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
@@ -280,7 +293,7 @@ def send_help(members,emails,ref,dic):
     year,semester,lab,group,location=ref
     files=[]
     for i in range (dic[lab]):
-        dir=download_blob(lab,i)
+        dir=download_blob('Help',lab,i)
         files.append(dir)
     for f in files:
         subject = f'Help file {f} for {lab}'
@@ -292,22 +305,19 @@ def send_help(members,emails,ref,dic):
                 send_email(subject, body, e, [f])
                 fbwrite('set',year,semester,lab,group,m,file,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
-def download_files(maabada,group):
-    for f in os.listdir(f'tmp/{maabada}'):
-        st.write(f)
-    # for f in files:
-    #     kvutsa,_=f.split('_')
-    #     if kvutsa==group:
-    # dic={}
-    # for f in os.listdir(f'code/{maabada}'):
-    #     st.write(f)
-    #     kvutsa,_=f.split('_')
-    #     if kvutsa==group:
-    #         with open(f'code/{maabada}/{f}') as data:
-    #             dic[f] = data.read()
-    # st.write(dic)
-    # for k,v in dic.items():
-    #     st.download_button(label=f'Download {k}?', data=v, file_name=k, mime='text/py')
+def download_files(year,semester,maabada,group):
+    _,files=decoder3.get_download_lst(year,semester,maabada)
+    kvatsim=[]
+    for f in files:
+        kvutsa,_=f.split('_')
+        if kvutsa==group:
+            dir=download_fb_files(year,semester,maabada,f)
+            kvatsim.append(dir)
+    for k in kvatsim:
+        with open(k) as data:
+            txt = data.read()
+        st.download_button(label=f'Download {k}?', data=txt, file_name=k, mime='text/py')
+    
 
 
 def main():
@@ -338,7 +348,7 @@ def main():
         if pdf:
             st.session_state.state='pdf'
         if st.sidebar.checkbox('Download your codes?'):
-            download_files(lab,group)
+            download_files(year,semester,lab,group)
     if st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
