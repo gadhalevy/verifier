@@ -278,7 +278,7 @@ def download_blob(what,maabada,counter):
 
 def download_fb_files(year,semester,maabada,file):
     """Downloads a blob from the bucket."""
-    source_blob_name=f'code/{year}/{semester}/{maabada}/{file}'    
+    source_blob_name=f'code/{year}/{semester}/{maabada}/{file}'
     # destination_file_name=os.path.join(year,semester,maabada)
     destination_file_name =f'tmp/{file}'
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
@@ -313,11 +313,12 @@ def download_files(year,semester,maabada,group):
         if kvutsa==group:
             dir=download_fb_files(year,semester,maabada,f)
             kvatsim.append(dir)
+    st.write(kvatsim)
     for k in kvatsim:
         with open(k) as data:
             txt = data.read()
         st.download_button(label=f'Download {k}?', data=txt, file_name=k, mime='text/py')
-    
+
 
 
 def main():
