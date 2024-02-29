@@ -330,7 +330,7 @@ def main():
         pdf=st.button('Start session')
         if pdf:
             st.session_state.state='pdf'
-        if st.sidebar.button('Download your codes?'):
+        if st.sidebar.checkbox('Download your codes?'):
             download_files(lab,group)
     if st.session_state.state=='pdf':
         pdf=displayPDF(lab)
