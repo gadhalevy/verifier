@@ -295,6 +295,7 @@ def send_help(members,emails,ref,dic):
 def download_files(maabada,group):
     dic={}
     for f in os.listdir(f'code/{maabada}'):
+        st.write(f)
         kvutsa,_=f.split('_')
         if kvutsa==group:
             with open(f'code/{maabada}/{f}') as data:
