@@ -362,4 +362,6 @@ def main():
             df = pd.read_csv('grades.csv',index_col=False)
             csv = convert_df(df)
             st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
-main()
+
+if __name__=='__main__':
+    main()
