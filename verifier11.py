@@ -309,9 +309,10 @@ def download_files(year,semester,maabada,group):
     _,files=decoder3.get_download_lst(year,semester,maabada)
     kvatsim=[]
     for f in files:
-        kvutsa,_=f.split('_')
+        kvutsa,_=f.split('_')        
         if str(kvutsa)==str(group):
-            dir=download_fb_files(year,semester,maabada,f)
+            kovets=f.replace('-','.')
+            dir=download_fb_files(year,semester,maabada,kovets)
             st.write(dir)
             kvatsim.append(dir)
     st.write(kvatsim)
