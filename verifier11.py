@@ -13,6 +13,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pandas as pd
 from uuid import uuid4
+
+import decoder3
+
+
 def send_email(subject, body, receiver,files=None):
     with open('passtxt') as f:
         password = f.read()
@@ -288,6 +292,16 @@ def send_help(members,emails,ref,dic):
                 send_email(subject, body, e, [f])
                 fbwrite('set',year,semester,lab,group,m,file,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
+def download_files(maabada,group):
+    dic={}
+    for f in os.listdir(f'code/{maabada}'):
+        kvutsa,_=f.split('_')
+        if kvutsa==group:
+            with open(f'code/{maabada}/{f}') as data:
+                dic[f] = data.read()
+    for k,v in dic.items():
+        st.download_button(label=f'Download {k}?', data=v, file_name=k, mime='text/py')
+
 
 def main():
     # st.session_state.update(st.session_state)
@@ -316,6 +330,8 @@ def main():
         pdf=st.button('Start session')
         if pdf:
             st.session_state.state='pdf'
+        if st.sidebar.button('Download your codes?'):
+            download_files(lab,group)
     if st.session_state.state=='pdf':
         pdf=displayPDF(lab)
         st.markdown(pdf, unsafe_allow_html=True)
@@ -340,6 +356,7 @@ def main():
     # if st.session_state=='end':
             st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
     #     st.session_state.state='begin'
+
 
 if __name__=='__main__':
     main()
