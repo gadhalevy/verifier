@@ -308,8 +308,12 @@ def send_help(members,emails,ref,dic):
 def download_files(year,semester,maabada,group):
     _,files=decoder3.get_download_lst(year,semester,maabada)
     kvatsim=[]
+    kvutsa='25'
     for f in files:
-        kvutsa,_=f.split('_')        
+        try:
+            kvutsa,_=f.split('_')
+        except ValueError:
+            pass
         if str(kvutsa)==str(group):
             kovets=f.replace('-','.')
             dir=download_fb_files(year,semester,maabada,kovets)
