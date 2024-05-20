@@ -13,7 +13,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import pandas as pd
 from uuid import uuid4
-from streamlit_TTS import auto_play, text_to_speech, text_to_audio
+from streamlit_TTS import auto_play, text_to_audio
 import decoder3
 
 
