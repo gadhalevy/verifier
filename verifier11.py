@@ -261,7 +261,7 @@ def upload(kind,obj,ref):
             new_ref = ('set',)+ref[:-1] + (kind,fname)
             fbwrite(*new_ref, **{pre: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
         else:
-            audio=text_to_audio("Rename your files as a plain number eg 01.mp4, and load them again",language='en')
+            audio=text_to_audio("Rename your files as a plain number eg 01.mp4 or 01.py, and load them again",language='en')
             auto_play(audio)
             st.error(f'{err_code}', icon="🚨")
 def download_blob(what,maabada,counter):
