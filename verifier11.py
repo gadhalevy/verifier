@@ -355,7 +355,7 @@ def main():
 
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
-            numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
+            numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
             txt=not_completed_lab(numEx,labs,maabada,movies,flag)
             st.markdown(txt)
         if st.sidebar.button('Download grades.csv?'):
