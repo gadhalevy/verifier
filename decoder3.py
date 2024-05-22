@@ -16,6 +16,10 @@ import math
 
 @st.cache_resource()
 def init():
+    '''
+    Init firebase through cloud. Same as verifier
+    :return:
+    '''
     try:
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
@@ -25,6 +29,12 @@ def init():
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
 def make_student_list(path,labs):
+    '''
+    Make df of students, make csv file for grades.
+    :param path:
+    :param labs:
+    :return:
+    '''
     df = pd.read_csv(path, header=0)
     skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
     tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
@@ -49,6 +59,13 @@ def make_student_list(path,labs):
     return groups,grades
 
 def from_db(year,semester,maabada):
+    '''
+    Download the 'loger' from realtime fb db
+    :param year:
+    :param semester:
+    :param maabada:
+    :return: Df of the loger.
+    '''
     init()
     year=str(year)
     ref=db.reference('{}/{}/{}'.format(year,semester,maabada))
@@ -67,7 +84,13 @@ def from_db(year,semester,maabada):
     return df
 
 def download_blob(sug,year,semester,maabada,file):
-    """Downloads a blob from the bucket."""
+    '''
+    Download from fb storage assuming file name groupNum_exNum eg. 11_2.mp4 same as verifier.
+    :param what:
+    :param maabada:
+    :param counter:
+    :return:
+    '''
     source_blob_name=f'{sug}/{year}/{semester}/{maabada}/{file}'
     # destination_file_name=os.path.join(year,semester,maabada)
     destination_file_name =f'{sug}/{maabada}'
@@ -80,6 +103,11 @@ def download_blob(sug,year,semester,maabada,file):
     return destination_file_name+f'/{file}'
 
 def make_movie(path):
+    '''
+    Prepare movie for display.
+    :param path:
+    :return: Movie as bytes and movie name.
+    '''
     movie=os.listdir(path)[st.session_state['counter']]
     if movie=='0_0':
         st.session_state['counter']+=1
@@ -91,6 +119,11 @@ def make_movie(path):
         return video_bytes,movie
 
 def comp_grades(lab):
+    '''
+    Compute average grade of all movies of a group per maabada.
+    :param lab:
+    :return: Csv with grades and remarks.
+    '''
     groups = pd.read_csv('grades.csv')
     # st.dataframe(groups)
     groups = groups.astype({'num': 'int8'})
@@ -103,6 +136,12 @@ def comp_grades(lab):
     return groups
 
 def grade_movie(team,lab):
+    '''
+    Store grades and remarks from UI to lists in the session_state.
+    :param team:
+    :param lab:
+    :return:
+    '''
     global Path
     # st.write(team,int(team))
     if 'team' not in st.session_state:
@@ -119,6 +158,12 @@ def grade_movie(team,lab):
     # st.write(st.session_state.mark,st.session_state.heara)
 
 def not_make_maabada(movies,maabada):
+    '''
+    Display groups that didn't upload movies to storage.
+    :param movies:
+    :param maabada:
+    :return:
+    '''
     nobody=False
     txt=f'### :green[All groups make this {maabada}]'
     groups = pd.read_csv('grades.csv',index_col=False)
@@ -134,6 +179,15 @@ def not_make_maabada(movies,maabada):
     return txt,nobody
 
 def not_completed_lab(numEx,labs,maabada,movies,flag):
+    '''
+    Display groups that didn't complete all missions in the lab.
+    :param numEx:
+    :param labs:
+    :param maabada:
+    :param movies:
+    :param flag:
+    :return:
+    '''
     txt=f'### :green[All groups completed all missions in {maabada}]'
     tarMaabada = numEx[labs.index(maabada) - 1]
     fb_groups = (m.split('_')[0] for m in movies)
@@ -150,6 +204,13 @@ def not_completed_lab(numEx,labs,maabada,movies,flag):
     return txt
 
 def get_download_lst(year,semester,maabada):
+    '''
+    Make list of all code and movies in the storage.
+    :param year:
+    :param semester:
+    :param maabada:
+    :return: List of uploaded codes, and list of uploaded movies.
+    '''
     tmp = pd.read_csv('grades.csv')
     groups = set(tmp['num'])
     m_lst = [];
@@ -171,10 +232,20 @@ def get_download_lst(year,semester,maabada):
 
 @st.cache
 def convert_df(df):
+    '''
+    Convert df to csv.
+    :param df:
+    :return: Csv file.
+    '''
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')
 
 def check_siomet(f):
+    '''
+    Check legality of files.
+    :param f:
+    :return: Boolean.
+    '''
     siomet = ('txt', 'py', 'kv', 'txt', 'logo', 'csv', 'mp4','mpeg4')
     try:
         pre,post=f.split('.')
@@ -184,6 +255,11 @@ def check_siomet(f):
         return False
 
 def compare_code(maabada):
+    '''
+    Compare codes.
+    :param maabada:
+    :return: Suspects of copying.
+    '''
     dic = {}
     for f in os.listdir(f'code/{maabada}'):
         if f.endswith('py'):
@@ -212,6 +288,11 @@ def compare_code(maabada):
     return suspects
 
 def show_suspects(suspects):
+    '''
+    Show list of suspects of copying.
+    :param suspects:
+    :return:
+    '''
     for v in suspects.values():
         str = f'### :red[Groups '
         for f in v:
@@ -222,6 +303,14 @@ def show_suspects(suspects):
         st.markdown(str)
 
 def build_json_df(what,year,semester,maabada):
+    '''
+    Helper function to get loger information from reaqltime db fb.
+    :param what:
+    :param year:
+    :param semester:
+    :param maabada:
+    :return: Df.
+    '''
     ref=db.reference(f'{year}/{semester}/{maabada}')
     tmp=pd.json_normalize(ref.get())
     cols=[c for c in tmp.columns if what in c]
@@ -229,6 +318,14 @@ def build_json_df(what,year,semester,maabada):
     return df
 
 def show_missings(what,year,semester,maabada):
+    '''
+    Show missing students and date of missing.
+    :param what: Missing, help_file.
+    :param year:
+    :param semester:
+    :param maabada:
+    :return:
+    '''
     df=build_json_df(what,year,semester,maabada)
     file='stam'
     dic={}
@@ -250,6 +347,14 @@ def show_missings(what,year,semester,maabada):
     st.markdown(f'#### :red[{my_str}]')
 
 def show_help(what,year,semester,maabada):
+    '''
+    Students used help files.
+    :param what:
+    :param year:
+    :param semester:
+    :param maabada:
+    :return:
+    '''
     df=build_json_df(what,year,semester,maabada)
     cols=df.columns
     tmp=[]
@@ -267,6 +372,11 @@ def show_help(what,year,semester,maabada):
     return Counter(tmp).keys()
 
 def no_use_help(use_help):
+    '''
+    Students that didn't use help files.
+    :param use_help:
+    :return:
+    '''
     tmp = pd.read_csv('grades.csv',index_col=False)
     tmp=tmp.dropna()
     students=tmp['Group members']
