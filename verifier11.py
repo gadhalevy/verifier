@@ -356,7 +356,13 @@ def upload(kind,obj,ref):
             auto_play(audio)
             st.error(f'{err_code}', icon="🚨")
 def download_blob(what,maabada,counter):
-    """Downloads a blob from the bucket."""
+    '''
+    Download from fb storage assuming file name groupNum_exNum eg. 11_2.mp4
+    :param what:
+    :param maabada:
+    :param counter:
+    :return:
+    '''
     counter+=1
     source_blob_name=f'{what}/{maabada}/{maabada}{counter}'
     # destination_file_name=os.path.join(year,semester,maabada)
@@ -372,11 +378,11 @@ def download_blob(what,maabada,counter):
 def download_fb_files(year,semester,maabada,file):
     '''
     Download blob from fb bucket.
-    :param year: 
-    :param semester: 
-    :param maabada: 
-    :param file: 
-    :return: 
+    :param year:
+    :param semester:
+    :param maabada:
+    :param file:
+    :return:
     '''
     source_blob_name=f'code/{year}/{semester}/{maabada}/{file}'
     # destination_file_name=os.path.join(year,semester,maabada)
@@ -392,11 +398,11 @@ def download_fb_files(year,semester,maabada,file):
 def send_help(members,emails,ref,dic):
     '''
     Send help files to users.
-    :param members: 
-    :param emails: 
-    :param ref: 
-    :param dic: 
-    :return: 
+    :param members:
+    :param emails:
+    :param ref:
+    :param dic:
+    :return:
     '''
     year,semester,lab,group,location=ref
     files=[]
@@ -416,11 +422,11 @@ def send_help(members,emails,ref,dic):
 def download_files(year,semester,maabada,group):
     '''
     Allow users to download their submissions from firebase to their PC.
-    :param year: 
-    :param semester: 
-    :param maabada: 
-    :param group: 
-    :return: 
+    :param year:
+    :param semester:
+    :param maabada:
+    :param group:
+    :return:
     '''
     _,files=decoder3.get_download_lst(year,semester,maabada)
     kvatsim=[]
