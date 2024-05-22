@@ -284,11 +284,12 @@ def main():
     global Path
     st.header("Verifier decoder")
     st.subheader('Tries to find incorrect submissions')
-    year = st.sidebar.selectbox('Please choose year', ['Tashpag', 'Tashpad', 'Tashpah','Demo'])
+    year = st.sidebar.selectbox('Please choose year', ['Tashpag', 'Tashpad', 'Tashpah','Demo'],1)
     labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur','HMI', 'Android', 'IOT', 'Auto car 1', 'Auto car 2','Social networks')
-    semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'))
+    semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),1)
     maabada = st.sidebar.selectbox('Please select maabada', labs)
     init()
+
     if not os.path.isfile('grades.csv'):
         make_student_list('Overview.csv',labs)
     else:
@@ -355,7 +356,7 @@ def main():
 
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
-            numEx = [2, 7,  3, 3, 3, 2, 3, 1, 0, 0]
+            numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
             txt=not_completed_lab(numEx,labs,maabada,movies,flag)
             st.markdown(txt)
         if st.sidebar.button('Download grades.csv?'):
