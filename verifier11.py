@@ -6,7 +6,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 from firebase_admin import storage
 import base64
-import email, smtplib, ssl,os
+import smtplib, ssl,os
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
@@ -18,6 +18,14 @@ import decoder3
 
 
 def send_email(subject, body, receiver,files=None):
+    '''
+    Send email via khanuka1912 password or help files,
+    :param subject:
+    :param body:
+    :param receiver:
+    :param files:
+    :return:
+    '''
     with open('passtxt') as f:
         password = f.read()
     # password=st.secrets.sisma
@@ -55,6 +63,10 @@ def send_email(subject, body, receiver,files=None):
         server.sendmail(sender, receiver, text)
 
 def make_pass():
+    '''
+    Make password for user.
+    :return: Password.
+    '''
     letters = string.ascii_letters
     digits = string.digits
     special_chars = string.punctuation
@@ -67,6 +79,11 @@ def make_pass():
     return pwd
 
 def send_pass(receiver):
+    '''
+    Send password for user via email.
+    :param receiver:
+    :return:
+    '''
     subject='Password for ITL'
     pswrd=make_pass()
     body=f'Please enter this password: {pswrd}'
@@ -77,6 +94,11 @@ def send_pass(receiver):
 
 @st.cache_resource()
 def init():
+    '''
+    Init firebase through cloud.
+    Using secrets.
+    :return:
+    '''
     try:
         firebase_admin.delete_app(firebase_admin.get_app())
     except ValueError:
@@ -88,6 +110,11 @@ def init():
 
 @st.cache_data()
 def make_student_list(path):
+    '''
+    Make df of students.
+    :param path:
+    :return: Df student_names, group_num, email.
+    '''
     df = pd.read_csv(path, header=0)
     skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
     tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
@@ -106,10 +133,21 @@ def make_student_list(path):
     return groups
 
 def find_members(group):
+    '''
+    Find members of group.
+    :param group:
+    :return: Records of selected group.
+    '''
     groups=make_student_list('Overview.csv')
     return groups[groups['num'].str.strip()==group]
 
 def fbwrite(*args,**kwargs):
+    '''
+    Write logs to firebase realtime db.
+    :param args:
+    :param kwargs:
+    :return:
+    '''
     # print(f,created_os,start,created,processed,station,group,lab)
     todo=args[0]
     mystr=''
@@ -122,12 +160,27 @@ def fbwrite(*args,**kwargs):
         attr({f'{k}':f'{v}'})
 
 def load(what,f,year,semester,lab,group):
+    '''
+    Loads files to firebase storage.
+    :param what: Code or movie string.
+    :param f: File.
+    :param year:
+    :param semester:
+    :param lab:
+    :param group:
+    :return:
+    '''
     ds=storage.bucket()
     bob=ds.blob(f.name)
     bob.upload_from_file(f)
     ds.rename_blob(bob,'{}/{}/{}/{}/{}_{}'.format(what,year,semester,lab,group,f.name))
 @st.cache_data()
 def displayPDF(lab):
+    '''
+    Display tadrich as HTML.
+    :param lab:
+    :return:
+    '''
     base_path = os.path.abspath(os.curdir)
     # Opening file from file path
     base_path = base_path + f'/{lab}'
@@ -146,6 +199,10 @@ def displayPDF(lab):
 
     # Displaying File
 def base():
+    '''
+    Display entry sidebar screen.
+    :return: Year,semester,lab,group,location,dic_4_help
+    '''
     if 'edflg' not in st.session_state:
         st.session_state.edflg=False
     st.header("Verifier")
@@ -162,6 +219,13 @@ def base():
     return year,semester,lab,group,location,dic_4_help
 
 def form_home(members,df_group,ref):
+    '''
+    Display form home, todo unite 2 forms.
+    :param members:
+    :param df_group:
+    :param ref:
+    :return:
+    '''
     year, semester, lab, group, location = ref
     with st.sidebar.form('Location'):
         member = st.radio('Who R U?', members)
@@ -188,6 +252,13 @@ def form_home(members,df_group,ref):
             else:
                 st.session_state['member'] = member
 def display_form(members,df_group,ref):
+    '''
+    Display form lab.
+    :param members:
+    :param df_group:
+    :param ref:
+    :return:
+    '''
     year, semester, lab, group, location=ref
     with st.sidebar.form('Location'):
         member=members.iloc[st.session_state.counter]
@@ -226,12 +297,25 @@ def display_form(members,df_group,ref):
             st.session_state.state='verified'
 
 
-def start_session(members,lab,location):
+def start_session(members,location):
+    '''
+    Change state and display tadrich on screen.
+    :param members:
+    :param lab:
+    :param location:
+    :return:
+    '''
     if (location=='Lab' and st.session_state.counter >= len(members) ) or (location=='Home' and st.session_state.state=='verified'):
         session_start = st.button("Start session")
         if session_start:
             st.session_state.state = 'pdf'
 def end_session(ref,members):
+    '''
+    Write logs of end_session to fb_realtime db.
+    :param ref:
+    :param members:
+    :return:
+    '''
     year, semester, lab, group, location = ref
     if location == 'Home':
         param = 'end read'
@@ -246,6 +330,13 @@ def end_session(ref,members):
                 pass
 
 def upload(kind,obj,ref):
+    '''
+    Upload movies or files to fb storage, use voice and st.error.
+    :param kind:
+    :param obj:
+    :param ref:
+    :return:
+    '''
     if kind=='movie':
         siomet=('mp4','mpeg4')
         err_code='Must be mp4'
@@ -279,7 +370,14 @@ def download_blob(what,maabada,counter):
     return destination_file_name
 
 def download_fb_files(year,semester,maabada,file):
-    """Downloads a blob from the bucket."""
+    '''
+    Download blob from fb bucket.
+    :param year: 
+    :param semester: 
+    :param maabada: 
+    :param file: 
+    :return: 
+    '''
     source_blob_name=f'code/{year}/{semester}/{maabada}/{file}'
     # destination_file_name=os.path.join(year,semester,maabada)
     destination_file_name =f'tmp/{file}'
@@ -292,6 +390,14 @@ def download_fb_files(year,semester,maabada,file):
     return destination_file_name
 
 def send_help(members,emails,ref,dic):
+    '''
+    Send help files to users.
+    :param members: 
+    :param emails: 
+    :param ref: 
+    :param dic: 
+    :return: 
+    '''
     year,semester,lab,group,location=ref
     files=[]
     for i in range (dic[lab]):
@@ -308,6 +414,14 @@ def send_help(members,emails,ref,dic):
                 fbwrite('set',year,semester,lab,group,m,file,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
 def download_files(year,semester,maabada,group):
+    '''
+    Allow users to download their submissions from firebase to their PC.
+    :param year: 
+    :param semester: 
+    :param maabada: 
+    :param group: 
+    :return: 
+    '''
     _,files=decoder3.get_download_lst(year,semester,maabada)
     kvatsim=[]
     kvutsa='25'
