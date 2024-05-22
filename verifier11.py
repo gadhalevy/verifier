@@ -1,18 +1,79 @@
-import os
+from datetime import datetime
+import pytz
+import streamlit as st,string,secrets
 import firebase_admin
-import streamlit as st
 from firebase_admin import credentials
 from firebase_admin import db
 from firebase_admin import storage
-import pytesseract as ocrstreamlit
+import base64
+import email, smtplib, ssl,os
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 import pandas as pd
-import platform
 from uuid import uuid4
-from moviepy.editor import *
-from collections import  Counter
-from difflib import *
-import re
-import math
+from streamlit_TTS import auto_play, text_to_speech, text_to_audio
+import decoder3
+
+
+def send_email(subject, body, receiver,files=None):
+    with open('passtxt') as f:
+        password = f.read()
+    # password=st.secrets.sisma
+    sender='khanuka1912@gmail.com'
+    # Create a multipart message and set headers
+    message = MIMEMultipart()
+    message["From"] = sender
+    message["To"] = receiver
+    message["Subject"] = subject
+    message["Bcc"] = receiver  # Recommended for mass emails
+    # Add body to email
+    message.attach(MIMEText(body, "plain"))
+    if files:
+        for i,filename in enumerate(files):
+            # Open PDF file in binary mode
+            with open(filename, "rb") as attachment:
+                # Add file as application/octet-stream
+                part = MIMEBase("application", "octet-stream")
+                # Email client can usually download this automatically as attachment
+                part.set_payload(attachment.read())
+            # Encode file in ASCII characters to send by email
+            encoders.encode_base64(part)
+            # Add header as key/value pair to attachment part
+            part.add_header(
+                f"Content-Disposition" ,
+                f"attachment; filename= {filename}",
+            )
+            # Add attachment to message and convert message to string
+            message.attach(part)
+    text = message.as_string()
+    # Log in to server using secure context and send email
+    context = ssl.create_default_context()
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(sender, password)
+        server.sendmail(sender, receiver, text)
+
+def make_pass():
+    letters = string.ascii_letters
+    digits = string.digits
+    special_chars = string.punctuation
+    alphabet = letters + digits + special_chars
+    pwd_length = 8
+    pwd = ''
+    for i in range(pwd_length):
+        pwd += ''.join(secrets.choice(alphabet))
+
+    return pwd
+
+def send_pass(receiver):
+    subject='Password for ITL'
+    pswrd=make_pass()
+    body=f'Please enter this password: {pswrd}'
+    # Unmark line below in production
+    send_email(subject,body,receiver)
+    return pswrd
+
 
 @st.cache_resource()
 def init():
@@ -24,344 +85,304 @@ def init():
     # cred = credentials.Certificate('fb_key.json')
     firebase_admin.initialize_app(cred, {'databaseURL': 'https://Lab9-c9743.firebaseio.com/',
                                              'storageBucket' :'lab9-c9743.appspot.com'})
-def make_student_list(path,labs):
+
+@st.cache_data()
+def make_student_list(path):
     df = pd.read_csv(path, header=0)
     skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
     tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
     df = df.iloc[skiprows:tmp]
-    df = df[[df.columns[1], df.columns[2]]]
+    # df = df[[df.columns[1], df.columns[2]]]
+    df=df[['Group members','Groups',"Email address"]]
+    pd.set_option('display.max_columns', None)
+    # return df
     df['Groups'] = df['Groups'].str.split('-')
+    # return  df
     stam = pd.DataFrame(df['Groups'].tolist(), columns=['Group', 'num'])
+    # return  stam['num']
     df = df.reset_index()
     final = df.join(stam)
-    groups = final[['Group members', 'num']]
-    num=len(groups)
-    remarks = [l + '_rem' for l in labs[1:]]
-    rem_data = {r: ['Lo nivdak'] * num for r in remarks}
-    data={l:[100]*num for l in labs[1:]}
-    data.update(rem_data)
-    temp=list(zip(labs[1:],remarks))
-    new_cols=[item for sublist in temp for item in sublist]
-    grades=pd.DataFrame(columns=new_cols,data=data)
-    concated=pd.concat([groups,grades],axis=1)
-    concated.to_csv('grades.csv')
-    st.write('grades.csv was created')
-    return groups,grades
+    groups = final[['Group members', 'num','Email address']]
+    return groups
 
-def from_db(year,semester,maabada):
-    init()
-    year=str(year)
-    ref=db.reference('{}/{}/{}'.format(year,semester,maabada))
-    df=pd.json_normalize(ref.get())
-    # print(df.to_string())
-    group=[col[0] for col in df.columns.str.split('.')][::7]
-    pics=[col[2] for col in df.columns.str.split('.')][::7]
-    cols=[col[3] for col in df.columns.str.split('.')][:7]
-    tmp=df.to_numpy()
-    tmp=tmp.reshape(-1,7)
-    df=pd.DataFrame(tmp)
-    df.columns=cols
-    df['targil']=pics
-    df['group']=group
-    df=df.astype('string')
-    return df
+def find_members(group):
+    groups=make_student_list('Overview.csv')
+    return groups[groups['num'].str.strip()==group]
 
-def download_blob(sug,year,semester,maabada,file):
+def fbwrite(*args,**kwargs):
+    # print(f,created_os,start,created,processed,station,group,lab)
+    todo=args[0]
+    mystr=''
+    for r in (args[1:]):
+        mystr+=str(r)+'/'
+    ref=db.reference(mystr[:-1])
+    attr=getattr(ref,todo)
+    for k,v in kwargs.items():
+        # st.write({f'{k[:-4]}': f'{v}'})
+        attr({f'{k}':f'{v}'})
+
+def load(what,f,year,semester,lab,group):
+    ds=storage.bucket()
+    bob=ds.blob(f.name)
+    bob.upload_from_file(f)
+    ds.rename_blob(bob,'{}/{}/{}/{}/{}_{}'.format(what,year,semester,lab,group,f.name))
+@st.cache_data()
+def displayPDF(lab):
+    base_path = os.path.abspath(os.curdir)
+    # Opening file from file path
+    base_path = base_path + f'/{lab}'
+    # st.write(os.path.dirname(base_path))
+    for f in (os.listdir(os.path.dirname(base_path + '/%s' % lab))):
+        # st.write(f)
+        if f.endswith('pdf'):
+            # st.write(f)
+            # st.write(base_path+f'/{f}')
+            with open(base_path+f'/{f}', "rb") as file:
+                base64_pdf = base64.b64encode(file.read()).decode('utf-8')
+            # base64_pdf = base64.b64encode(file).decode('utf-8')
+            # Embedding PDF in HTML
+            pdf = F'<iframe src="data:application/pdf;base64,{base64_pdf}" width="700" height="1000" type="application/pdf"></iframe>'
+            return pdf
+
+    # Displaying File
+def base():
+    if 'edflg' not in st.session_state:
+        st.session_state.edflg=False
+    st.header("Verifier")
+    st.subheader('Assist you with your submissions')
+    year = st.sidebar.selectbox('Please choose year', ['Tashpad', 'Tashpah', 'Tashpav','Demo'],index=0,disabled=st.session_state.edflg)
+    labs = ('Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur', 'Android','HMI', 'IOT', 'Auto car','Social networks')
+    help_4_lab=(2,7,2,1,1,1,2,5,2,2)
+    dic_4_help={labs[i]:help_4_lab[i] for i in range(len(labs))}
+    semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),index=1,disabled=st.session_state.edflg)
+    lab = st.sidebar.selectbox('Please select maabada', labs,disabled=st.session_state.edflg)
+    options = range(1, 24)
+    group = st.sidebar.select_slider('Please choose group number', options,disabled=st.session_state.edflg)
+    location = st.sidebar.radio('Please choose location', ['None', 'Home', 'Lab'],key='location',disabled=st.session_state.edflg)
+    return year,semester,lab,group,location,dic_4_help
+
+def form_home(members,df_group,ref):
+    year, semester, lab, group, location = ref
+    with st.sidebar.form('Location'):
+        member = st.radio('Who R U?', members)
+        param = 'start_read'
+        reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
+        submitted = st.form_submit_button("Send password")
+        pratiut=st.checkbox(':red[הנני מאשר את הצהרת הפרטיות וזכויות היוצרים  שעליהן חתמתי במודל]:rotating_light:')
+        if submitted and pratiut:
+            st_pass = send_pass(reciver[0].strip())
+            if st_pass not in st.session_state:
+                st.session_state['st_pass'] = st_pass
+            st.write('Password was sent to your email')
+            st.text_input('Write password', max_chars=8, type="password", key="user_pass")
+        verify_btn = st.form_submit_button("Verify password")
+        if verify_btn:
+            if st.session_state.user_pass == st.session_state.st_pass:
+                fbwrite('push',year, semester, lab, group, member, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+                st.write('Your password verified please press start session')
+                st.session_state.state='verified'
+            else:
+                st.error('Wrong password', icon="🚨")
+            if 'member' not in st.session_state:
+                st.session_state['member'] = member
+            else:
+                st.session_state['member'] = member
+def display_form(members,df_group,ref):
+    year, semester, lab, group, location=ref
+    with st.sidebar.form('Location'):
+        member=members.iloc[st.session_state.counter]
+        st.markdown("**:red[%s]**" %member)
+        param='start_lab'
+        reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
+        submitted = st.form_submit_button("Send password")
+        pratiut = st.checkbox(
+            ':red[הנני מאשר את הצהרת הפרטיות וזכויות היוצרים  שעליהן חתמתי במודל]:rotating_light:')
+        if submitted and pratiut:
+            st_pass = send_pass(reciver[0].strip())
+            if st_pass not in st.session_state:
+                st.session_state['st_pass'] = st_pass
+            st.write('Password was sent to your email')
+            st.text_input('Write password', max_chars=8, type="password", key="user_pass")
+        verify_btn = st.form_submit_button("Verify password")
+        if verify_btn:
+            if st.session_state.user_pass == st.session_state.st_pass:
+                st.session_state.counter += 1
+                fbwrite('push',year, semester, lab, group, member, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+                st.write('Your password verified please press start session')
+                st.form_submit_button('Submit')
+            else:
+                st.error('Wrong password', icon="🚨")
+        missing = st.form_submit_button('Missing')
+        if missing:
+            # st.write(member[:-1])
+            fbwrite('set',year, semester, lab, group, member, missing=datetime.now().strftime("%d/%m/%y"))
+            if 'missing' not in st.session_state:
+                st.session_state['missing'] = [member]
+            else:
+                st.session_state['missing'].append(member)
+            st.session_state.counter += 1
+            st.form_submit_button('Continue')
+        if st.session_state.counter>=len(members):
+            st.session_state.state='verified'
+
+
+def start_session(members,lab,location):
+    if (location=='Lab' and st.session_state.counter >= len(members) ) or (location=='Home' and st.session_state.state=='verified'):
+        session_start = st.button("Start session")
+        if session_start:
+            st.session_state.state = 'pdf'
+def end_session(ref,members):
+    year, semester, lab, group, location = ref
+    if location == 'Home':
+        param = 'end read'
+        fbwrite('push',year, semester, lab, group, st.session_state.member, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+    else:
+        param = 'finish lab'
+        for m in members:
+            try:
+                if m not in st.session_state.missing:
+                    fbwrite('push',year, semester, lab, group, m, **{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+            except AttributeError:
+                pass
+
+def upload(kind,obj,ref):
+    if kind=='movie':
+        siomet=('mp4','mpeg4')
+        err_code='Must be mp4'
+    elif kind=='code':
+        siomet=('txt','.py','.kv','txt','logo','csv')
+        err_code='Must be one of py,kv,txt,nlogo or csv files and file name should be exercise number'
+    # st.write(obj)
+    for c in obj:
+        pre,post=c.name.split('.')
+        if c.name.lower()[-3:] in siomet and pre.isdigit():
+            load(kind, c, *ref[:-1])
+            fname=c.name.replace('.','-')
+            new_ref = ('set',)+ref[:-1] + (kind,fname)
+            fbwrite(*new_ref, **{pre: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
+        else:
+            audio=text_to_audio("Remove the uploaded file, rename your files as a plain number eg 01.mp4 or 01.py, and load them again",language='en')
+            auto_play(audio)
+            st.error(f'{err_code}', icon="🚨")
+def download_blob(what,maabada,counter):
     """Downloads a blob from the bucket."""
-    source_blob_name=f'{sug}/{year}/{semester}/{maabada}/{file}'
+    counter+=1
+    source_blob_name=f'{what}/{maabada}/{maabada}{counter}'
     # destination_file_name=os.path.join(year,semester,maabada)
-    destination_file_name =f'{sug}/{maabada}'
+    destination_file_name =f'tmp/{maabada}{counter}'
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
     metadata = {"firebaseStorageDownloadTokens": new_token}
     blob.metadata = metadata
-    blob.download_to_filename(destination_file_name+f'/{file}')
-    return destination_file_name+f'/{file}'
+    blob.download_to_filename(destination_file_name)
+    return destination_file_name
 
-def make_movie(path):
-    movie=os.listdir(path)[st.session_state['counter']]
-    if movie=='0_0':
-        st.session_state['counter']+=1
-        movie=os.listdir(path)[st.session_state['counter']]
-        # st.write(st.session_state['counter'],st.session_state['grades'])
-    if movie.lower().endswith('mp4') or movie.lower().endswith('mov') or movie.lower().endswith('avi'):
-        video_file = open(os.path.join(path,movie), 'rb')
-        video_bytes = video_file.read()
-        return video_bytes,movie
+def download_fb_files(year,semester,maabada,file):
+    """Downloads a blob from the bucket."""
+    source_blob_name=f'code/{year}/{semester}/{maabada}/{file}'
+    # destination_file_name=os.path.join(year,semester,maabada)
+    destination_file_name =f'tmp/{file}'
+    bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
+    blob = bucket.blob(source_blob_name)
+    new_token = uuid4()
+    metadata = {"firebaseStorageDownloadTokens": new_token}
+    blob.metadata = metadata
+    blob.download_to_filename(destination_file_name)
+    return destination_file_name
 
-def comp_grades(lab):
-    groups = pd.read_csv('grades.csv')
-    # st.dataframe(groups)
-    groups = groups.astype({'num': 'int8'})
-    # groups.loc[(groups.num == 1), 'IOT'] = 31
-    avg = sum(st.session_state['grades']) / len(st.session_state['grades'])
-    groups.loc[(groups.num == int(st.session_state['team'])), lab] = avg
-    groups.loc[(groups.num == int(st.session_state['team'])), lab + '_rem'] = ' '.join(st.session_state.remarks)
-    # st.dataframe(groups)
-    groups.to_csv('grades.csv', index=False)
-    return groups
+def send_help(members,emails,ref,dic):
+    year,semester,lab,group,location=ref
+    files=[]
+    for i in range (dic[lab]):
+        dir=download_blob('Help',lab,i)
+        files.append(dir)
+    for f in files:
+        subject = f'Help file {f} for {lab}'
+        body = f'Attached your file {f}'
+        if st.button(f):
+            for m,e in zip(members,emails):
+                file=f[4:]
+                param=f'help file {file} was sent'
+                send_email(subject, body, e, [f])
+                fbwrite('set',year,semester,lab,group,m,file,**{param: datetime.now(pytz.timezone('Asia/Jerusalem')).strftime('%d-%m-%y %H:%M')})
 
-def grade_movie(team,lab):
-    global Path
-    # st.write(team,int(team))
-    if 'team' not in st.session_state:
-        st.session_state['team']=team
-    # st.write('check=',int(st.session_state.counter),len(os.listdir(Path))-1)
-    if team!=st.session_state['team']:
-        comp_grades(lab)
-        st.session_state.team=team
-        st.session_state.grades=[]
-        st.session_state.remarks=[]
-    st.session_state.grades.append(int(st.session_state.mark))
-    st.session_state.remarks.append(st.session_state.heara)
-    st.session_state.counter += 1
-    # st.write(st.session_state.mark,st.session_state.heara)
-
-def not_make_maabada(movies,maabada):
-    nobody=False
-    txt=f'### :green[All groups make this {maabada}]'
-    groups = pd.read_csv('grades.csv',index_col=False)
-    fb_groups=(m.split('_')[0] for m in movies)
-    set_fb_groups=set(map(int,fb_groups))
-    set_groups = set(s for s in groups['num'])
-    dif = set_groups - set_fb_groups
-    if len(dif) > 0:
-        txt = f'### :red[Groups {" ".join(str(dif))} did not make maabada {maabada} yet]'
-    if len(dif)==len(set_groups):
-        txt= f'### :red[Nobody make maabada {maabada} yet]'
-        nobody=True
-    return txt,nobody
-
-def not_completed_lab(numEx,labs,maabada,movies,flag):
-    txt=f'### :green[All groups completed all missions in {maabada}]'
-    tarMaabada = numEx[labs.index(maabada) - 1]
-    fb_groups = (m.split('_')[0] for m in movies)
-    fb_groups = set(map(int, fb_groups))
-    tmp=Counter(fb_groups)
-    mystr=''
-    for k,v in tmp.items():
-        if v<tarMaabada:
-            mystr+=str(k)+' '
-    if len(mystr)>0 and not flag:
-        txt = f'### :red[Groups {mystr} did not complete all missions]'
-    if flag:
-        txt= f'### :red[Nobody make maabada {maabada} yet]'
-    return txt
-
-def get_download_lst(year,semester,maabada):
-    tmp = pd.read_csv('grades.csv')
-    groups = set(tmp['num'])
-    m_lst = [];
-    f_lst = []
-    lst = m_lst
-    data = 'movie'
-    for _ in range(2):
-        for g in groups:
-            ref = db.reference(f'{year}/{semester}/{maabada}/{g}/{data}')
-            tmp = ref.get()
-            if tmp is not None:
-                if data=='movie':
-                    siomet='mp4'
-                for k in tmp.keys():
-                    lst.append(f'{g}_{k}')
-        lst = f_lst
-        data = 'code'
-    return m_lst,f_lst
-
-@st.cache
-def convert_df(df):
-    # IMPORTANT: Cache the conversion to prevent computation on every rerun
-    return df.to_csv().encode('utf-8')
-
-def check_siomet(f):
-    siomet = ('txt', 'py', 'kv', 'txt', 'logo', 'csv', 'mp4','mpeg4')
-    try:
-        pre,post=f.split('.')
-        if post.lower() in siomet:
-            return True
-    except:
-        return False
-
-def compare_code(maabada):
-    dic = {}
-    for f in os.listdir(f'code/{maabada}'):
-        if f.endswith('py'):
-            with open(f'code/{maabada}/{f}') as data:
-                dic[f] = data.read()
-    ratios = {};
-    suspects = {}
-    for k in list(dic.keys())[1:]:
-        s = SequenceMatcher(None, dic[list(dic.keys())[0]], dic[k])
-        ratios[k] = round(s.ratio(), 2)
-    lst = [k for k, v in ratios.items() if v == 1]
-    if len(lst) > 0:
-        lst.append(list(dic.keys())[0])
-    suspects[1] = lst
-    counts = Counter(ratios.values())
-    # Create a new dictionary with only the keys whose value has a count greater than 1
-    result = {k: v for k, v in ratios.items() if counts[v] > 1}
-    set_ratios = set(list(result.values()))
-    for i, s in enumerate(set_ratios, 2):
-        lst = [k for k, v in result.items() if v == s]
-        suspects[i] = lst
-    for k, v in suspects.items():
-        st.write(f'**:red[Suspected files {" ".join(v)}]**')
-        for f in v:
-            st.download_button(label=f'Download {f}?', data=dic[f], file_name=f, mime='text/py')
-    return suspects
-
-def show_suspects(suspects):
-    for v in suspects.values():
-        str = f'### :red[Groups '
-        for f in v:
-            group, tmp = f.split('_')
-            ex, _ = tmp.split('.')
-            str += f'{group} '
-        str += f'Suspected of coping exercise {ex}]'
-        st.markdown(str)
-
-def build_json_df(what,year,semester,maabada):
-    ref=db.reference(f'{year}/{semester}/{maabada}')
-    tmp=pd.json_normalize(ref.get())
-    cols=[c for c in tmp.columns if what in c]
-    df=tmp[cols]
-    return df
-
-def show_missings(what,year,semester,maabada):
-    df=build_json_df(what,year,semester,maabada)
-    file='stam'
-    dic={}
-    for k,v in df.items():
-        w=v.dropna()
-        dic[k]=w
-    st.markdown(f'## :red[{what}]:')
-    my_str=''
-    for k,v in dic.items():
-        match=re.search(r'\d+(/|-)\d+(/|-)\d+',str(v))
+def download_files(year,semester,maabada,group):
+    _,files=decoder3.get_download_lst(year,semester,maabada)
+    kvatsim=[]
+    kvutsa='25'
+    for f in files:
         try:
-            pre,post=str(k).split('.')
+            kvutsa,_=f.split('_')
         except ValueError:
-            pre,file,post=str(k).split('.')
-        if file!='stam':
-            my_str+=f' {pre} {file} {match.group()},'
-        else:
-            my_str+=f' {pre} {match.group()},'
-    st.markdown(f'#### :red[{my_str}]')
-
-def show_help(what,year,semester,maabada):
-    df=build_json_df(what,year,semester,maabada)
-    cols=df.columns
-    tmp=[]
-    for c in cols:
-        try:
-            pre,post=str(c).split('.')
-        except ValueError:
-            pre,file,post=str(c).split('.')
-        tmp.append(pre)
-    my_str=''
-    st.markdown(f'## :red[{what}]:')
-    for k,v in Counter(tmp).most_common():
-        my_str+=f'{k} {v} '
-    st.markdown(f'#### :green[{my_str}]')
-    return Counter(tmp).keys()
-
-def no_use_help(use_help):
-    tmp = pd.read_csv('grades.csv',index_col=False)
-    tmp=tmp.dropna()
-    students=tmp['Group members']
-    res=set(students)-set(use_help)
-    st.markdown(f'## :red[Students not used help files]:')
-    st.markdown(f"### :red[{','.join(res)}]")
+            pass
+        if str(kvutsa)==str(group):
+            kovets=f.replace('-','.')
+            dir=download_fb_files(year,semester,maabada,kovets)
+            st.write(dir)
+            kvatsim.append(dir)
+    st.write(kvatsim)
+    for k in kvatsim:
+        with open(k) as data:
+            txt = data.read()
+        st.download_button(label=f'Download {k}?', data=txt, file_name=k, mime='text/py')
 
 
 
 def main():
-    '''
-    session_state:counter,grades,mark,heara,team,remarks
-    :return:
-    '''
-    global Path
-    st.header("Verifier decoder")
-    st.subheader('Tries to find incorrect submissions')
-    year = st.sidebar.selectbox('Please choose year', ['Tashpag', 'Tashpad', 'Tashpah','Demo'],1)
-    labs = ('Choose', 'Robotica', 'PreVision','Vision', 'Robolego', 'Yetsur','HMI', 'Android', 'IOT', 'Auto car 1', 'Auto car 2','Social networks')
-    semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),1)
-    maabada = st.sidebar.selectbox('Please select maabada', labs)
-    init()
-    if not os.path.isfile('grades.csv'):
-        make_student_list('Overview.csv',labs)
-    else:
-        movies,codes=get_download_lst(year,semester,maabada)
-
-    # ToDo config page make student list
-    if maabada != 'Choose':
-        if st.sidebar.button('Download codes from Firebase?'):
-            for c in codes:
-                f=c.replace('-','.')
-                if check_siomet(f):
-                    download_blob('code',year, semester, maabada,f)
-        if st.sidebar.button('Download movies from Firebase?'):
-            for m in movies:
-                f = m.replace('-', '.')
-                if check_siomet(f):
-                    download_blob('movie',year, semester, maabada,f)
-        if 'grades' not in st.session_state:
-            st.session_state['grades']=[]
-        if 'remarks' not in st.session_state:
-            st.session_state['remarks']=[]
+    # st.session_state.update(st.session_state)
+    # st.write(st.session_state.keys())
+    if 'state' not in st.session_state:
+        st.session_state['state']='begin'
+    year, semester, lab, group, location, dic4Help= base()
+    ref = year, semester, lab, group, location
+    df_group = find_members(f'{group:02}')
+    members = df_group['Group members']
+    if st.session_state.state=='begin':
+        init()
+        auth=st.sidebar.button('Authenticate')
+        if auth:
+            st.session_state.edflg=True
+            st.session_state.state='auth'
+    # st.write(st.session_state.state)
+    if st.session_state.state=='auth':
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
-        Path=f'movie/{maabada}/'
-        if st.sidebar.checkbox('Grade Movies?'):
-            if st.session_state.counter < len(os.listdir(Path)) -1:
-                holder = st.empty()
-                video,v_name=make_movie(Path)
-                col1,col2=st.columns([8,2])
-                with col1:
-                    st.video(video)
-                with col2:
-                    with st.form("Grade this movie", clear_on_submit=True):
-                        st.text_input('Movie grade',key='mark')
-                        kvutsa,seret=v_name.split('_')
-                        # st.write(kvutsa,int(kvutsa))
-                        st.text_area('Remark','Checked',key='heara')
-                        st.form_submit_button("Submit",on_click=grade_movie,args=(kvutsa,maabada))
-                holder.text_input('Remarks', 'movie {} of group {} is being checked'.format(seret, kvutsa))
-            elif st.session_state.counter == (len(os.listdir(Path))-1) and len(os.listdir(Path))>1:
-                comp_grades(maabada)
-            else:
-                st.warning('No more movies ❗ 🛑')
-        if st.sidebar.button('Show grades?'):
-            groups=pd.read_csv('grades.csv',index_col=False)
-            st.dataframe(groups)
-        if st.sidebar.checkbox('Compare codes?'):
-            suspects=compare_code(maabada)
-        if st.sidebar.checkbox('Summarize Lab?'):
-            try:
-                if len(suspects)>0:
-                    show_suspects(suspects)
-            except:
-                pass
-            show_missings('missing',year,semester,maabada)
-            help_details=st.sidebar.checkbox('Detailed help files activity')
-            if help_details:
-                show_missings('help file',year,semester,maabada)
-            help_summary=st.sidebar.checkbox('Help files summary')
-            if help_summary:
-                use_help=show_help('help file',year,semester,maabada)
-                if st.sidebar.button('Show students not used help?'):
-                    no_use_help(use_help)
+        if location=='Home':
+            form_home(members,df_group,ref)
+        elif location=='Lab':
+            display_form(members,df_group,ref)
+    if st.session_state.state=='verified':
+        pdf=st.button('Start session')
+        if pdf:
+            st.session_state.state='pdf'
+        if st.sidebar.checkbox('Download your codes?'):
+            download_files(year,semester,lab,group)
+    if st.session_state.state=='pdf':
+        pdf=displayPDF(lab)
+        st.markdown(pdf, unsafe_allow_html=True)
+        ezra=st.checkbox('Do you need help coding?')
+        if ezra:
+            emails=df_group['Email address'].values
+            send_help(members,emails,ref,dic4Help)
+        if location=='Lab':
+            # st.write(st.session_state.counter)
+            # if st.session_state.counter>=len(members):
+            movie=st.file_uploader("Please select your movie",accept_multiple_files=True,key='movie')
+            if movie:
+                upload('movie',movie,ref)
+            code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
+            if code:
+                upload('code',code,ref)
+        st.subheader(":red[When you done please press End session otherwise your session won't be registered in our system]:rotating_light:")
+        session_end = st.button('End session')
+        if session_end:
+            end_session(ref, members)
+    #         st.session_state='end'
+    # if st.session_state=='end':
+            st.success("We hope you liked the lab, if you haven't finish please continue some other time.",icon="✅")
+    #     st.session_state.state='begin'
 
-            txt,flag=not_make_maabada(movies,maabada)
-            st.markdown(txt)
-            numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
-            txt=not_completed_lab(numEx,labs,maabada,movies,flag)
-            st.markdown(txt)
-        if st.sidebar.button('Download grades.csv?'):
-            df = pd.read_csv('grades.csv',index_col=False)
-            csv = convert_df(df)
-            st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
 
 if __name__=='__main__':
     main()
