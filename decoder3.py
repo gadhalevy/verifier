@@ -83,7 +83,7 @@ def from_db(year,semester,maabada):
     df=df.astype('string')
     return df
 
-def download_blob(sug,year,semester,maabada,file):
+def download_blob(src,dst):
     '''
     Download from fb storage assuming file name groupNum_exNum eg. 11_2.mp4 same as verifier.
     :param what:
@@ -91,16 +91,16 @@ def download_blob(sug,year,semester,maabada,file):
     :param counter:
     :return:
     '''
-    source_blob_name=f'{sug}/{year}/{semester}/{maabada}/{file}'
+    source_blob_name=f'{src}'
     # destination_file_name=os.path.join(year,semester,maabada)
-    destination_file_name =f'{sug}/{maabada}'
+    destination_file_name =f'{dst}'
     bucket = firebase_admin.storage.bucket('lab9-c9743.appspot.com')
     blob = bucket.blob(source_blob_name)
     new_token = uuid4()
     metadata = {"firebaseStorageDownloadTokens": new_token}
     blob.metadata = metadata
-    blob.download_to_filename(destination_file_name+f'/{file}')
-    return destination_file_name+f'/{file}'
+    blob.download_to_filename(destination_file_name)
+    return destination_file_name
 
 def make_movie(path):
     '''
@@ -384,7 +384,21 @@ def no_use_help(use_help):
     st.markdown(f'## :red[Students not used help files]:')
     st.markdown(f"### :red[{','.join(res)}]")
 
-
+def load(year,semester,df,name):
+    '''
+    Loads files to firebase storage.
+    :param what: Code or movie string.
+    :param f: File.
+    :param year:
+    :param semester:
+    :param lab:
+    :param group:
+    :return:
+    '''
+    ds=storage.bucket()
+    bob=ds.blob(name)
+    bob.upload_from_string(df.to_csv())
+    ds.rename_blob(bob,f'{year}/{semester}/{name}')
 
 def main():
     '''
@@ -399,11 +413,14 @@ def main():
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),1)
     maabada = st.sidebar.selectbox('Please select maabada', labs)
     init()
-
     if not os.path.isfile('grades.csv'):
-        make_student_list('Overview.csv',labs)
-    else:
-        movies,codes=get_download_lst(year,semester,maabada)
+        try:
+            download_blob(f'{year}/{semester}/grades.csv',f'grades.csv')
+        except:
+            groups,grades=make_student_list('Overview.csv',labs)
+            load(year,semester,grades,'grades.csv')
+
+    movies,codes=get_download_lst(year,semester,maabada)
 
     # ToDo config page make student list
     if maabada != 'Choose':
@@ -411,12 +428,12 @@ def main():
             for c in codes:
                 f=c.replace('-','.')
                 if check_siomet(f):
-                    download_blob('code',year, semester, maabada,f)
+                    download_blob(f'code/{year}/{semester}/{maabada}/{f}',f'code/{maabada}/{f}')
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
                 f = m.replace('-', '.')
                 if check_siomet(f):
-                    download_blob('movie',year, semester, maabada,f)
+                    download_blob(f'movie/{year}/{semester}/{maabada}/{f}',f'movie/{maabada}/{f}')
         if 'grades' not in st.session_state:
             st.session_state['grades']=[]
         if 'remarks' not in st.session_state:
@@ -463,15 +480,16 @@ def main():
                 use_help=show_help('help file',year,semester,maabada)
                 if st.sidebar.button('Show students not used help?'):
                     no_use_help(use_help)
-
             txt,flag=not_make_maabada(movies,maabada)
             st.markdown(txt)
             numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
             txt=not_completed_lab(numEx,labs,maabada,movies,flag)
             st.markdown(txt)
-        if st.sidebar.button('Download grades.csv?'):
+        if st.sidebar.button('Update unsave grades?'):
             df = pd.read_csv('grades.csv',index_col=False)
             csv = convert_df(df)
+            load(year, semester, csv, 'grades.csv')
+        if st.sidebar.button('Download grades.csv?'):
             st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
 
 if __name__=='__main__':
