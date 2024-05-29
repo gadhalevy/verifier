@@ -496,7 +496,7 @@ def main():
             code=st.file_uploader("Please select your code submission files",accept_multiple_files=True,key='code')
             if code:
                 upload('code',code,ref)
-        st.subheader(":red[When you done please press End session otherwise your session won't be registered in our system]:rotating_light:")
+        st.markdown("## :red[When you done please press End session otherwise your session won't be registered in our system]:rotating_light:")
         session_end = st.button('End session')
         if session_end:
             end_session(ref, members)
