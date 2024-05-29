@@ -266,7 +266,7 @@ def display_form(members,df_group,ref):
         member=members.iloc[st.session_state.counter]
         st.markdown("**:red[%s]**" %member)
         param='start_lab'
-        reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
+        reciver = df_group[df_group['full_name'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
         pratiut = st.checkbox(
             ':red[הנני מאשר את הצהרת הפרטיות וזכויות היוצרים  שעליהן חתמתי במודל]:rotating_light:')
