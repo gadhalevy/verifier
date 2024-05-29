@@ -14,7 +14,7 @@ def main():
         groups.to_csv('groups.csv', index=False)
     else:
         groups=pd.read_csv('groups.csv')
-    st.dataframe(groups,height=38*(len(groups)-2),hide_index=True)
+    st.dataframe(groups,height=38*(len(groups)-2))
     options=groups.loc[groups['group']==-1]
     members=st.sidebar.multiselect('Please select your group',options['full_name'],max_selections=3)
     if st.sidebar.button('Update'):
