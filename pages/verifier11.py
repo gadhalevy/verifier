@@ -116,7 +116,7 @@ def make_student_list(path):
     :return: Df student_names, group_num, email.
     '''
     df = pd.read_csv(path, header=0)
-    skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 02'].values[0]
+    skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
     tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
     df = df.iloc[skiprows:tmp]
     # df = df[[df.columns[1], df.columns[2]]]
@@ -139,7 +139,8 @@ def find_members(group):
     :param group:
     :return: Records of selected group.
     '''
-    groups=make_student_list('Overview.csv')
+    # groups=make_student_list('Overview.csv')
+    groups=pd.read_csv('groups.csv',index_col=False)
     return groups[groups['num'].str.strip()==group]
 
 def fbwrite(*args,**kwargs):
