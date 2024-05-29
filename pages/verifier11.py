@@ -141,7 +141,7 @@ def find_members(group):
     '''
     # groups=make_student_list('Overview.csv')
     groups=pd.read_csv('groups.csv',index_col=False)
-    return groups[groups['group'].str.strip()==group]
+    return groups[groups['group']==group]
 
 def fbwrite(*args,**kwargs):
     '''
@@ -457,7 +457,6 @@ def main():
     if 'state' not in st.session_state:
         st.session_state['state']='begin'
     year, semester, lab, group, location, dic4Help= base()
-    group
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
     members = df_group['Group members']
