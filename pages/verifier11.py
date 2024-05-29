@@ -232,7 +232,7 @@ def form_home(members,df_group,ref):
     with st.sidebar.form('Location'):
         member = st.radio('Who R U?', members)
         param = 'start_read'
-        reciver = df_group[df_group['Group members'].str.strip() == member]['Email address'].values
+        reciver = df_group[df_group['full_name'].str.strip() == member]['Email address'].values
         submitted = st.form_submit_button("Send password")
         pratiut=st.checkbox(':red[הנני מאשר את הצהרת הפרטיות וזכויות היוצרים  שעליהן חתמתי במודל]:rotating_light:')
         if submitted and pratiut:
