@@ -125,11 +125,11 @@ def make_student_list(path):
     # return df
     df['Groups'] = df['Groups'].str.split('-')
     # return  df
-    stam = pd.DataFrame(df['Groups'].tolist(), columns=['Group', 'num'])
+    stam = pd.DataFrame(df['Groups'].tolist(), columns=['Group', 'group'])
     # return  stam['num']
     df = df.reset_index()
     final = df.join(stam)
-    groups = final[['Group members', 'num','Email address']]
+    groups = final[['Group members', 'group','Email address']]
     st.dataframe(groups)
     return groups
 
@@ -141,7 +141,7 @@ def find_members(group):
     '''
     # groups=make_student_list('Overview.csv')
     groups=pd.read_csv('groups.csv',index_col=False)
-    return groups[groups['num'].str.strip()==group]
+    return groups[groups['group'].str.strip()==group]
 
 def fbwrite(*args,**kwargs):
     '''
