@@ -141,6 +141,7 @@ def find_members(group):
     '''
     # groups=make_student_list('Overview.csv')
     groups=pd.read_csv('groups.csv',index_col=False)
+    st.write(groups[groups['group']==group])
     return groups[groups['group']==group]
 
 def fbwrite(*args,**kwargs):
