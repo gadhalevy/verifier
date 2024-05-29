@@ -459,7 +459,7 @@ def main():
     year, semester, lab, group, location, dic4Help= base()
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
-    members = df_group['Group members']
+    members = df_group['full_name']
     if st.session_state.state=='begin':
         init()
         auth=st.sidebar.button('Authenticate')
