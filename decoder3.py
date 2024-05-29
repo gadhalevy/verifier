@@ -1,17 +1,15 @@
-import os
 import firebase_admin
 import streamlit as st
 from firebase_admin import credentials
 from firebase_admin import db
 from firebase_admin import storage
 import pandas as pd
-import platform
 from uuid import uuid4
 from moviepy.editor import *
 from collections import  Counter
 from difflib import *
 import re
-import math
+
 
 @st.cache_resource()
 def init():
