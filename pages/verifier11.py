@@ -141,8 +141,6 @@ def find_members(group):
     '''
     # groups=make_student_list('Overview.csv')
     groups=pd.read_csv('groups.csv',index_col=False)
-    groups
-    # st.dataframe(groups[groups['group']==group])
     return groups[groups['group']==group]
 
 def fbwrite(*args,**kwargs):
@@ -461,9 +459,7 @@ def main():
     year, semester, lab, group, location, dic4Help= base()
     ref = year, semester, lab, group, location
     df_group = find_members(group)
-    df_group
     members = df_group['full_name']
-    members
     if st.session_state.state=='begin':
         init()
         auth=st.sidebar.button('Authenticate')
