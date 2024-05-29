@@ -5,7 +5,6 @@ from firebase_admin import db
 from firebase_admin import storage
 import pandas as pd
 from uuid import uuid4
-from moviepy.editor import *
 from collections import  Counter
 from difflib import *
 import re
