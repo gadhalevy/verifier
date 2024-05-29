@@ -4,7 +4,6 @@ import streamlit as st
 from firebase_admin import credentials
 from firebase_admin import db
 from firebase_admin import storage
-import pytesseract as ocrstreamlit
 import pandas as pd
 import platform
 from uuid import uuid4
