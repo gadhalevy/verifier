@@ -8,3 +8,4 @@ pycode-similar~=1.4
 requests~=2.31.0
 streamlit_TTS~=0.0.7
 python-dotenv~=1.0.1
+openai~=1.30.1
