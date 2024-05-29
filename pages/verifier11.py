@@ -457,6 +457,7 @@ def main():
     if 'state' not in st.session_state:
         st.session_state['state']='begin'
     year, semester, lab, group, location, dic4Help= base()
+    group
     ref = year, semester, lab, group, location
     df_group = find_members(f'{group:02}')
     members = df_group['Group members']
