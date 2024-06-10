@@ -5,6 +5,7 @@ from firebase_admin import db
 from firebase_admin import storage
 import pandas as pd
 from uuid import uuid4
+from moviepy.editor import *
 from collections import  Counter
 from difflib import *
 import re,os
@@ -37,10 +38,10 @@ def make_student_list(path,labs):
     df = df.iloc[skiprows:tmp]
     df = df[[df.columns[1], df.columns[2]]]
     df['Groups'] = df['Groups'].str.split('-')
-    stam = pd.DataFrame(df['Groups'].tolist(), columns=['Group', 'num'])
+    stam = pd.DataFrame(df['Groups'].tolist(), columns=['Group', 'group'])
     df = df.reset_index()
     final = df.join(stam)
-    groups = final[['Group members', 'num']]
+    groups = final[['Group members', 'group']]
     num=len(groups)
     remarks = [l + '_rem' for l in labs[1:]]
     rem_data = {r: ['Lo nivdak'] * num for r in remarks}
@@ -122,7 +123,7 @@ def comp_grades(lab):
     '''
     groups = pd.read_csv('grades.csv')
     # st.dataframe(groups)
-    groups = groups.astype({'num': 'int8'})
+    groups = groups.astype({'group': 'int8'})
     # groups.loc[(groups.num == 1), 'IOT'] = 31
     avg = sum(st.session_state['grades']) / len(st.session_state['grades'])
     groups.loc[(groups.num == int(st.session_state['team'])), lab] = avg
@@ -165,7 +166,7 @@ def not_make_maabada(movies,maabada):
     groups = pd.read_csv('grades.csv',index_col=False)
     fb_groups=(m.split('_')[0] for m in movies)
     set_fb_groups=set(map(int,fb_groups))
-    set_groups = set(s for s in groups['num'])
+    set_groups = set(s for s in groups['group'])
     dif = set_groups - set_fb_groups
     if len(dif) > 0:
         txt = f'### :red[Groups {" ".join(str(dif))} did not make maabada {maabada} yet]'
@@ -208,7 +209,7 @@ def get_download_lst(year,semester,maabada):
     :return: List of uploaded codes, and list of uploaded movies.
     '''
     tmp = pd.read_csv('grades.csv')
-    groups = set(tmp['num'])
+    groups = set(tmp['group'])
     m_lst = [];
     f_lst = []
     lst = m_lst
