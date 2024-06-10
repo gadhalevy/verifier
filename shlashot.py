@@ -1,8 +1,9 @@
 import streamlit as st
 import pandas as pd
-import os
+import os,sys
 def main():
     st.header('List of students and groups')
+    st.write(sys.version_info)
     st.sidebar.subheader('Choose group members up to 3 students.')
     if not os.path.isfile('groups.csv'):
         groups=pd.read_csv('students.csv')
