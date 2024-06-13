@@ -33,7 +33,7 @@ def make_student_list(path,labs):
     :return:
     '''
     groups = pd.read_csv(path, header=0)
-    groups
+    st.write(groups)
     # skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
     # tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
     # df = df.iloc[skiprows:tmp]
