@@ -406,15 +406,14 @@ def main():
     if not os.path.isfile('grades.csv'):
         try:
             download_blob(f'{year}/{semester}/grades.csv',f'grades.csv')
-            st.write('firebase')
         except:
             groups,grades=make_student_list('groups.csv',labs)
             load(year,semester,grades,'grades.csv')
-            st.write(groups)
-            st.write(grades)
-    tmp=pd.read_csv('grades.csv')
+    # tmp=pd.read_csv('grades.csv')
+    # st.write(tmp)
     movies,codes=get_download_lst(year,semester,maabada)
-
+    st.write(movies)
+    st.write(codes)
     # ToDo config page make student list
     if maabada != 'Choose':
         if st.sidebar.button('Download codes from Firebase?'):
