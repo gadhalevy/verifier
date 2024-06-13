@@ -75,6 +75,6 @@
 #     # set_places()
 #     # make_cross()
 import pandas as pd
-tmp=pd.read('grades.csv')
+tmp=pd.read_csv('grades.csv')
 tmp
 
