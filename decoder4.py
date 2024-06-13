@@ -53,7 +53,7 @@ def make_student_list(path,labs):
     concated=pd.concat([groups,grades],axis=1)
     concated.to_csv('grades.csv')
     st.write('grades.csv was created')
-    return groups,grades
+    return groups,concated
 
 def from_db(year,semester,maabada):
     '''
