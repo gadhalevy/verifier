@@ -424,6 +424,8 @@ def main():
                 f = m.replace('-', '.')
                 if check_siomet(f):
                     download_blob(f'movie/{year}/{semester}/{maabada}/{f}',f'movie/{maabada}/{f}')
+            for f in os.listdir(Path):
+                st.write(f)
         if 'grades' not in st.session_state:
             st.session_state['grades']=[]
         if 'remarks' not in st.session_state:
@@ -432,8 +434,6 @@ def main():
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            st.write('counter=',st.session_state.counter)
-            st.write('dir=',len(os.listdir(Path)))
             if st.session_state.counter < len(os.listdir(Path)) -1:
                 holder = st.empty()
                 video,v_name=make_movie(Path)
