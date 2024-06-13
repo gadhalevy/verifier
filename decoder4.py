@@ -418,7 +418,7 @@ def main():
         except:
             groups,grades=make_student_list('groups.csv',labs)
             load(year,semester,grades,'grades.csv')
-    pd.read_csv(grades)
+            pd.read_csv(grades)
     movies,codes=get_download_lst(year,semester,maabada)
 
     # ToDo config page make student list
