@@ -209,7 +209,7 @@ def get_download_lst(year,semester,maabada):
     data = 'movie'
     for _ in range(2):
         for g in groups:
-            ref = db.reference(f'{year}/{semester}/{maabada}/{g}/{data}')
+            ref = db.reference(f'{year}/{semester}/{maabada}/{int(g)}/{data}')
             tmp = ref.get()
             if tmp is not None:
                 if data=='movie':
