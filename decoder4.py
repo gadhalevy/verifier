@@ -34,15 +34,6 @@ def make_student_list(path,labs):
     '''
     groups = pd.read_csv(path, header=0)
     st.write(groups)
-    # skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
-    # tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
-    # df = df.iloc[skiprows:tmp]
-    # df = df[[df.columns[1], df.columns[2]]]
-    # df['Groups'] = df['Groups'].str.split('-')
-    # stam = pd.DataFrame(df['Groups'].tolist(), columns=['Group', 'group'])
-    # df = df.reset_index()
-    # final = df.join(stam)
-    # groups = final[['Group members', 'group']]
     num=len(groups)
     remarks = [l + '_rem' for l in labs[1:]]
     rem_data = {r: ['Lo nivdak'] * num for r in remarks}
