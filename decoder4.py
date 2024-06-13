@@ -430,10 +430,8 @@ def main():
             st.session_state['remarks']=[]
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
-        Path=f'movie/{maabada}/'
+        Path=f'movie/{year}/{semester}/{maabada}/'
         if st.sidebar.checkbox('Grade Movies?'):
-            st.write('counter=',st.session_state.counter)
-            st.write('dir=',len(os.listdir(Path)))
             if st.session_state.counter < len(os.listdir(Path)) -1:
                 holder = st.empty()
                 video,v_name=make_movie(Path)
