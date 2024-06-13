@@ -32,9 +32,18 @@ def make_student_list(path,labs):
     :param labs:
     :return:
     '''
-    groups = pd.read_csv(path, header=0)
-    st.write(groups)
-    num=len(groups)
+    kvutsot = pd.read_csv(path, header=0)
+    st.write(kvutsot)
+    # skiprows = df.index[df['Groups'] == u'רישום לשלשות מעבדה - 01'].values[0]
+    # tmp = df.index[df['Grouping name'] == 'Not in a grouping'].values[0]
+    # df = df.iloc[skiprows:tmp]
+    # df = df[[df.columns[1], df.columns[2]]]
+    # df['Groups'] = df['Groups'].str.split('-')
+    # stam = pd.DataFrame(df['Groups'].tolist(), columns=['Group', 'group'])
+    # df = df.reset_index()
+    # final = df.join(stam)
+    # groups = final[['Group members', 'group']]
+    num=len(kvutsot)
     remarks = [l + '_rem' for l in labs[1:]]
     rem_data = {r: ['Lo nivdak'] * num for r in remarks}
     data={l:[100]*num for l in labs[1:]}
@@ -42,10 +51,10 @@ def make_student_list(path,labs):
     temp=list(zip(labs[1:],remarks))
     new_cols=[item for sublist in temp for item in sublist]
     grades=pd.DataFrame(columns=new_cols,data=data)
-    concated=pd.concat([groups,grades],axis=1)
+    concated=pd.concat([kvutsot,grades],axis=1)
     concated.to_csv('grades.csv')
     st.write('grades.csv was created')
-    return groups,concated
+    return kvutsot,concated
 
 def from_db(year,semester,maabada):
     '''
