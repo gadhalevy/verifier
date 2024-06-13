@@ -34,18 +34,19 @@ def make_student_list(path,labs):
     '''
     kvutsot = pd.read_csv(path, header=0)
     st.write(kvutsot)
-    # num=len(kvutsot)
-    # remarks = [l + '_rem' for l in labs[1:]]
-    # rem_data = {r: ['Lo nivdak'] * num for r in remarks}
-    # data={l:[100]*num for l in labs[1:]}
-    # data.update(rem_data)
-    # temp=list(zip(labs[1:],remarks))
-    # new_cols=[item for sublist in temp for item in sublist]
-    # grades=pd.DataFrame(columns=new_cols,data=data)
-    # concated=pd.concat([kvutsot,grades],axis=1)
-    # concated.to_csv('grades.csv')
-    # st.write('grades.csv was created')
-    # return kvutsot,concated
+    num=len(kvutsot)
+    remarks = [l + '_rem' for l in labs[1:]]
+    rem_data = {r: ['Lo nivdak'] * num for r in remarks}
+    data={l:[100]*num for l in labs[1:]}
+    data.update(rem_data)
+    temp=list(zip(labs[1:],remarks))
+    new_cols=[item for sublist in temp for item in sublist]
+    grades=pd.DataFrame(columns=new_cols,data=data)
+    concated=pd.concat([kvutsot,grades],axis=1)
+    st.write(concated)
+    concated.to_csv('grades.csv')
+    st.write('grades.csv was created')
+    return kvutsot,concated
 
 def from_db(year,semester,maabada):
     '''
@@ -402,86 +403,85 @@ def main():
     semester = st.sidebar.selectbox("Please choose semester", ('A', 'B'),1)
     maabada = st.sidebar.selectbox('Please select maabada', labs)
     init()
-    make_student_list('groups.csv',labs)
-    # if not os.path.isfile('grades.csv'):
-    #     try:
-    #         download_blob(f'{year}/{semester}/grades.csv',f'grades.csv')
-    #     except:
-    #         groups,grades=make_student_list('groups.csv',labs)
-    #         load(year,semester,grades,'grades.csv')
-    # tmp=pd.read_csv('grades.csv')
-    # st.write(tmp)
-    # movies,codes=get_download_lst(year,semester,maabada)
+    if not os.path.isfile('grades.csv'):
+        try:
+            download_blob(f'{year}/{semester}/grades.csv',f'grades.csv')
+        except:
+            groups,grades=make_student_list('groups.csv',labs)
+            load(year,semester,grades,'grades.csv')
+    tmp=pd.read_csv('grades.csv')
+    st.write(tmp)
+    movies,codes=get_download_lst(year,semester,maabada)
 
-    # # ToDo config page make student list
-    # if maabada != 'Choose':
-    #     if st.sidebar.button('Download codes from Firebase?'):
-    #         for c in codes:
-    #             f=c.replace('-','.')
-    #             if check_siomet(f):
-    #                 download_blob(f'code/{year}/{semester}/{maabada}/{f}',f'code/{maabada}/{f}')
-    #     if st.sidebar.button('Download movies from Firebase?'):
-    #         for m in movies:
-    #             f = m.replace('-', '.')
-    #             if check_siomet(f):
-    #                 download_blob(f'movie/{year}/{semester}/{maabada}/{f}',f'movie/{maabada}/{f}')
-    #     if 'grades' not in st.session_state:
-    #         st.session_state['grades']=[]
-    #     if 'remarks' not in st.session_state:
-    #         st.session_state['remarks']=[]
-    #     if 'counter' not in st.session_state:
-    #         st.session_state['counter']=0
-    #     Path=f'movie/{maabada}/'
-    #     if st.sidebar.checkbox('Grade Movies?'):
-    #         if st.session_state.counter < len(os.listdir(Path)) -1:
-    #             holder = st.empty()
-    #             video,v_name=make_movie(Path)
-    #             col1,col2=st.columns([8,2])
-    #             with col1:
-    #                 st.video(video)
-    #             with col2:
-    #                 with st.form("Grade this movie", clear_on_submit=True):
-    #                     st.text_input('Movie grade',key='mark')
-    #                     kvutsa,seret=v_name.split('_')
-    #                     # st.write(kvutsa,int(kvutsa))
-    #                     st.text_area('Remark','Checked',key='heara')
-    #                     st.form_submit_button("Submit",on_click=grade_movie,args=(kvutsa,maabada))
-    #             holder.text_input('Remarks', 'movie {} of group {} is being checked'.format(seret, kvutsa))
-    #         elif st.session_state.counter == (len(os.listdir(Path))-1) and len(os.listdir(Path))>1:
-    #             comp_grades(maabada)
-    #         else:
-    #             st.warning('No more movies ❗ 🛑')
-    #     if st.sidebar.button('Show grades?'):
-    #         groups=pd.read_csv('grades.csv',index_col=False)
-    #         st.dataframe(groups)
-    #     if st.sidebar.checkbox('Compare codes?'):
-    #         suspects=compare_code(maabada)
-    #     if st.sidebar.checkbox('Summarize Lab?'):
-    #         try:
-    #             if len(suspects)>0:
-    #                 show_suspects(suspects)
-    #         except:
-    #             pass
-    #         show_missings('missing',year,semester,maabada)
-    #         help_details=st.sidebar.checkbox('Detailed help files activity')
-    #         if help_details:
-    #             show_missings('help file',year,semester,maabada)
-    #         help_summary=st.sidebar.checkbox('Help files summary')
-    #         if help_summary:
-    #             use_help=show_help('help file',year,semester,maabada)
-    #             if st.sidebar.button('Show students not used help?'):
-    #                 no_use_help(use_help)
-    #         txt,flag=not_make_maabada(movies,maabada)
-    #         st.markdown(txt)
-    #         numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
-    #         txt=not_completed_lab(numEx,labs,maabada,movies,flag)
-    #         st.markdown(txt)
-    #     if st.sidebar.button('Update unsave grades?'):
-    #         df = pd.read_csv('grades.csv',index_col=False)
-    #         load(year, semester, df, 'grades.csv')
-    #         if st.sidebar.button('Download grades.csv?'):
-    #             csv = convert_df(df)
-    #             st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
+    # ToDo config page make student list
+    if maabada != 'Choose':
+        if st.sidebar.button('Download codes from Firebase?'):
+            for c in codes:
+                f=c.replace('-','.')
+                if check_siomet(f):
+                    download_blob(f'code/{year}/{semester}/{maabada}/{f}',f'code/{maabada}/{f}')
+        if st.sidebar.button('Download movies from Firebase?'):
+            for m in movies:
+                f = m.replace('-', '.')
+                if check_siomet(f):
+                    download_blob(f'movie/{year}/{semester}/{maabada}/{f}',f'movie/{maabada}/{f}')
+        if 'grades' not in st.session_state:
+            st.session_state['grades']=[]
+        if 'remarks' not in st.session_state:
+            st.session_state['remarks']=[]
+        if 'counter' not in st.session_state:
+            st.session_state['counter']=0
+        Path=f'movie/{maabada}/'
+        if st.sidebar.checkbox('Grade Movies?'):
+            if st.session_state.counter < len(os.listdir(Path)) -1:
+                holder = st.empty()
+                video,v_name=make_movie(Path)
+                col1,col2=st.columns([8,2])
+                with col1:
+                    st.video(video)
+                with col2:
+                    with st.form("Grade this movie", clear_on_submit=True):
+                        st.text_input('Movie grade',key='mark')
+                        kvutsa,seret=v_name.split('_')
+                        # st.write(kvutsa,int(kvutsa))
+                        st.text_area('Remark','Checked',key='heara')
+                        st.form_submit_button("Submit",on_click=grade_movie,args=(kvutsa,maabada))
+                holder.text_input('Remarks', 'movie {} of group {} is being checked'.format(seret, kvutsa))
+            elif st.session_state.counter == (len(os.listdir(Path))-1) and len(os.listdir(Path))>1:
+                comp_grades(maabada)
+            else:
+                st.warning('No more movies ❗ 🛑')
+        if st.sidebar.button('Show grades?'):
+            groups=pd.read_csv('grades.csv',index_col=False)
+            st.dataframe(groups)
+        if st.sidebar.checkbox('Compare codes?'):
+            suspects=compare_code(maabada)
+        if st.sidebar.checkbox('Summarize Lab?'):
+            try:
+                if len(suspects)>0:
+                    show_suspects(suspects)
+            except:
+                pass
+            show_missings('missing',year,semester,maabada)
+            help_details=st.sidebar.checkbox('Detailed help files activity')
+            if help_details:
+                show_missings('help file',year,semester,maabada)
+            help_summary=st.sidebar.checkbox('Help files summary')
+            if help_summary:
+                use_help=show_help('help file',year,semester,maabada)
+                if st.sidebar.button('Show students not used help?'):
+                    no_use_help(use_help)
+            txt,flag=not_make_maabada(movies,maabada)
+            st.markdown(txt)
+            numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
+            txt=not_completed_lab(numEx,labs,maabada,movies,flag)
+            st.markdown(txt)
+        if st.sidebar.button('Update unsave grades?'):
+            df = pd.read_csv('grades.csv',index_col=False)
+            load(year, semester, df, 'grades.csv')
+            if st.sidebar.button('Download grades.csv?'):
+                csv = convert_df(df)
+                st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
 
 if __name__=='__main__':
     main()
