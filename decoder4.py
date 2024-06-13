@@ -9,9 +9,7 @@ from moviepy.editor import *
 from collections import  Counter
 from difflib import *
 import re,os
-'''
-Rishum shlashot has changed so not working decoder4 is now relevant.
-'''
+
 
 @st.cache_resource()
 def init():
@@ -418,7 +416,8 @@ def main():
         except:
             groups,grades=make_student_list('groups.csv',labs)
             load(year,semester,grades,'grades.csv')
-            pd.read_csv(grades)
+    tmp=pd.read_csv('grades.csv')
+    st.write(tmp)
     movies,codes=get_download_lst(year,semester,maabada)
 
     # ToDo config page make student list
