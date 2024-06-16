@@ -215,7 +215,7 @@ def get_download_lst(year,semester,maabada):
                 if data=='movie':
                     siomet='mp4'
                 for k in tmp.keys():
-                    lst.append(f'{g}_{k}')
+                    lst.append(f'{int(g)}_{k}')
         lst = f_lst
         data = 'code'
     return m_lst,f_lst
