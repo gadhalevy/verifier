@@ -481,7 +481,7 @@ def main():
             numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
             txt=not_completed_lab(numEx,labs,maabada,movies,flag)
             st.markdown(txt)
-        if st.sidebar.button('Update unsave grades?'):
+        if st.sidebar.checkbox('Update unsave grades?'):
             df = pd.read_csv('grades.csv',index_col=False)
             load(year, semester, df, 'grades.csv')
             if st.sidebar.checkbox('Download grades.csv?'):
