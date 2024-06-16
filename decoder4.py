@@ -484,7 +484,7 @@ def main():
         if st.sidebar.button('Update unsave grades?'):
             df = pd.read_csv('grades.csv',index_col=False)
             load(year, semester, df, 'grades.csv')
-            if st.sidebar.button('Download grades.csv?'):
+            if st.sidebar.checkbox('Download grades.csv?'):
                 csv = convert_df(df)
                 st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
 
