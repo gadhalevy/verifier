@@ -426,8 +426,6 @@ def main():
                 if check_siomet(f):
                     st.write(f)
                     download_blob(f'movie/{year}/{semester}/{maabada}/{f}',f'movie/{maabada}/{f}')
-            for f in os.listdir(Path):
-                st.write(f)
         if 'grades' not in st.session_state:
             st.session_state['grades']=[]
         if 'remarks' not in st.session_state:
@@ -435,6 +433,8 @@ def main():
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
+        for f in os.listdir(Path):
+            st.write(f)
         if st.sidebar.checkbox('Grade Movies?'):
             if st.session_state.counter < len(os.listdir(Path)) -1:
                 holder = st.empty()
