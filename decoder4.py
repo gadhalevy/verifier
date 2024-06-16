@@ -119,8 +119,8 @@ def comp_grades(lab):
     groups = groups.astype({'group': 'int8'})
     # groups.loc[(groups.num == 1), 'IOT'] = 31
     avg = sum(st.session_state['grades']) / len(st.session_state['grades'])
-    groups.loc[(groups.num == int(st.session_state['team'])), lab] = avg
-    groups.loc[(groups.num == int(st.session_state['team'])), lab + '_rem'] = ' '.join(st.session_state.remarks)
+    groups.loc[(groups.group == int(st.session_state['team'])), lab] = avg
+    groups.loc[(groups.group == int(st.session_state['team'])), lab + '_rem'] = ' '.join(st.session_state.remarks)
     # st.dataframe(groups)
     groups.to_csv('grades.csv', index=False)
     return groups
