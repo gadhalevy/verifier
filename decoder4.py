@@ -418,11 +418,13 @@ def main():
             for c in codes:
                 f=c.replace('-','.')
                 if check_siomet(f):
+                    st.write(f)
                     download_blob(f'code/{year}/{semester}/{maabada}/{f}',f'code/{maabada}/{f}')
         if st.sidebar.button('Download movies from Firebase?'):
             for m in movies:
                 f = m.replace('-', '.')
                 if check_siomet(f):
+                    st.write(f)
                     download_blob(f'movie/{year}/{semester}/{maabada}/{f}',f'movie/{maabada}/{f}')
             for f in os.listdir(Path):
                 st.write(f)
