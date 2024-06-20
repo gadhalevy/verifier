@@ -412,8 +412,6 @@ def main():
     # tmp=pd.read_csv('grades.csv')
     # st.write(tmp)
     movies,codes=get_download_lst(year,semester,maabada)
-    st.write(movies)
-    st.write(codes)
     # ToDo config page make student list
     if maabada != 'Choose':
         if st.sidebar.button('Download codes from Firebase?'):
