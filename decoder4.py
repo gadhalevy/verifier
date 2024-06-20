@@ -481,12 +481,14 @@ def main():
             numEx = [2, 8,  3, 3, 3, 2, 2, 2, 1, 0]
             txt=not_completed_lab(numEx,labs,maabada,movies,flag)
             st.markdown(txt)
-        if st.sidebar.checkbox('Update unsave grades?'):
+        if st.sidebar.button('Update unsave grades?'):
             df = pd.read_csv('grades.csv',index_col=False)
             load(year, semester, df, 'grades.csv')
             if st.sidebar.checkbox('Download grades.csv?'):
                 csv = convert_df(df)
                 st.sidebar.download_button(label="Download data as CSV",data=csv, file_name='grades.csv',mime='text/csv')
+                if st.sidebar.button('Erase grades?'):
+                    os.remove('grades.csv')
 
 if __name__=='__main__':
     main()
