@@ -412,8 +412,6 @@ def main():
     # tmp=pd.read_csv('grades.csv')
     # st.write(tmp)
     movies,codes=get_download_lst(year,semester,maabada)
-    movies
-    codes
     # ToDo config page make student list
     if maabada != 'Choose':
         if st.sidebar.button('Download codes from Firebase?'):
@@ -435,8 +433,6 @@ def main():
         if 'counter' not in st.session_state:
             st.session_state['counter']=0
         Path=f'movie/{maabada}/'
-        for f in os.listdir(Path):
-            st.write(f)
         if st.sidebar.checkbox('Grade Movies?'):
             if st.session_state.counter < len(os.listdir(Path)) -1:
                 holder = st.empty()
